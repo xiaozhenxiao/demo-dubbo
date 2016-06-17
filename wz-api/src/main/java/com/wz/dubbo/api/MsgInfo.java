@@ -1,4 +1,4 @@
-package com.wz.dubbo.provider;
+package com.wz.dubbo.api;
 
 import java.io.Serializable;
 import java.util.List;

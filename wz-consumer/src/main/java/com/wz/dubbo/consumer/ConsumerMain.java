@@ -1,5 +1,7 @@
-package com.wz.dubbo.provider;
+package com.wz.dubbo.consumer;
 
+import com.wz.dubbo.api.DemoService;
+import com.wz.dubbo.api.MsgInfo;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

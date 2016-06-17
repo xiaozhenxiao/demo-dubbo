@@ -14,5 +14,5 @@
 	<!-- 使用multicast广播注册中心暴露的服务地址 -->
 	<!--<dubbo:registry address="multicast://10.57.41.19:1234" /> -->
 	 <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
-	<dubbo:reference id="demoService" interface="com.wz.dubbo.provider.DemoService" />
+	<dubbo:reference id="demoService" interface="com.wz.dubbo.api.DemoService" />
 </beans>
