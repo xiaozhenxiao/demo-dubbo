@@ -13,8 +13,8 @@ public class ProviderMain {
         String[] names=context.getBeanDefinitionNames();
         System.out.print("Beans:");
         for(String string : names)
-            System.out.print(string+" ,||, ");
+            System.out.print(string+" || ");
         System.out.println();
-        Thread.sleep(1000*60*10);
+        Thread.sleep(1000*60*100);
     }
 }
