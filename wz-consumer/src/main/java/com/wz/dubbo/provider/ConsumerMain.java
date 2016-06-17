@@ -18,7 +18,7 @@ public class ConsumerMain {
         System.out.print("Beans:");
         for(String string : names) {
             System.out.print(string);
-            System.out.print(" ,|, ");
+            System.out.print("  |  ");
         }
         System.out.println();
 
