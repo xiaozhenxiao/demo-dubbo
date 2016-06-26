@@ -5,6 +5,21 @@ package com.wz.sort;
  * Date:2016-06-26
  */
 public class Sort {
+    public static void main(String[] args) {
+        int [] array = {1, 5, 8, 2, 7, 4, 3, 6, 9, 15, 10, 11, 13};
+        printArray("排序前：", array);
+//        bubbleSort(array);
+        quickSort(array, 0, array.length-1);
+        printArray("排序：", array);
+    }
+
+    public static void printArray(String print, int[] numbers){
+        System.out.println(print);
+        for (int i : numbers) {
+            System.out.print(i + " - ");
+        }
+        System.out.println();
+    }
 
     /**
      * 代码
