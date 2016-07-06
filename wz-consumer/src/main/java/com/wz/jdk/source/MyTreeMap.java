@@ -279,22 +279,33 @@ public class MyTreeMap<K, V> {
                     //因为x的分支由于删除，少了一个黑色节点，所以将兄分支的兄节点设置为红色，保证了各分支黑色节点的相同
                     //设置兄为红
                     setColor(sib, RED);
-                    //x指向父节点,在函数最后把父节点设为黑色(因为兄为红了，父就要变为黑,同时又不改变各分支黑色的数量)
+                    //x指向父节点,循环递归向上处理
                     x = parentOf(x);
                 } else {
+                    //兄的右孩子为黑,左孩子为红
                     if (colorOf(rightOf(sib)) == BLACK) {
+                        //设置兄的左孩子为黑,经过右旋后成为x的兄弟节点
                         setColor(leftOf(sib), BLACK);
+                        //设置兄为红----A
                         setColor(sib, RED);
+                        //以兄为中心右旋
                         rotateRight(sib);
+                        //兄指向x的新兄弟节点(此时兄的右节点A为红色)
                         sib = rightOf(parentOf(x));
                     }
+                    //兄的右孩子为红的情况,左孩子为红或黑都可以
+                    //设置兄为父的颜色,即交换父兄的颜色
                     setColor(sib, colorOf(parentOf(x)));
+                    //设置父为黑,即兄的颜色
                     setColor(parentOf(x), BLACK);
+                    //设置兄的右孩子为黑色
                     setColor(rightOf(sib), BLACK);
+                    //对父进行左旋
                     rotateLeft(parentOf(x));
+                    //此时已达到平衡,将x指向root,结束循环
                     x = root;
                 }
-            } else { // symmetric
+            } else { // symmetric 对称的,左右互换
                 Entry<K,V> sib = leftOf(parentOf(x));
 
                 if (colorOf(sib) == RED) {
