@@ -99,7 +99,7 @@ public class MyTreeMap<K, V> {
                     if (x == rightOf(parentOf(x))) {
                         //将X的父节点作为X
                         x = parentOf(x);
-                        //左旋转
+                        //左旋转,转变为情况五，即新增节点为父节点的左节点
                         rotateLeft(x);
                     }
                     //（情况五）
