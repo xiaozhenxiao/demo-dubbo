@@ -17,10 +17,21 @@ public class MyTreeMap<K, V> {
     private static final boolean RED   = false;
     private static final boolean BLACK = true;
 
+    public MyTreeMap(){
+        comparator = null;
+    }
+
     public MyTreeMap(Comparator<? super K> comparator) {
         this.comparator = comparator;
     }
 
+    public int size() {
+        return size;
+    }
+    public V get(Object key) {
+        Entry<K,V> p = getEntry(key);
+        return (p==null ? null : p.value);
+    }
     final int compare(Object k1, Object k2) {
         return comparator==null ? ((Comparable<? super K>)k1).compareTo((K)k2)
                 : comparator.compare((K)k1, (K)k2);
