@@ -2,6 +2,7 @@ package com.wz.dubbo.consumer;
 
 import com.wz.dubbo.api.DemoService;
 import com.wz.dubbo.api.MsgInfo;
+import com.wz.spring.schema.People;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -35,5 +36,10 @@ public class ConsumerMain {
 
         ds.sayHello("test 测试");
         System.out.println(ds.returnMsgInfo(info).getMsgs());
+
+        People people = context.getBean("peoplewz", People.class);
+        System.out.println("people age:" + people.getAge());
+        System.out.println("people id:" + people.getId());
+        System.out.println("people name:" + people.getName());
     }
 }
