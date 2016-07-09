@@ -7,7 +7,7 @@ package com.wz.sort;
 public class Sort {
     public static void main(String[] args) {
         int [] array = {1, 5, 8, 2, 7, 4, 3, 6, 9, 15, 10, 11, 13};
-        printArray("排序前：", array);
+        printArray("排序前：",  array);
 //        bubbleSort(array);
         quickSort(array, 0, array.length-1);
         printArray("排序：", array);
