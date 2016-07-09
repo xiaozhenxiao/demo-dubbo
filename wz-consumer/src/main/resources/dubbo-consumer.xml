@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:wz="http://xiaoxiao.wz/schema/people"
     xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://xiaoxiao.wz/schema/people
+        http://xiaoxiao.wz/schema/people/people.xsd
         http://code.alibabatech.com/schema/dubbo
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         ">     
@@ -15,4 +18,6 @@
 	<!--<dubbo:registry address="multicast://10.57.41.19:1234" /> -->
 	 <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
 	<dubbo:reference id="demoService" interface="com.wz.dubbo.api.DemoService" />
+
+	<wz:people id="peoplewz" name="王振" age="27"/>
 </beans>
