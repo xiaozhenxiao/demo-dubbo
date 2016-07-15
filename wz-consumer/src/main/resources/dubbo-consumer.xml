@@ -8,17 +8,20 @@
         http://xiaoxiao.wz/schema/people
         http://xiaoxiao.wz/schema/people/people.xsd
         http://code.alibabatech.com/schema/dubbo
-        http://code.alibabatech.com/schema/dubbo/dubbo.xsd
-        ">
-	<bean id="treeMap" class="com.wz.jdk.source.MyTreeMap" name="自定义TreeMap"/>
+        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+        default-lazy-init = "false">
+	<bean id="dependService" class="com.wz.spring.depends.test.service.impl.DependServiceImpl" name="DependService实现">
+		<property name="dependDao" ref="dependDao"/>
+	</bean>
+	<bean id="dependDao" class="com.wz.spring.depends.test.dao.DependDao" name="dao没有实现接口"/>
 	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
-	<dubbo:application name="consumer-of-helloworld-app" />
+	<!--<dubbo:application name="consumer-of-helloworld-app" />-->
 	<!-- zookeeper注册中心 -->
-	<dubbo:registry  protocol="zookeeper" address="127.0.0.1:2181" />
+	<!--<dubbo:registry  protocol="zookeeper" address="127.0.0.1:2181" />-->
 	<!-- 使用multicast广播注册中心暴露的服务地址 -->
 	<!--<dubbo:registry address="multicast://10.57.41.19:1234" /> -->
 	 <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
-	<dubbo:reference id="demoService" interface="com.wz.dubbo.api.DemoService" />
+	<!--<dubbo:reference id="demoService" interface="com.wz.dubbo.api.DemoService" />-->
 
-	<wz:people id="peoplewz" name="王振" age="27"/>
+	<!--<wz:people id="peoplewz" name="王振" age="27"/>-->
 </beans>
