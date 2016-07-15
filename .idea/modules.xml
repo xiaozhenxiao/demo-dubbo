@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/idea.iml" filepath="$PROJECT_DIR$/.idea/idea.iml" />
       <module fileurl="file://$PROJECT_DIR$/wz-api/wz-api.iml" filepath="$PROJECT_DIR$/wz-api/wz-api.iml" />
       <module fileurl="file://$PROJECT_DIR$/wz-consumer/wz-consumer.iml" filepath="$PROJECT_DIR$/wz-consumer/wz-consumer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wz-java-test/wz-java-test.iml" filepath="$PROJECT_DIR$/wz-java-test/wz-java-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/wz-parent/wz-parent.iml" filepath="$PROJECT_DIR$/wz-parent/wz-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/wz-provider/wz-provider.iml" filepath="$PROJECT_DIR$/wz-provider/wz-provider.iml" />
     </modules>
