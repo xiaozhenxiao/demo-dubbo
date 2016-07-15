@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/aop
+           http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--━━━━━━神兽出没━━━━━━-->
+    <!--　　　┏┓　　　┏┓-->
+    <!--　　┏┛┻━━━┛┻┓-->
+    <!--　　┃　　　　　　　┃-->
+    <!--　　┃　　　━　　　┃-->
+    <!--　　┃　┳┛　┗┳　┃-->
+    <!--　　┃　　　　　　　┃-->
+    <!--　　┃　　　┻　　　┃-->
+    <!--　　┃　　　　　　　┃-->
+    <!--　　┗━┓　　　┏━┛-->
+    <!--　　　　┃　　　┃神兽保佑, 永无BUG!-->
+    <!--　　　　┃　　　┃Code is far away from bug with the animal protecting-->
+    <!--　　　　┃　　　┗━━━┓-->
+    <!--　　　　┃　　　　　　　┣┓-->
+    <!--　　　　┃　　　　　　　┏┛-->
+    <!--　　　　┗┓┓┏━┳┓┏┛-->
+    <!--　　　　　┃┫┫　┃┫┫-->
+    <!--　　　　　┗┻┛　┗┻┛-->
+    <!--━━━━━━感觉萌萌哒━━━━━━-->
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/wz_db?characterEncoding=utf8"/>
+        <property name="username" value="root"/>
+        <property name="password" value=""/>
+        <property name="initialSize" value="5"/>
+        <property name="minIdle" value="3"/>
+        <property name="maxActive" value="20"/>
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <property name="minEvictableIdleTimeMillis" value="300000"/>
+        <property name="filters" value="stat,slf4j"/>
+    </bean>
+
+    <bean id="druidStatInterceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"/>
+    <aop:config>
+        <aop:advisor advice-ref="druidStatInterceptor" pointcut="execution(* com.wz.web.service..*.*(..))"/>
+    </aop:config>
+</beans>

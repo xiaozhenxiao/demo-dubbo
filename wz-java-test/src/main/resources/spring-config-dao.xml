@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/tx
+           http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!-- 数据库操作Session工厂 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+        <!-- mapper和resultmap配置路径 -->
+        <property name="mapperLocations">
+            <list>
+                <value>classpath*:sqlmap/mybatis/mysql/*.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.wz.web.dao"/>
+    </bean>
+
+    <!-- spring-data-redis操作集群 -->
+    <!--<bean id="redisSentinelConfiguration" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
+        <property name="master">
+            <bean class="org.springframework.data.redis.connection.RedisNode">
+                <property name="name" value="localhost"></property>
+            </bean>
+        </property>
+        <property name="sentinels">
+            <set>
+                <bean class="org.springframework.data.redis.connection.RedisNode">
+                    <constructor-arg name="host" value="192.168.0.100"></constructor-arg>
+                    <constructor-arg name="port" value="26380"></constructor-arg>
+                </bean>
+                <bean class="org.springframework.data.redis.connection.RedisNode">
+                    <constructor-arg name="host" value="192.168.0.100"/>
+                    <constructor-arg name="port" value="26381"/>
+                </bean>
+                <bean class="org.springframework.data.redis.connection.RedisNode">
+                    <constructor-arg name="host" value="192.168.0.100"/>
+                    <constructor-arg name="port" value="26382"/>
+                </bean>
+            </set>
+        </property>
+    </bean>
+    <bean id="jeidsConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <constructor-arg ref="redisSentinelConfiguration"/>
+    </bean>
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+          <property name="connectionFactory" ref="jeidsConnectionFactory"/>
+    </bean>-->
+
+    <!-- jedis 操作集群-->
+    <bean name="genericObjectPoolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+        <property name="maxWaitMillis" value="-1" />
+        <property name="maxTotal" value="8" />
+        <property name="minIdle" value="0" />
+        <property name="maxIdle" value="8" />
+    </bean>
+    <bean id="jedisCluster" class="com.wz.web.redis.JedisClusterFactory">
+        <property name="connectionTimeout" value="3000" />
+        <property name="soTimeout" value="3000" />
+        <property name="maxRedirections" value="5" />
+        <property name="genericObjectPoolConfig" ref="genericObjectPoolConfig" />
+        <property name="jedisClusterNodes">
+            <set>
+                <value>10.125.31.7:6380</value>
+                <value>10.125.31.7:6381</value>
+                <value>10.125.31.7:6379</value>
+                <value>10.125.31.8:6379</value>
+                <value>10.125.31.8:6380</value>
+                <value>10.125.31.8:6381</value>
+            </set>
+        </property>
+    </bean>
+</beans>
