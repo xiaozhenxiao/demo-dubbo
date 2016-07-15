@@ -24,14 +24,16 @@
         <processorPath useClasspath="true" />
         <module name="wz-api" />
         <module name="wz-consumer" />
+        <module name="wz-java-test" />
         <module name="wz-provider" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="wz-api" target="1.5" />
-      <module name="wz-consumer" target="1.5" />
-      <module name="wz-parent" target="1.5" />
-      <module name="wz-provider" target="1.5" />
+      <module name="wz-api" target="1.8" />
+      <module name="wz-consumer" target="1.8" />
+      <module name="wz-java-test" target="1.8" />
+      <module name="wz-parent" target="1.8" />
+      <module name="wz-provider" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
