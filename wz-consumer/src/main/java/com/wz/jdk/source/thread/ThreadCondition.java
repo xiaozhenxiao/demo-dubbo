@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class ThreadCondition {
     private int queueSize = 100;
     private PriorityQueue<Integer> queue = new PriorityQueue<Integer>(queueSize);
-    private Lock lock = new ReentrantLock();
+    private ReentrantLock lock = new ReentrantLock();
     private Condition notFull = lock.newCondition();
     private Condition notEmpty = lock.newCondition();
 
