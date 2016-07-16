@@ -46,16 +46,16 @@
         <aop:advisor advice-ref="druidStatInterceptor" pointcut="execution(* com.wz.web.service..*.*(..))"/>
     </aop:config>
 
-    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"></bean>
+    <!--<bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"></bean>
     <bean id="druid-type-proxyCreator"
-          class="com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator">    <!-- 所有ABCInterface的派生类被拦截监控  -->
+          class="com.alibaba.druid.support.spring.stat.BeanTypeAutoProxyCreator">    &lt;!&ndash; 所有ABCInterface的派生类被拦截监控  &ndash;&gt;
         <property name="targetBeanType" value="xxxx.ABCInterface"/>
         <property name="interceptorNames">
             <list>
                 <value>druid-stat-interceptor</value>
             </list>
         </property>
-    </bean>
+    </bean>-->
     <!--方法名正则匹配拦截配置-->
     <!--<bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"></bean>
     <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
