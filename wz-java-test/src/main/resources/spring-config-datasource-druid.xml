@@ -2,31 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="
            http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/aop
-           http://www.springframework.org/schema/aop/spring-aop.xsd">
-
-    <!--━━━━━━神兽出没━━━━━━-->
-    <!--　　　┏┓　　　┏┓-->
-    <!--　　┏┛┻━━━┛┻┓-->
-    <!--　　┃　　　　　　　┃-->
-    <!--　　┃　　　━　　　┃-->
-    <!--　　┃　┳┛　┗┳　┃-->
-    <!--　　┃　　　　　　　┃-->
-    <!--　　┃　　　┻　　　┃-->
-    <!--　　┃　　　　　　　┃-->
-    <!--　　┗━┓　　　┏━┛-->
-    <!--　　　　┃　　　┃神兽保佑, 永无BUG!-->
-    <!--　　　　┃　　　┃Code is far away from bug with the animal protecting-->
-    <!--　　　　┃　　　┗━━━┓-->
-    <!--　　　　┃　　　　　　　┣┓-->
-    <!--　　　　┃　　　　　　　┏┛-->
-    <!--　　　　┗┓┓┏━┳┓┏┛-->
-    <!--　　　　　┃┫┫　┃┫┫-->
-    <!--　　　　　┗┻┛　┗┻┛-->
-    <!--━━━━━━感觉萌萌哒━━━━━━-->
+           http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
@@ -42,9 +24,25 @@
     </bean>
 
     <bean id="druidStatInterceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"/>
-    <aop:config>
+    <!--<aop:config>
         <aop:advisor advice-ref="druidStatInterceptor" pointcut="execution(* com.wz.web.service..*.*(..))"/>
+    </aop:config>-->
+
+    <!-- 以AspectJ方式 定义 AOP -->
+    <aop:config proxy-target-class="true">
+        <aop:advisor pointcut="execution(* com.wz.web.service..*.*(..))" advice-ref="txAdvice"/>
     </aop:config>
+
+    <!-- 基本事务定义,使用transactionManager作事务管理,默认get* find*方法的事务为readonly,其余方法按默认设置.
+             默认的设置请参考Spring文档事务一章. -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="find*" read-only="true"/>
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="query*" read-only="true"/>
+            <tx:method name="*" read-only="false"/>
+        </tx:attributes>
+    </tx:advice>
 
     <!--<bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"></bean>
     <bean id="druid-type-proxyCreator"
