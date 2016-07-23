@@ -23,7 +23,7 @@
         <property name="filters" value="stat,slf4j"/>
     </bean>
 
-    <bean id="druidStatInterceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"/>
+   <!-- <bean id="druidStatInterceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor"/>-->
     <!--<aop:config>
         <aop:advisor advice-ref="druidStatInterceptor" pointcut="execution(* com.wz.web.service..*.*(..))"/>
     </aop:config>-->
