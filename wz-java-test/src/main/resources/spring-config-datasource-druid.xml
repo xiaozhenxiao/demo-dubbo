@@ -14,7 +14,7 @@
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/wz_db?characterEncoding=utf8"/>
         <property name="username" value="root"/>
-        <property name="password" value=""/>
+        <property name="password" value="root"/>
         <property name="initialSize" value="5"/>
         <property name="minIdle" value="3"/>
         <property name="maxActive" value="20"/>
