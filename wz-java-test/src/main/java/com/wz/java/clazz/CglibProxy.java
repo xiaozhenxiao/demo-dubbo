@@ -34,11 +34,11 @@ public class CglibProxy implements MethodInterceptor {
         CglibProxy proxy = new CglibProxy();
         //通过生成子类的方式创建代理类
         ParentClass proxyImp = (ParentClass)proxy.getProxy(ParentClass.class);
-        System.out.println(proxyImp.doSomething());
+        proxyImp.doSomething();
 
         //通过生成子类的方式创建代理类
         ChildClass childProxy = (ChildClass)proxy.getProxy(ChildClass.class);
-        System.out.println(childProxy.doSomething());
+        childProxy.doSomething();
     }
 }
 

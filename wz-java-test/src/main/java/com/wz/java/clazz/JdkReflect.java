@@ -13,12 +13,12 @@ public class JdkReflect {
             Class parentClassType = Class.forName("com.wz.java.clazz.ParentClass");
             Constructor<ParentClass> constructor = parentClassType.getDeclaredConstructor((Class[]) null);
             ParentClass parent = constructor.newInstance();
-            System.out.println(parent.doSomething());
+            parent.doSomething();
             System.out.println(parent.doParent());
 
             Constructor<ChildClass> constructor1 = childClassType.getDeclaredConstructor((Class[]) null);
             ChildClass child = constructor1.newInstance();
-            System.out.println(child.doSomething());
+            child.doSomething();
             System.out.println(child.doChild());
 //            classType.newInstance();
         } catch (ClassNotFoundException e) {
@@ -38,8 +38,8 @@ public class JdkReflect {
 class ParentClass{
     public String name = "爸爸";
 
-    public String doSomething(){
-        return "父亲的行为";
+    public void doSomething(){
+        System.out.println("父亲的行为");
     }
     public String doParent(){
         return "父亲做自己的事情了";
@@ -58,8 +58,9 @@ class ChildClass extends ParentClass{
     public String name = "儿子";
 
     @Override
-    public String doSomething() {
-        return super.doSomething();
+    public void doSomething() {
+        System.out.println("儿子的行为");
+        super.doSomething();
     }
 
     public String doChild(){

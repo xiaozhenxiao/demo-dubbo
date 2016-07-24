@@ -1,6 +1,7 @@
 package com.wz.java.clazz;
 
 /**
+ * 对 Java  的  class.cast 的测试
  * Created by wangzhen on 2016-07-13.
  */
 public class ClassDemoCast {
