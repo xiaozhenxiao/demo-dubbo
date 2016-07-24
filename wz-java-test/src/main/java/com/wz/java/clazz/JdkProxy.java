@@ -12,19 +12,27 @@ public class JdkProxy {
         ObjectProxy proxy = new ObjectProxy();
         BookFacade bookProxy = (BookFacade) proxy.bind(new BookFacadeImpl());
         bookProxy.addBook();
+        BookFacade people = (BookFacade) proxy.bind(new People());
+        people.addBook();
     }
 }
 
 interface BookFacade {
     public void addBook();
 }
+
 class BookFacadeImpl implements BookFacade {
 
     @Override
     public void addBook() {
         System.out.println("增加图书方法。。。");
     }
-
+}
+class People implements BookFacade{
+    @Override
+    public void addBook() {
+        System.out.println("人的方法。。。");
+    }
 }
 class ObjectProxy implements InvocationHandler {
     private Object target;
