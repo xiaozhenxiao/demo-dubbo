@@ -26,12 +26,12 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.wz.web.dao"/>
     </bean>
-
-    <bean id="demo" class="com.wz.web.domain.Demo">
+    <!--beanPostProcessors的测试-->
+    <!--<bean id="demo" class="com.wz.web.domain.Demo">
         <property name="id" value="1"/>
         <property name="username" value="本名"/>
     </bean>
-    <bean id="demPostProcessor" class="com.wz.web.beanPostProcessors.DemoPostProcessor"/>
+    <bean id="demPostProcessor" class="com.wz.web.beanPostProcessors.DemoPostProcessor"/>-->
     <!-- spring-data-redis操作集群 -->
     <!--<bean id="redisSentinelConfiguration" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
         <property name="master">
@@ -64,7 +64,7 @@
     </bean>-->
 
     <!-- jedis 操作集群-->
-    <bean name="genericObjectPoolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+    <!--<bean name="genericObjectPoolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
         <property name="maxWaitMillis" value="-1" />
         <property name="maxTotal" value="8" />
         <property name="minIdle" value="0" />
@@ -85,5 +85,5 @@
                 <value>10.125.31.8:6381</value>
             </set>
         </property>
-    </bean>
+    </bean>-->
 </beans>

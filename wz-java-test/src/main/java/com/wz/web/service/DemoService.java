@@ -12,7 +12,7 @@ public interface DemoService {
 
     public int addDemo(Demo record);
 
-    public int addDemoSelective(Demo record);
+    public int addDemoSelective(Demo record) throws Exception;
 
     public Demo getDemoById(Long id);
 
