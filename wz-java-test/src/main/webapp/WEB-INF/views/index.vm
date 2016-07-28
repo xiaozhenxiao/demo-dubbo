@@ -6,5 +6,6 @@
 <h2>Hello  $name!!</h2>
 #set($age="男")
 性别: ${age}
+<h1>序号:$!{index}</h1>
 </body>
 </html>
