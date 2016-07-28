@@ -36,18 +36,18 @@ public class DemoServiceImpl implements DemoService {
     public int addDemoSelective(Demo record) throws Exception{
         int result = demoDao.insertSelective(record);
 
-        /*User user = new User();
+        User user = new User();
         user.setId(1l);
         user.setUsername("振振");
         user.setPassword("654321");
         //此种情况，user可执行成功，demo回滚
-        userService.modifyById(user);*/
+        userService.modifyById(user);
 
-        record.setId(2l);
+        /*record.setId(2l);
         record.setUsername("振振");
         record.setPassword("654321");
 //      在add的事务中执行，发生异常，一起回滚
-        modifyById(record);
+        modifyById(record);*/
         if(result > 0){
             throw new ParseException("测试事务回滚");
         }
