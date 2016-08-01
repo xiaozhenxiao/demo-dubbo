@@ -21,8 +21,13 @@ public class ThreadCondition {
         Producer producer = test.new Producer();
         Consumer consumer = test.new Consumer();
 
-        producer.start();
         consumer.start();
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        producer.start();
     }
 
     class Consumer extends Thread{
@@ -33,7 +38,9 @@ public class ThreadCondition {
         }
 
         private void consume() {
-            while(true){
+            int i = 0;
+            while(i++ < 10){
+                System.out.println("consume: " + Thread.currentThread().getName());
                 lock.lock();
                 try {
                     while(queue.size() == 0){
@@ -62,8 +69,10 @@ public class ThreadCondition {
         }
 
         private void produce() {
-            while(true){
+            int j = 0;
+            while(j++ < 10){
                 lock.lock();
+                System.out.println("produce: " + Thread.currentThread().getName());
                 try {
                     while(queue.size() == queueSize){
                         try {

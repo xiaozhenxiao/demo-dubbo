@@ -18,31 +18,9 @@ public class TestCountDownLatch {
     public static void main(String[] args) {
         final CountDownLatch latch = new CountDownLatch(2);
 
-        new Thread(){
-            public void run() {
-                try {
-                    System.out.println("子线程"+Thread.currentThread().getName()+"正在执行");
-                    Thread.sleep(3000);
-                    System.out.println("子线程"+Thread.currentThread().getName()+"执行完毕");
-                    latch.countDown();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            };
-        }.start();
+        StartThread(latch);
 
-        new Thread(){
-            public void run() {
-                try {
-                    System.out.println("子线程"+Thread.currentThread().getName()+"正在执行");
-                    Thread.sleep(3000);
-                    System.out.println("子线程"+Thread.currentThread().getName()+"执行完毕");
-                    latch.countDown();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            };
-        }.start();
+        StartThread(latch);
 
         try {
             System.out.println("等待2个子线程执行完毕...");
@@ -52,5 +30,20 @@ public class TestCountDownLatch {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private static void StartThread(final CountDownLatch latch) {
+        new Thread(){
+            public void run() {
+                try {
+                    System.out.println("子线程"+Thread.currentThread().getName()+"正在执行");
+                    Thread.sleep(3000);
+                    System.out.println("子线程"+Thread.currentThread().getName()+"执行完毕");
+                    latch.countDown();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            };
+        }.start();
     }
 }

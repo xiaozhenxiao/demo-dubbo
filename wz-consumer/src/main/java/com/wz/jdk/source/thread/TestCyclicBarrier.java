@@ -29,6 +29,8 @@ public class TestCyclicBarrier {
             try{
                 System.out.println(Thread.currentThread().getName()+" Worker's waiting");
                 //线程在这里等待，直到所有线程都到达barrier。
+//                System.out.println("numberWaiting:" + barrier.getNumberWaiting());
+//                System.out.println("Parties:" + barrier.getParties());
                 barrier.await();
                 System.out.println("ID:"+Thread.currentThread().getName()+" Working");
             }catch(Exception e){

@@ -95,5 +95,23 @@ public class JavaTest {
 
         Calendar calendar = Calendar.getInstance();
         dateTime = new DateTime(calendar);
+
+        String s1 = "ffffffff";
+        String s2 = "FFFFFFFF";
+        String s3 = "DDDDDDDDDDD";
+        s1 = s2 = s3;
+        System.out.println("s1:" + s1);
+        System.out.println("s2:" + s2);
+        System.out.println("s3:" + s3);
+
+        int SHARED_SHIFT   = 16;
+        int SHARED_UNIT    = (1 << SHARED_SHIFT);
+        int MAX_COUNT      = (1 << SHARED_SHIFT) - 1;
+        int EXCLUSIVE_MASK = (1 << SHARED_SHIFT) - 1;
+        System.out.println("SHARED_UNIT:: "+SHARED_UNIT);
+        System.out.println("MAX_COUNT:: "+MAX_COUNT);
+        System.out.println("EXCLUSIVE_MASK:: "+EXCLUSIVE_MASK);
+
+        System.out.println("共享锁：" + (65536*2 >>> SHARED_SHIFT));
     }
 }
