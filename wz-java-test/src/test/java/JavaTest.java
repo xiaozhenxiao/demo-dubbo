@@ -113,5 +113,8 @@ public class JavaTest {
         System.out.println("EXCLUSIVE_MASK:: "+EXCLUSIVE_MASK);
 
         System.out.println("共享锁：" + (65536*2 >>> SHARED_SHIFT));
+
+        int parent = (9 - 1) >>> 1;
+        System.out.println("二叉树计算父节点:" + parent);
     }
 }
