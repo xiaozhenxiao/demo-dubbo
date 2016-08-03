@@ -1,4 +1,4 @@
-package com.wz.jdk.source.thread.conditioncqueue;
+package com.wz.jdk.java.thread.conditioncqueue;
 
 import java.util.concurrent.locks.*;
 

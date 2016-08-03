@@ -1,4 +1,4 @@
-package com.wz.jdk.source.thread.conditioncqueue;
+package com.wz.jdk.java.thread.conditioncqueue;
 
 import net.jcip.annotations.ThreadSafe;
 

@@ -1,4 +1,4 @@
-package com.wz.jdk.source.thread;
+package com.wz.jdk.java.thread;
 
 import java.util.concurrent.Semaphore;
 

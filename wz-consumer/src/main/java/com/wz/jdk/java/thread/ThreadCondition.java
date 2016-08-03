@@ -1,8 +1,7 @@
-package com.wz.jdk.source.thread;
+package com.wz.jdk.java.thread;
 
 import java.util.PriorityQueue;
 import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
