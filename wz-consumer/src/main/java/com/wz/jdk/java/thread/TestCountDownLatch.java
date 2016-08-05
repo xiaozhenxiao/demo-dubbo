@@ -43,7 +43,7 @@ public class TestCountDownLatch {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            };
+            }
         }.start();
     }
 }

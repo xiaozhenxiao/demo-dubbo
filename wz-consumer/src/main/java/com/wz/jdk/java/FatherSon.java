@@ -10,12 +10,13 @@ public class FatherSon {
         Father father = new Son();
         System.out.println(father.name);
         father.getName();
-        father.getNick("FatherSon");
+        father.getNick();
     }
 }
 
 class Father{
     public String name = "father";
+    protected int i = 0;
 
     public Father(){
         System.out.println("Father constructor!");
@@ -25,9 +26,15 @@ class Father{
         System.out.println("Father's name is " + this.name + this.getClass());
         return name;
     }
-    public String getNick(String name){
-        System.out.println("Father's Nick name is " + name + this.getClass());
+    public String getNick(){
+        System.out.println(name + " Father's Nick name is " + getName() + " " + this.getClass());
         return name;
+    }
+    public void increase(){
+        System.out.println("increase in father");
+    }
+    public int printI(){
+        return i;
     }
 }
 
@@ -39,12 +46,30 @@ class Son extends Father{
     }
 
     public String getName(){
-        System.out.println("Son's name is " + this.name + this.getClass());
+        System.out.println("Son's name is " + this.name + " " + this.getClass());
         return name;
     }
 
     public String getName(String name){
         System.out.println("Son's Overload name is " + name + this.getClass());
         return name;
+    }
+    public void increase(){
+        i++;
+    }
+    public int printI() {
+        return i;
+    }
+    public void setName(String name){
+        this.name = name;
+    }
+}
+
+class daughter extends Father{
+    public void increase(){
+        i += 10;
+    }
+    public int printI() {
+        return i;
     }
 }
