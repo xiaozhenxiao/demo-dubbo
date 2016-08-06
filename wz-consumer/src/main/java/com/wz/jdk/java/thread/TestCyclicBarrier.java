@@ -1,6 +1,7 @@
 package com.wz.jdk.java.thread;
 
 import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.Phaser;
 
 /**
  * 字面意思回环栅栏，通过它可以实现让一组线程等待至某个状态之后再全部同时执行。
@@ -19,10 +20,11 @@ public class TestCyclicBarrier {
 
     public static class WorkerThread implements Runnable{
 
-        CyclicBarrier barrier;
+//        CyclicBarrier barrier;
+        Phaser phaser;
 
-        public WorkerThread(CyclicBarrier b){
-            this.barrier = b;
+        public WorkerThread(Phaser b){
+            this.phaser = b;
         }
 
         public void run() {
@@ -31,7 +33,7 @@ public class TestCyclicBarrier {
                 //线程在这里等待，直到所有线程都到达barrier。
 //                System.out.println("numberWaiting:" + barrier.getNumberWaiting());
 //                System.out.println("Parties:" + barrier.getParties());
-                barrier.await();
+                phaser.arriveAndAwaitAdvance();
                 System.out.println("ID:"+Thread.currentThread().getName()+" Working");
             }catch(Exception e){
                 e.printStackTrace();
@@ -44,15 +46,15 @@ public class TestCyclicBarrier {
      * @param args
      */
     public static void main(String[] args) {
-        CyclicBarrier cb = new CyclicBarrier(THREAD_NUM, new Runnable() {
-            //当所有线程到达barrier时执行
-            public void run() {
-                System.out.println(Thread.currentThread().getName()+"Inside Barrier");
-            }
+        CyclicBarrier cb = new CyclicBarrier(THREAD_NUM, () -> {
+            System.out.println(Thread.currentThread().getName()+" Inside Barrier");
         });
 
+        Phaser phaser = new Phaser(THREAD_NUM);
+
         for(int i=0;i<THREAD_NUM;i++){
-            new Thread(new WorkerThread(cb)).start();
+//            new Thread(new WorkerThread(cb)).start();
+            new Thread(new WorkerThread(phaser)).start();
         }
     }
 

@@ -1,6 +1,7 @@
 package com.wz.jdk.java.thread;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 /**
  * CountDownLatch类位于java.util.concurrent包下，
@@ -16,30 +17,32 @@ import java.util.concurrent.CountDownLatch;
  */
 public class TestCountDownLatch {
     public static void main(String[] args) {
-        final CountDownLatch latch = new CountDownLatch(2);
+        CountDownLatch latch = new CountDownLatch(1);
 
         StartThread(latch);
 
         StartThread(latch);
 
+        System.out.println("等待主线程执行countDown...");
         try {
-            System.out.println("等待2个子线程执行完毕...");
-            latch.await();
-            System.out.println("2个子线程已经执行完毕");
-            System.out.println("继续执行主线程");
+            TimeUnit.SECONDS.sleep(7);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        System.out.println("主线程执行countDown完毕");
+        latch.countDown();
+        System.out.println("执行主线程");
+
     }
 
     private static void StartThread(final CountDownLatch latch) {
         new Thread(){
             public void run() {
                 try {
+                    latch.await();
                     System.out.println("子线程"+Thread.currentThread().getName()+"正在执行");
                     Thread.sleep(3000);
                     System.out.println("子线程"+Thread.currentThread().getName()+"执行完毕");
-                    latch.countDown();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

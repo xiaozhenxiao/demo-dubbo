@@ -9,8 +9,30 @@ public class Sort {
         int [] array = {1, 5, 8, 2, 7, 4, 3, 6, 9, 15, 10, 11, 13};
         printArray("排序前：",  array);
 //        bubbleSort(array);
-        quickSort(array, 0, array.length-1);
+        kuaipai(array, 0, array.length-1);
         printArray("排序：", array);
+    }
+
+    public static void kuaipai(int[] a, int start, int end){
+        if(start<end){
+            int i = start, j = end;
+            int base = a[start];
+            while(i<=j){
+                while(i < end && a[i] < base)
+                    i++;
+                while(j > start && a[j] > base)
+                    j--;
+                if (i<=j){
+                    swap(a, i, j);
+                    i++;
+                    j--;
+                }
+            }
+            if(i < end)
+                kuaipai(a, i, end);
+            if(j > start)
+                kuaipai(a, start, j);
+        }
     }
 
     public static void printArray(String print, int[] numbers){
@@ -19,6 +41,11 @@ public class Sort {
             System.out.print(i + " - ");
         }
         System.out.println();
+    }
+    public static void swap(int a[], int i, int j){
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
     }
 
     /**
@@ -71,9 +98,7 @@ public class Sort {
                 while ((numbers[j] > base) && (j > start))
                     j--;
                 if (i <= j) {
-                    temp = numbers[i];
-                    numbers[i] = numbers[j];
-                    numbers[j] = temp;
+                    swap(numbers, i, j);
                     i++;
                     j--;
                 }

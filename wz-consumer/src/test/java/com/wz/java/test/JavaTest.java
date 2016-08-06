@@ -3,6 +3,7 @@ package com.wz.java.test;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
@@ -26,6 +27,11 @@ public class JavaTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
+        long[] array = new long[]{5,9,6,7,8,2,4,3,1,5,7,85,42,63,54,27,45};
+        Arrays.sort(array, 0, 10);
+        for (int i = 0; i < array.length; i++) {
+            long l = array[i];
+            System.out.print(l+ "\t");
+        }
     }
 }

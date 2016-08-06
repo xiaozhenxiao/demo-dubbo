@@ -39,9 +39,9 @@ public class StreamTest {
         print(strA);
         print("");
         print(strB);
-        getLength(strA);
-        getLength("");
-        getLength(strB);
+        System.out.println(getLength(strA));
+        System.out.println(getLength(""));
+        System.out.println(getLength(strB));
     }
     public static void print(String text) {
         // Java 8
