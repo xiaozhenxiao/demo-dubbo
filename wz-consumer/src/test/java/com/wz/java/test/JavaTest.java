@@ -3,9 +3,7 @@ package com.wz.java.test;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by wangzhen on 2016-08-05.
@@ -32,6 +30,19 @@ public class JavaTest {
         for (int i = 0; i < array.length; i++) {
             long l = array[i];
             System.out.print(l+ "\t");
+        }
+        System.out.println();
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 11; i++) {
+            list.add("num_" + i);
+        }
+//        for (String s : list) {
+//            System.out.println(s);
+//        }
+        System.out.println("===========================");
+        List<String> subList = list.subList(0,11);
+        for (int i = 0; i < subList.size(); i++) {
+            System.out.println(subList.get(i));
         }
     }
 }
