@@ -32,9 +32,9 @@ public class MyTreeMap<K, V> {
         Entry<K,V> p = getEntry(key);
         return (p==null ? null : p.value);
     }
-    final int compare(Object k1, Object k2) {
-        return comparator==null ? ((Comparable<? super K>)k1).compareTo((K)k2)
-                : comparator.compare((K)k1, (K)k2);
+    final int compare(K k1, K k2) {
+        return comparator==null ? ((Comparable<? super K>)k1).compareTo(k2)
+                : comparator.compare(k1, k2);
     }
     public V put(K key, V value) {
         Entry<K,V> t = root;

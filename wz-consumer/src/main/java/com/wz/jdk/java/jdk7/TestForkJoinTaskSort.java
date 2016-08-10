@@ -67,7 +67,7 @@ public class TestForkJoinTaskSort extends RecursiveAction {
 
     public static void main(String[] args) throws InterruptedException {
         long[] array = new long[]{5,9,6,7,8,2,4,3,1,5,7,85,42,63,54,27,45};
-        ForkJoinTask sort = new TestForkJoinTaskSort(array);
+        ForkJoinTask<Void> sort = new TestForkJoinTaskSort(array);
         ForkJoinPool fjpool = new ForkJoinPool();
         fjpool.submit(sort);
         fjpool.shutdown();

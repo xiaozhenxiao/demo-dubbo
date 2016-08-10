@@ -1,6 +1,7 @@
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.LocalDate;
+import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -46,9 +47,11 @@ public class JavaTest {
         DateTime dt1 = new DateTime();// 取得当前时间
 
         // 根据指定格式,将时间字符串转换成DateTime对象,这里的格式和上面的输出格式是一样的
-        DateTime dt2 = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime("2016-07-25 00:0:00");
+        DateTime dt2 = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss").parseDateTime("2016-08-09 12:00:00");
         int days = Days.daysBetween(dt2, dt1).getDays();
+        int minute = Minutes.minutesBetween(dt1, dt2).getMinutes();
         System.out.println("days: " + days);
+        System.out.println("minute: " + minute);
 
         //计算两个日期间隔的天数
         LocalDate start=new LocalDate(2012, 12,14);
