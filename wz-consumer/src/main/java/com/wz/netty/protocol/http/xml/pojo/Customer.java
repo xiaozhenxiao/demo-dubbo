@@ -17,6 +17,16 @@ public class Customer {
     /** Middle name(s), if any. */
     private List<String> middleNames;
 
+    public Customer() {
+    }
+
+    public Customer(long customerNumber, String firstName, String lastName, List<String> middleNames) {
+        this.customerNumber = customerNumber;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleNames = middleNames;
+    }
+
     public long getCustomerNumber() {
 	return customerNumber;
     }

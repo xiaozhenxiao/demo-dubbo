@@ -311,8 +311,10 @@
                 </executions>
                 <configuration>
                     <interfaceClassNames>
+                        <!--<interfaceClassName>com.wz.netty.protocol.http.xml.pojo.Order</interfaceClassName>-->
                         <interfaceClassName>com.wz.netty.protocol.http.xml.pojo.Order</interfaceClassName>
                     </interfaceClassNames>
+
                     <outputDirectory>${project.build.outputDirectory}/META-INF/schema</outputDirectory>
 
                     <schemaBindingDirectory>${project.build.outputDirectory}/META-INF/schema</schemaBindingDirectory>
