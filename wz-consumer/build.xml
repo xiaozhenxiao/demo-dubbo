@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project default="main" basedir=".">
+    <path id="classpath">
+        <dirset dir="${basedir}/target/classes" />
+        <dirset dir="${basedir}/target/test-classes" />
+        <fileset dir="D:/repository/com/thoughtworks/qdox/qdox/1.12.1" includes="*.jar" />
+        <fileset dir="D:/repository/xpp3/xpp3/1.1.3.4.O" includes="*.jar" />
+        <fileset dir="D:/repository/org/jibx/jibx-bind/1.2.6/" includes="*.jar" />
+        <fileset dir="D:/repository/org/jibx/jibx-run/1.2.6/" includes="*.jar" />
+        <fileset dir="D:/repository/org/jibx/jibx-tools/1.2.6" includes="*.jar" />
+        <fileset dir="D:/repository/org/jibx/jibx-schema/1.2.6" includes="*.jar" />
+        <fileset dir="D:/repository/org/jibx/jibx-extras/1.2.6" includes="*.jar" />
+        <fileset dir="D:/repository/log4j/log4j/1.2.16" includes="*.jar" />
+        <fileset dir="D:/repository/org/apache/bcel/bcel/6.0/" includes="*.jar" />
+    </path>
+    <target name="main" depends="compile,bindGen, bind" description="Main target" />
+    <target name="compile" description="Compilation target">
+        <echo>Building file.</echo>
+        <javac srcdir="${basedir}/src/main/java/com/wz/netty/protocol/http/xml/pojo" destdir="${basedir}/target/classes" includeantruntime="true" />
+    </target>
+    <target name="bindGen">
+        <echo message="Running BindGen tool" />
+        <java classpathref="classpath" fork="true" failonerror="true" classname="org.jibx.binding.generator.BindGen">
+            <arg value="com.wz.netty.protocol.http.xml.pojo.Order" />
+        </java>
+    </target>
+    <target name="bind">
+        <echo message="Running bind" />
+        <taskdef name="bind" classname="org.jibx.binding.ant.CompileTask">
+            <classpath refid="classpath"/>
+        </taskdef>
+        <bind binding="${basedir}/binding.xml">
+            <classpath refid="classpath"/>
+        </bind>
+    </target>
+</project>
