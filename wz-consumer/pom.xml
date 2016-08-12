@@ -283,8 +283,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
-            <plugin>
-                <!-- http://jibx.sourceforge.net/jibx-maven-plugin/ -->
+            <!--<plugin>
+                &lt;!&ndash; http://jibx.sourceforge.net/jibx-maven-plugin/ &ndash;&gt;
                 <groupId>org.jibx</groupId>
                 <artifactId>jibx-maven-plugin</artifactId>
                 <version>1.2.5</version>
@@ -308,7 +308,6 @@
                     </execution>
                     <execution>
                         <id>jibx-2-wsdl</id>
-                        <phase>process-classes</phase>
                         <goals>
                             <goal>jibx2wsdl</goal>
                         </goals>
@@ -316,7 +315,7 @@
                 </executions>
                 <configuration>
                     <interfaceClassNames>
-                        <!--<interfaceClassName>com.wz.netty.protocol.http.xml.pojo.Order</interfaceClassName>-->
+                        &lt;!&ndash;<interfaceClassName>com.wz.netty.protocol.http.xml.pojo.Order</interfaceClassName>&ndash;&gt;
                         <interfaceClassName>com.wz.netty.protocol.http.xml.pojo.Order</interfaceClassName>
                     </interfaceClassNames>
 
@@ -338,7 +337,7 @@
                         <version>6.0</version>
                     </dependency>
                 </dependencies>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 </project>

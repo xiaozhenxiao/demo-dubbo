@@ -30,55 +30,54 @@ import io.netty.util.CharsetUtil;
 
 /**
  * @author lilinfeng
- * @date 2014年2月14日
  * @version 1.0
+ * @date 2014年2月14日
  */
 public class FileServer {
 
     public void run(int port) throws Exception {
-	EventLoopGroup bossGroup = new NioEventLoopGroup();
-	EventLoopGroup workerGroup = new NioEventLoopGroup();
-	try {
-	    ServerBootstrap b = new ServerBootstrap();
-	    b.group(bossGroup, workerGroup)
-		    .channel(NioServerSocketChannel.class)
-		    .option(ChannelOption.SO_BACKLOG, 100)
-		    .childHandler(new ChannelInitializer<SocketChannel>() {
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * io.netty.channel.ChannelInitializer#initChannel(io
-			 * .netty.channel.Channel)
-			 */
-			public void initChannel(SocketChannel ch)
-				throws Exception {
-			    ch.pipeline().addLast(
-				    new StringEncoder(CharsetUtil.UTF_8),
-				    new LineBasedFrameDecoder(1024),
-				    new StringDecoder(CharsetUtil.UTF_8),
-				    new FileServerHandler());
-			}
-		    });
-	    ChannelFuture f = b.bind(port).sync();
-	    System.out.println("Start file server at port : " + port);
-	    f.channel().closeFuture().sync();
-	} finally {
-	    // 优雅停机
-	    bossGroup.shutdownGracefully();
-	    workerGroup.shutdownGracefully();
-	}
+        EventLoopGroup bossGroup = new NioEventLoopGroup();
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        try {
+            ServerBootstrap b = new ServerBootstrap();
+            b.group(bossGroup, workerGroup)
+                    .channel(NioServerSocketChannel.class)
+                    .option(ChannelOption.SO_BACKLOG, 100)
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        /*
+                         * (non-Javadoc)
+                         *
+                         * @see
+                         * io.netty.channel.ChannelInitializer#initChannel(io
+                         * .netty.channel.Channel)
+                         */
+                        public void initChannel(SocketChannel ch)
+                                throws Exception {
+                            ch.pipeline().addLast(new StringEncoder(CharsetUtil.UTF_8),
+                                    new LineBasedFrameDecoder(1024),
+                                    new StringDecoder(CharsetUtil.UTF_8),
+                                    new FileServerHandler());
+                        }
+                    });
+            ChannelFuture f = b.bind(port).sync();
+            System.out.println("Start file server at port : " + port);
+            f.channel().closeFuture().sync();
+        } finally {
+            // 优雅停机
+            bossGroup.shutdownGracefully();
+            workerGroup.shutdownGracefully();
+        }
     }
 
     public static void main(String[] args) throws Exception {
-	int port = 8080;
-	if (args.length > 0) {
-	    try {
-		port = Integer.parseInt(args[0]);
-	    } catch (NumberFormatException e) {
-		e.printStackTrace();
-	    }
-	}
-	new FileServer().run(port);
+        int port = 8080;
+        if (args.length > 0) {
+            try {
+                port = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+        new FileServer().run(port);
     }
 }
