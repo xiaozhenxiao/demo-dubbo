@@ -97,6 +97,11 @@
             <version>1.2.6</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.bcel</groupId>
+            <artifactId>bcel</artifactId>
+            <version>6.0</version>
+        </dependency>
         <!-- netty end -->
         <!-- commons start -->
         <dependency>
