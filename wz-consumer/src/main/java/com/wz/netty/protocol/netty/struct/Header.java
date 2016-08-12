@@ -20,8 +20,8 @@ import java.util.Map;
 
 /**
  * @author Lilinfeng
- * @date 2014年3月14日
  * @version 1.0
+ * @date 2014年3月14日
  */
 public final class Header {
 
@@ -41,90 +41,84 @@ public final class Header {
      * @return the crcCode
      */
     public final int getCrcCode() {
-	return crcCode;
+        return crcCode;
     }
 
     /**
-     * @param crcCode
-     *            the crcCode to set
+     * @param crcCode the crcCode to set
      */
     public final void setCrcCode(int crcCode) {
-	this.crcCode = crcCode;
+        this.crcCode = crcCode;
     }
 
     /**
      * @return the length
      */
     public final int getLength() {
-	return length;
+        return length;
     }
 
     /**
-     * @param length
-     *            the length to set
+     * @param length the length to set
      */
     public final void setLength(int length) {
-	this.length = length;
+        this.length = length;
     }
 
     /**
      * @return the sessionID
      */
     public final long getSessionID() {
-	return sessionID;
+        return sessionID;
     }
 
     /**
-     * @param sessionID
-     *            the sessionID to set
+     * @param sessionID the sessionID to set
      */
     public final void setSessionID(long sessionID) {
-	this.sessionID = sessionID;
+        this.sessionID = sessionID;
     }
 
     /**
      * @return the type
      */
     public final byte getType() {
-	return type;
+        return type;
     }
 
     /**
-     * @param type
-     *            the type to set
+     * @param type the type to set
      */
     public final void setType(byte type) {
-	this.type = type;
+        this.type = type;
     }
 
     /**
      * @return the priority
      */
     public final byte getPriority() {
-	return priority;
+        return priority;
     }
 
     /**
-     * @param priority
-     *            the priority to set
+     * @param priority the priority to set
      */
     public final void setPriority(byte priority) {
-	this.priority = priority;
+        this.priority = priority;
     }
 
     /**
      * @return the attachment
      */
     public final Map<String, Object> getAttachment() {
-	return attachment;
+        return attachment;
     }
 
     /**
-     * @param attachment
-     *            the attachment to set
+     * @param attachment the attachment to set
      */
     public final void setAttachment(Map<String, Object> attachment) {
-	this.attachment = attachment;
+        this.attachment = attachment;
     }
 
     /*
@@ -134,9 +128,9 @@ public final class Header {
      */
     @Override
     public String toString() {
-	return "Header [crcCode=" + crcCode + ", length=" + length
-		+ ", sessionID=" + sessionID + ", type=" + type + ", priority="
-		+ priority + ", attachment=" + attachment + "]";
+        return "Header [crcCode=" + crcCode + ", length=" + length
+                + ", sessionID=" + sessionID + ", type=" + type + ", priority="
+                + priority + ", attachment=" + attachment + "]";
     }
 
 }
