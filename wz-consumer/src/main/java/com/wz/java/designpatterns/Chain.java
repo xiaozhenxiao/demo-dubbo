@@ -4,7 +4,7 @@ package com.wz.java.designpatterns;
  * Created by wangzhen on 2016-07-06.
  * 责任链模式
  */
-public class Client {
+public class Chain {
 
     public static void main(String[] args) {
         //组装责任链
