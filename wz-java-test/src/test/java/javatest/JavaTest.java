@@ -1,4 +1,4 @@
-package java;
+package javatest;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -62,6 +62,11 @@ public class JavaTest {
 		int rr = ii + (int)dd;
 		System.out.println(rr);
 		System.out.println(dd);
-	}
 
+		System.out.println(log2(8));
+	}
+	private static int log2(int val) {
+		// compute the (0-based, with lsb = 0) position of highest set bit i.e, log2
+		return Integer.SIZE - 1 - Integer.numberOfLeadingZeros(val);
+	}
 }

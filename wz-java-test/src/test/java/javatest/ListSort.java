@@ -1,4 +1,4 @@
-package java;
+package javatest;
 
 import com.alibaba.fastjson.JSON;
 
