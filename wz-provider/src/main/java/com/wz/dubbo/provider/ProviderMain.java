@@ -9,7 +9,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class ProviderMain {
     public static void main(String[] args) throws InterruptedException {
         String configLocation="dubbo-provider.xml";
-        ApplicationContext context =new ClassPathXmlApplicationContext(configLocation);
+        ClassPathXmlApplicationContext context =new ClassPathXmlApplicationContext(configLocation);
+//        context.start();
         String[] names=context.getBeanDefinitionNames();
         System.out.print("Beans:");
         for(String string : names)
