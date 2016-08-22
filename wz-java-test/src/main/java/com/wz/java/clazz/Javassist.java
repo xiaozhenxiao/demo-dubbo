@@ -24,5 +24,8 @@ public class Javassist {
         cc.addMethod(method);
         //保存生成的字节码
         cc.writeFile("d://temp");
+
+        Class clazz = cc.getClass();
+        clazz.newInstance();
     }
 }
