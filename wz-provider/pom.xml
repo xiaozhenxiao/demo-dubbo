@@ -26,6 +26,13 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/com.esotericsoftware.kryo/kryo -->
+    <dependency>
+      <groupId>com.esotericsoftware.kryo</groupId>
+      <artifactId>kryo</artifactId>
+      <version>2.24.0</version>
+    </dependency>
+
     <!-- spring -->
     <dependency>
       <groupId>org.springframework</groupId>

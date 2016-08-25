@@ -19,8 +19,8 @@ public interface DemoService {
 
 	String sayHello(String name);
 
-	public String returnHello();
+	String returnHello();
 
-	public MsgInfo returnMsgInfo(MsgInfo info);
+	MsgInfo returnMsgInfo(MsgInfo info);
 
 }

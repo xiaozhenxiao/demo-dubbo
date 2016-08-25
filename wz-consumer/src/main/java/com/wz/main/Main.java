@@ -1,5 +1,6 @@
 package com.wz.main;
 
+import com.alibaba.fastjson.JSON;
 import com.wz.dubbo.api.DemoService;
 import com.wz.dubbo.api.MsgInfo;
 import com.wz.spring.depends.test.service.DependService;
@@ -17,8 +18,15 @@ public class Main {
     public static void main(String[] args) {
         String configLocation="dubbo-consumer.xml";
         ApplicationContext context =new ClassPathXmlApplicationContext(configLocation);
-        DependService ds = context.getBean("dependService", DependService.class);
-        System.out.println("=====================" + ds.getDomain());
+//        DependService ds = context.getBean("dependService", DependService.class);
+//        System.out.println("=====================" + ds.getDomain());
+        DemoService demoService = (DemoService) context.getBean("demoService");
+        System.out.println(demoService.sayHello("xiaoxiao"));
+        MsgInfo info = new MsgInfo();
+        info.setId(1);
+        info.setName("zhangsan");
+        info.setMsgs(new ArrayList<String>());
+        System.out.println(JSON.toJSONString(demoService.returnMsgInfo(info)));
         String[] names=context.getBeanDefinitionNames();
         System.out.print("Beans:");
         for(String string : names) {
