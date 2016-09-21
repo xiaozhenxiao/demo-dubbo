@@ -4,7 +4,7 @@ package com.wz.jdk.java;
  * Created by Administrator on 2016/6/25.
  * Date:2016-06-25
  */
-public class FatherSon {
+public class JavaBinding {
 
     public static void main(String[] args) {
         Father father = new Son();
