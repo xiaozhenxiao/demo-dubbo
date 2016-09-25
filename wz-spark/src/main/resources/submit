@@ -1,0 +1,2 @@
+#输出文件夹不能存在
+./bin/spark-submit --name "wz-spark-javatest" --master spark://spark:7077 --class com.wz.dubbo.WordCountApp /home/wangzhen/spark-project/wz-spark-1.0-SNAPSHOT-jar-with-dependencies.jar /home/wangzhen/spark-project/input
