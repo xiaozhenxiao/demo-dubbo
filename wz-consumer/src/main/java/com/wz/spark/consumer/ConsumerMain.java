@@ -1,7 +1,7 @@
-package com.wz.dubbo.consumer;
+package com.wz.spark.consumer;
 
-import com.wz.dubbo.api.DemoService;
-import com.wz.dubbo.api.MsgInfo;
+import com.wz.spark.api.DemoService;
+import com.wz.spark.api.MsgInfo;
 import com.wz.spring.schema.People;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

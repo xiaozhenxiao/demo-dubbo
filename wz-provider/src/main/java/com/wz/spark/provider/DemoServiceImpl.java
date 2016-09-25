@@ -1,7 +1,7 @@
-package com.wz.dubbo.provider;
+package com.wz.spark.provider;
 
-import com.wz.dubbo.api.DemoService;
-import com.wz.dubbo.api.MsgInfo;
+import com.wz.spark.api.DemoService;
+import com.wz.spark.api.MsgInfo;
 
 /**
  * Created by wangzhen on 2016-06-16.

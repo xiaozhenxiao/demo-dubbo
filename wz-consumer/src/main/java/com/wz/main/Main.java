@@ -1,15 +1,12 @@
 package com.wz.main;
 
 import com.alibaba.fastjson.JSON;
-import com.wz.dubbo.api.DemoService;
-import com.wz.dubbo.api.MsgInfo;
-import com.wz.spring.depends.test.service.DependService;
-import com.wz.spring.schema.People;
+import com.wz.spark.api.DemoService;
+import com.wz.spark.api.MsgInfo;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by wangzhen on 2016-07-15.

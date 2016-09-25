@@ -96,7 +96,7 @@
           <includeProjectDependencies>true</includeProjectDependencies>
           <includePluginDependencies>false</includePluginDependencies>
           <classpathScope>compile</classpathScope>
-          <mainClass>com.wz.dubbo.WordCountApp</mainClass>
+          <mainClass>com.wz.spark.WordCountApp</mainClass>
         </configuration>
       </plugin>
 

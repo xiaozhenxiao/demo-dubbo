@@ -1,6 +1,5 @@
-package com.wz.dubbo.provider;
+package com.wz.spark.provider;
 
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**

@@ -1,4 +1,4 @@
-package com.wz.dubbo;
+package com.wz.spark;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -12,7 +12,6 @@ import scala.Tuple2;
 
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Hello world!
