@@ -11,6 +11,8 @@ import org.apache.spark.api.java.function.VoidFunction;
 import scala.Tuple2;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Hello world!
@@ -21,10 +23,10 @@ public class WordCountApp {
 //        String inputPath = "hdfs://soy1:9000/mapreduces/word.txt";
 //        String outputPath = "hdfs://soy1:9000/spark/wordCount";
         String outputPath = "file:///home/wangzhen/spark-project/output";
-        if(args != null){
-            if(args.length > 0)
+        if (args != null) {
+            if (args.length > 0)
                 inputPath = args[0];
-            if(args.length > 1)
+            if (args.length > 1)
                 outputPath = args[1];
         }
         /**
@@ -54,12 +56,13 @@ public class WordCountApp {
          * lines调用flatMap这个transformation算子（参数类型是FlatMapFunction接口实现类）返回每一行的每个单词
          */
         JavaRDD<String> words = lines.flatMap(new FlatMapFunction<String, String>() {
+            @Override
+            public Iterator<String> call(String line) throws Exception {
+                return Arrays.asList(line.split(" ")).iterator();
+
+            }
             private static final long serialVersionUID = -3243665984299496473L;
 
-            @Override
-            public Iterable<String> call(String line) throws Exception {
-                return Arrays.asList(line.split("\t"));
-            }
         });
 
         /**

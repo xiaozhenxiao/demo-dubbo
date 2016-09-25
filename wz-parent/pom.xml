@@ -23,7 +23,7 @@
         <default.encoding>UTF-8</default.encoding>
         <default.jdk.version>1.8</default.jdk.version>
 
-        <spark.version>1.3.0</spark.version>
+        <spark.version>2.0.0</spark.version>
         <hadoop.version>2.4.1</hadoop.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
