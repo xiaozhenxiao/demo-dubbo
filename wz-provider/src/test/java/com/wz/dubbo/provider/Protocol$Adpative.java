@@ -1,4 +1,4 @@
-package com.wz.spark.provider;
+package com.wz.dubbo.provider;
 
 import com.alibaba.dubbo.common.extension.ExtensionLoader;
 

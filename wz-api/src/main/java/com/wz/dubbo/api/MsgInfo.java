@@ -1,4 +1,4 @@
-package com.wz.spark.api;
+package com.wz.dubbo.api;
 
 import java.io.Serializable;
 import java.util.List;

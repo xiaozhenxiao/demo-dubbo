@@ -1,8 +1,8 @@
 package com.wz.main;
 
 import com.alibaba.fastjson.JSON;
-import com.wz.spark.api.DemoService;
-import com.wz.spark.api.MsgInfo;
+import com.wz.dubbo.api.DemoService;
+import com.wz.dubbo.api.MsgInfo;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
