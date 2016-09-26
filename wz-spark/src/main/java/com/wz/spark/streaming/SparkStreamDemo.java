@@ -72,10 +72,11 @@ public class SparkStreamDemo {
         * 的数据计算
         * 第 4.1 步：将每一行的字符串拆分成单个的单词
         */
+        //如果是 Scala，由于SAM 转换，所以可以写成 val words = lines.flatMap { line => line.split(" ")}
         JavaDStream<String> words = lines.flatMap(new FlatMapFunction<String, String>() {
-            // /如果是 Scala，由于SAM 转换，所以可以写成 val words = lines.flatMap { line => line.split(" ")}
+
             @Override
-            public Iterator<String> call(String line) throws Exception {
+            public Iterator<String> call(String line){
                 return Arrays.asList(line.split(" ")).iterator();
             }
         });
@@ -83,19 +84,17 @@ public class SparkStreamDemo {
         * 第四步：对初始的 DStream 进行 Transformation 级别的处理，例如 map、 filter 等高阶函数等的编程，来
         进行具体的数据计算
         * 第 4.2 步：在单词拆分的基础上对每个单词实例计数为 1，也就是 word => (word, 1)
+        * mapToPair 接收的参数 PairFunction<String, String, Integer>
         */
-        JavaPairDStream<String, Integer> pairs = words.mapToPair((String word) -> {
-                return new Tuple2(word, 1);
-        });
+        JavaPairDStream<String, Integer> pairs = words.mapToPair((String word) -> new Tuple2<>(word, 1));
         /*
         * 第四步：对初始的 DStream 进行 Transformation 级别的处理，例如 map、 filter 等高阶函数等的编程，来
         进行具体的数据计算
         * 第 4.3 步：在每个单词实例计数为 1 基础之上统计每个单词在文件中出现的总次数
         */
-        JavaPairDStream<String, Integer> wordsCount = pairs.reduceByKey((Integer v1, Integer v2) -> {
-            //对相同的 Key，进行 Value 的累计（包括 Local 和 Reducer 级别同时 Reduce）
-                return v1 + v2;
-        });
+        //对相同的 Key，进行 Value 的累计（包括 Local 和 Reducer 级别同时 Reduce）
+        //reduceByKey接收的参数Function2<Integer, Integer, Integer>
+        JavaPairDStream<String, Integer> wordsCount = pairs.reduceByKey((Integer v1, Integer v2) -> v1 + v2);
         /*
         * 此处的 print 并不会直接触发Job的执行，因为现在的一切都是在 Spark Streaming 框架的控制之下的，对于 Spark Streaming
         * 而言具体是否触发真正的 Job 运行是基于设置的 Duration 时间间隔的
