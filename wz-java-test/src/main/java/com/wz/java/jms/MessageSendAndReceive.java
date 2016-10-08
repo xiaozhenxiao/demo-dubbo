@@ -1,10 +1,13 @@
+/*
 package com.wz.java.jms;
 
+*/
 /**
  * @author wangzhen
  * @version 1.0
  * @date 2016-09-30 17:26
- **/
+ **//*
+
 
 public class MessageSendAndReceive {
     public static void main(String[] args) {
@@ -44,3 +47,4 @@ public class MessageSendAndReceive {
         });
     }
 }
+*/
