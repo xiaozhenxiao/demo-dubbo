@@ -5,9 +5,9 @@ package com.wz.sort;
  */
 public class HeapSortDemo {
     private static int[] queue = new int[10];
-    public static void main(String[] args)
-    {
-        int[] array=new int[]{11,32,13,4,70,38,29,10,54,16};
+
+    public static void main(String[] args) {
+        int[] array = new int[]{11, 32, 13, 4, 70, 38, 29, 10, 54, 16};
         /*MaxHeap heap=new MaxHeap(array);
         System.out.println("执行最大堆化前堆的结构：");
         printHeapTree(heap.heap);
@@ -22,13 +22,16 @@ public class HeapSortDemo {
             siftUp(i, array[i]);
         }
         printHeapTree(queue);
-        printHeap(-1,queue);
+        printHeap(-1, queue);
+        System.out.println("\r\n======================================================");
 
+        getLevel(array.length);
+        System.out.println("\r\n======================================================");
         for (int i = 9; i >= 0; i--) {
             siftDownHeap(i);
         }
         System.out.println("\n排序结果:");
-        printHeap(-1,queue);
+        printHeap(-1, queue);
 
     }
 
@@ -36,13 +39,13 @@ public class HeapSortDemo {
         int last;
         last = queue[index];
         queue[index] = queue[0];
-        siftDown(0,last, index);
-        System.out.println("\n元素沉降"+ (10-index) +"次以后");
+        siftDown(0, last, index);
+        System.out.println("\n元素沉降" + (10 - index) + "次以后");
         printHeapTree(queue);
-        printHeap(-1,queue);
+        printHeap(-1, queue);
     }
 
-    private static void siftUp(int k, int key){
+    private static void siftUp(int k, int key) {
         while (k > 0) {
             int parent = (k - 1) >>> 1;
             int e = queue[parent];
@@ -53,6 +56,7 @@ public class HeapSortDemo {
         }
         queue[k] = key;
     }
+
     private static void siftDown(int k, int key, int size) {
         int half = size >>> 1;
         while (k < half) {
@@ -68,22 +72,37 @@ public class HeapSortDemo {
         }
         queue[k] = key;
     }
-    private static void printHeapTree(int[] array){
-        for(int i=1;i<array.length;i=i*2){
-            for(int k=i-1;k<2*(i)-1&&k<array.length;k++){
-                System.out.print(array[k]+" ");
+
+    private static void printHeapTree(int[] array) {
+        for (int i = 1; i < array.length; i = i * 2) {
+            for (int k = i - 1; k < 2 * (i) - 1 && k < array.length; k++) {
+                System.out.print(array[k] + " ");
             }
             System.out.println();
         }
     }
-    private static void printHeap(int k, int[] array){
-        for(int i=0;i<array.length;i++){
-            if(i==k && array[i]!=0){
-                System.out.print("<"+ array[i]+"> ");
-            }else if(array[i]!=0){
-                System.out.print(array[i]+" ");
+
+    private static void printHeap(int k, int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            if (i == k && array[i] != 0) {
+                System.out.print("<" + array[i] + "> ");
+            } else if (array[i] != 0) {
+                System.out.print(array[i] + " ");
             }
 
         }
+    }
+
+    private static Integer getLevel(Integer length) {
+        Integer level = 0;
+        while (true) {
+            Double power = Math.pow(length, level);
+            if (power < length) {
+                level++;
+            }else {
+                break;
+            }
+        }
+        return level;
     }
 }
