@@ -1,5 +1,7 @@
 package com.wz.sort;
 
+import java.util.Arrays;
+
 /**
  * Created by Administrator on 2016/6/26.
  * Date:2016-06-26
@@ -8,8 +10,9 @@ public class Sort {
     public static void main(String[] args) {
         int [] array = {1, 5, 8, 2, 7, 4, 3, 6, 9, 15, 10, 11, 13};
         printArray("排序前：",  array);
+        radixSort(array, 10, 4);
 //        bubbleSort(array);
-        kuaipai(array, 0, array.length-1);
+//        kuaipai(array, 0, array.length-1);
         printArray("排序：", array);
     }
 
@@ -61,14 +64,11 @@ public class Sort {
      * @param numbers 需要排序的整型数组
      */
     public static void bubbleSort(int[] numbers) {
-        int temp; // 记录临时中间值
         int size = numbers.length; // 数组大小
         for (int i = 0; i < size - 1; i++) {
             for (int j = i + 1; j < size; j++) {
                 if (numbers[i] < numbers[j]) { // 交换两数的位置
-                    temp = numbers[i];
-                    numbers[i] = numbers[j];
-                    numbers[j] = temp;
+                    swap(numbers, i, j);
                 }
             }
         }
@@ -119,15 +119,13 @@ public class Sort {
      * @param numbers
      */
     public static void selectSort(int[] numbers) {
-        int size = numbers.length, temp;
+        int size = numbers.length;
         for (int i = 0; i < size; i++) {
             int k = i;
             for (int j = size - 1; j >i; j--)  {
                 if (numbers[j] < numbers[k])  k = j;
             }
-            temp = numbers[i];
-            numbers[i] = numbers[k];
-            numbers[k] = temp;
+            swap(numbers, i, k);
         }
     }
 
@@ -209,5 +207,51 @@ public class Sort {
             B[k++] = data[s++];
         for (int i = p; i <= r; i++)
             data[i] = B[i];
+    }
+
+    /**
+     * 将待排数据里德排序关键字拆分成多个排序关键字；第1个排序关键字，第2个排序关键字，第3个排序关键字......
+     * 然后，根据子关键字对待排序数据进行排序
+     * 多关键字排序时有两种解决方案：
+     * 最高位优先法（MSD）(Most Significant Digit first)
+     * 最低位优先法（LSD）(Least Significant Digit first)
+     * 例如，对如下数据序列进行排序。192,221,12,23
+     * 可以观察到它的每个数据至多只有3位，因此可以将每个数据拆分成3个关键字：百位（高位）、十位、个位（低位）。
+     * @param data
+     * @param radix
+     * @param d
+     */
+    public static void radixSort(int[] data, int radix, int d) {
+        // 缓存数组
+        int[] tmp = new int[data.length];
+        // buckets用于记录待排序元素的信息
+        // buckets数组定义了max-min个桶
+        int[] buckets = new int[radix];
+
+        for (int i = 0, rate = 1; i < d; i++) {
+
+            // 重置count数组，开始统计下一个关键字
+            Arrays.fill(buckets, 0);
+            // 将data中的元素完全复制到tmp数组中
+            System.arraycopy(data, 0, tmp, 0, data.length);
+
+            // 计算每个待排序数据的子关键字
+            for (int j = 0; j < data.length; j++) {
+                int subKey = (tmp[j] / rate) % radix;
+                buckets[subKey]++;
+            }
+
+            for (int j = 1; j < radix; j++) {
+                buckets[j] = buckets[j] + buckets[j - 1];
+            }
+
+            // 按子关键字对指定的数据进行排序
+            for (int m = data.length - 1; m >= 0; m--) {
+                int subKey = (tmp[m] / rate) % radix;
+                data[--buckets[subKey]] = tmp[m];
+            }
+            rate *= radix;
+        }
+
     }
 }
