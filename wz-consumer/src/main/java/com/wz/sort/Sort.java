@@ -90,7 +90,6 @@ public class Sort {
     public static void quickSort(int[] numbers, int start, int end) {
         if (start < end) {
             int base = numbers[start]; // 选定的基准值（第一个数值作为基准值）
-            int temp; // 记录临时中间值
             int i = start, j = end;
             do {
                 while ((numbers[i] < base) && (i < end))
