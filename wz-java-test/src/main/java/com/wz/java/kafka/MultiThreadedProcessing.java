@@ -9,8 +9,6 @@ import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * TODO
- *
  * @author wangzhen
  * @version 1.0
  * @date 2016-10-18 19:11
