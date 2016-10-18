@@ -42,6 +42,7 @@ public class JConsumer extends Thread {
         this.topic = topic;
     }
 
+    //Kafka Streams Configs
     private ConsumerConfig consumerConfig() {
         Properties props = new Properties();
         props.put("zookeeper.connect", KafkaProperties.ZK);
