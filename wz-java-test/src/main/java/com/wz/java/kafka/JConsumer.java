@@ -12,6 +12,12 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.kstream.KStreamBuilder;
 
 import java.text.MessageFormat;
 import java.util.*;
@@ -51,13 +57,17 @@ public class JConsumer extends Thread {
         props.put("auto.commit.interval.ms", KafkaProperties.INTERVAL);// 经过INTERVAL时间提交一次offset
         props.put("auto.offset.reset", "largest");// What to do when there is no initial offset in ZooKeeper or if an offset is out of range
         props.put("zookeeper.session.timeout.ms", KafkaProperties.TIMEOUT);
-        props.put("zookeeper.sync.time.ms", "200");
+        props.put("zookeeper.connection.timeout.ms", "100000");
+        props.put("rebalance.backoff.ms", "20000");
+        props.put("rebalance.max.retries", "5");
+        props.put("consumer.timeout.ms", "-1");
+        props.put("fetch.min.bytes", "1");
         return new ConsumerConfig(props);
     }
 
     @Override
     public void run() {
-        Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
+        /*Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
         topicCountMap.put(topic, new Integer(1));// 线程数
         Map<String, List<KafkaStream<byte[], byte[]>>> streams = consumer.createMessageStreams(topicCountMap);
         KafkaStream<byte[], byte[]> stream = streams.get(topic).get(0);// 若上面设了多个线程去消费，则这里需为每个stream开个线程做如下的处理
@@ -74,7 +84,23 @@ public class JConsumer extends Thread {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        }
+        }*/
+        automaticOffsetCommitting();
+    }
+
+    public void streams(){
+        Map<String, Object> props = new HashMap<>();
+        props.put(StreamsConfig.APPLICATION_ID_CONFIG, "my-stream-processing-application");
+        props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(StreamsConfig.KEY_SERDE_CLASS_CONFIG, Serdes.StringSerde.class);
+        props.put(StreamsConfig.VALUE_SERDE_CLASS_CONFIG, Serdes.StringSerde.class);
+        StreamsConfig config = new StreamsConfig(props);
+
+        KStreamBuilder builder = new KStreamBuilder();
+        builder.stream("my-input-topic").mapValues((Object value) -> ((String)value).length()).to("my-output-topic");
+
+        KafkaStreams streams = new KafkaStreams(builder, config);
+        streams.start();
     }
 
     /**
@@ -82,7 +108,7 @@ public class JConsumer extends Thread {
      */
     public void automaticOffsetCommitting() {
         Properties props = new Properties();
-        props.put("bootstrap.servers", "localhost:9092");
+        props.put("bootstrap.servers", ConfigureAPI.KafkaProperties.BROKER_LIST);
         props.put("group.id", "test");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
@@ -90,11 +116,12 @@ public class JConsumer extends Thread {
         props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(props);
-        consumer.subscribe(Arrays.asList("foo", "bar"));
+//        consumer.subscribe(Arrays.asList("foo", "bar"));
+        consumer.subscribe(Arrays.asList(KafkaProperties.TOPIC));
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(100);
             for (ConsumerRecord<String, String> record : records)
-                System.out.printf("offset = %d, key = %s, value = %s", record.offset(), record.key(), record.value());
+                System.out.printf("offset = %d, key = %s, value = %s ", record.offset(), record.key(), record.value());
         }
     }
 

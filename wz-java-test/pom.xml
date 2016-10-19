@@ -160,6 +160,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+            <version>0.10.0.0</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>wz-test</finalName>
