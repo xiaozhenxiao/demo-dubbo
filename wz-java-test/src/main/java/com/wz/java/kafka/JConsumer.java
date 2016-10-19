@@ -60,14 +60,12 @@ public class JConsumer extends Thread {
         props.put("zookeeper.connection.timeout.ms", "100000");
         props.put("rebalance.backoff.ms", "20000");
         props.put("rebalance.max.retries", "5");
-        props.put("consumer.timeout.ms", "-1");
-        props.put("fetch.min.bytes", "1");
         return new ConsumerConfig(props);
     }
 
     @Override
     public void run() {
-        /*Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
+        Map<String, Integer> topicCountMap = new HashMap<String, Integer>();
         topicCountMap.put(topic, new Integer(1));// 线程数
         Map<String, List<KafkaStream<byte[], byte[]>>> streams = consumer.createMessageStreams(topicCountMap);
         KafkaStream<byte[], byte[]> stream = streams.get(topic).get(0);// 若上面设了多个线程去消费，则这里需为每个stream开个线程做如下的处理
@@ -84,7 +82,10 @@ public class JConsumer extends Thread {
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
-        }*/
+        }
+        /**
+         * 成功调用
+         */
         automaticOffsetCommitting();
     }
 
