@@ -1,5 +1,6 @@
 package com.wz.java.kafka;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +10,10 @@ import java.util.concurrent.Executors;
 
 import kafka.consumer.Consumer;
 import kafka.consumer.ConsumerConfig;
+import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
+import kafka.message.MessageAndMetadata;
 
 /**
  * 璇︾粏鍙互鍙傝�锛歨ttps://cwiki.apache.org/confluence/display/KAFKA/Consumer+Group+ Example
@@ -52,6 +55,19 @@ public class ConsumerDemo {
         int threadNumber = 0;
         for (final KafkaStream stream : streams) {
 //            executor.submit(new ConsumerMsgTask(stream, threadNumber));
+            ConsumerIterator<byte[], byte[]> it = stream.iterator();
+            MessageAndMetadata<byte[], byte[]> messageAndMetaData = null;
+            while (it.hasNext()) {
+                messageAndMetaData = it.next();
+                System.out.println(MessageFormat.format("Receive->[ message:{0} , key:{1} , partition:{2} , offset:{3} ]",
+                        new String(messageAndMetaData.message()), new String(messageAndMetaData.key()),
+                        messageAndMetaData.partition() + "", messageAndMetaData.offset() + ""));
+                try {
+                    Thread.sleep(200);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
             threadNumber++;
         }
     }
@@ -65,17 +81,22 @@ public class ConsumerDemo {
         // Kafka等待Zookeeper的响应时间（毫秒）
         props.put("zookeeper.session.timeout.ms", "400");
         // ZooKeeper 的‘follower’可以落后Master多少毫秒
-        props.put("zookeeper.sync.time.ms", "200");
+        props.put("zookeeper.sync.time.ms", "2000");
         // consumer更新offerset到Zookeeper的时间
         props.put("auto.commit.interval.ms", "1000");
+        props.put("rebalance.backoff.ms", "2000");
         return new ConsumerConfig(props);
     }
 
     public static void main(String[] args) {
-        String zooKeeper = args[0];
+        /*String zooKeeper = args[0];
         String groupId = args[1];
         String topic = args[2];
-        int threads = Integer.parseInt(args[3]);
+        int threads = Integer.parseInt(args[3]);*/
+        String zooKeeper = "spark:2181,spark2:2181,spark3:2181";
+        String groupId = "test";
+        String topic = "testTopic";
+        int threads = 1;
 
         ConsumerDemo example = new ConsumerDemo(zooKeeper, groupId, topic);
         example.run(threads);

@@ -106,7 +106,7 @@ public class JProducer extends Thread {
     @Override
     public void run() {
         for (int i = 0; i < msgNum; i++) {
-            String msg = "Message_" + i;
+            String msg = "===============================================Message_" + i;
             // KeyedMessage<String, String> msg = new KeyedMessage<String, String>(topic, "Message_" + i);//未指定key，Kafka会自动选择一个分区
             producer.send(new ProducerRecord<>(topic, Integer.toString(i), msg));
             System.out.println("Send->[" + msg + "]");
