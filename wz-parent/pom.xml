@@ -16,6 +16,7 @@
         <module>../wz-provider</module>
         <module>../wz-java-test</module>
         <module>../wz-spark</module>
+        <module>../wz-jd</module>
     </modules>
 
     <properties>
