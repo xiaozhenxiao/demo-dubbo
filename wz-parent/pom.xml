@@ -17,6 +17,7 @@
         <module>../wz-java-test</module>
         <module>../wz-spark</module>
         <module>../wz-jd</module>
+        <module>../wz-jmeter</module>
     </modules>
 
     <properties>
@@ -473,6 +474,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-assembly-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.6</version>
+            </plugin>
+
         </plugins>
     </build>
 </project>
