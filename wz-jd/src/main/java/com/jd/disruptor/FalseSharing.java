@@ -1,11 +1,10 @@
-package com.wz.disruptor;
+package com.jd.disruptor;
 
 /**
  * 伪共享(False Sharing)
  * Created by wangzhen23 on 2016/11/16.
  */
-public final class FalseSharing
-        implements Runnable
+public final class FalseSharing implements Runnable
 {
     public final static int NUM_THREADS = 4; // change
     public final static long ITERATIONS = 500L * 1000L * 1000L;

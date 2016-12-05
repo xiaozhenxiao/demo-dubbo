@@ -1,8 +1,8 @@
-package com.wz.disruptor.java8;
+package com.jd.disruptor.java8;
 
 import com.lmax.disruptor.EventTranslatorOneArg;
 import com.lmax.disruptor.RingBuffer;
-import com.wz.disruptor.demo.LongEvent;
+import com.jd.disruptor.demo.LongEvent;
 
 import java.nio.ByteBuffer;
 

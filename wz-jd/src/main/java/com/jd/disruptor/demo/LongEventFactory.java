@@ -1,4 +1,4 @@
-package com.wz.disruptor.demo;
+package com.jd.disruptor.demo;
 
 import com.lmax.disruptor.EventFactory;
 

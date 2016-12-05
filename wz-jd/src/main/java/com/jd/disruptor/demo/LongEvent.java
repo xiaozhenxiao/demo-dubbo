@@ -1,4 +1,4 @@
-package com.wz.disruptor.demo;
+package com.jd.disruptor.demo;
 
 /**
  * Created by wangzhen23 on 2016/11/17.
