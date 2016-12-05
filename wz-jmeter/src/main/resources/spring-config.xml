@@ -10,10 +10,6 @@
            http://code.alibabatech.com/schema/dubbo
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-    <context:component-scan base-package="com.wz.jd">
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-    </context:component-scan>
-    <context:annotation-config/>
     <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
     <dubbo:application name="consumer-of-jmeter-app" />
     <!-- zookeeper注册中心 -->
