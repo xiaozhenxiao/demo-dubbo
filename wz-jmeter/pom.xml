@@ -92,7 +92,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.wz.jd.jmeter.SearchPhoneOperator</mainClass>
+                            <mainClass>com.wz.jd.jmeter.DemoServiceYaCe</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

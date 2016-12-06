@@ -9,7 +9,7 @@ import org.apache.jmeter.protocol.java.sampler.JavaSamplerClient;
 import org.apache.jmeter.protocol.java.sampler.JavaSamplerContext;
 import org.apache.jmeter.samplers.SampleResult;
 
-public class SearchPhoneOperator implements JavaSamplerClient {
+public class DemoServiceYaCe implements JavaSamplerClient {
 	DemoService demoService = null;
 
 	/** 参数化 **/
@@ -57,7 +57,7 @@ public class SearchPhoneOperator implements JavaSamplerClient {
 	}
 
 	public static void main(String[] args) {
-		SearchPhoneOperator testCase = new SearchPhoneOperator();
+		DemoServiceYaCe testCase = new DemoServiceYaCe();
 		JavaSamplerContext arg0 = new JavaSamplerContext(
 				testCase.getDefaultParameters());
 		testCase.setupTest(arg0);
