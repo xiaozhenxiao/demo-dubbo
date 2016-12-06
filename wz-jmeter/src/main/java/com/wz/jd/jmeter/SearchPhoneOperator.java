@@ -1,5 +1,6 @@
 package com.wz.jd.jmeter;
 
+import com.google.common.collect.Lists;
 import com.wz.dubbo.api.DemoService;
 import com.wz.dubbo.api.MsgInfo;
 import com.wz.jd.spring.ApplicationContextUtil;
@@ -16,7 +17,7 @@ public class SearchPhoneOperator implements JavaSamplerClient {
 	public Arguments getDefaultParameters() {
 		Arguments args = new Arguments();
 		args.addArgument("name", "zhangsan");
-		args.addArgument("id", "039498537");
+		args.addArgument("id", "98537");
 		return args;
 	}
 	@Override
@@ -37,14 +38,15 @@ public class SearchPhoneOperator implements JavaSamplerClient {
 		Integer id = arg0.getIntParameter("id");
 		params.setId(id);
 		params.setName(name);
+		params.setMsgs(Lists.newArrayList());
 		MsgInfo response = demoService.returnMsgInfo(params);
 		 //System.out.println("调用接口的结果=========================" +response);
 		if (response != null) {
-			 System.out.println("调用接口的结果=========================" +response);
+//			 System.out.println("调用接口的结果=========================" +response);
 			result.setSuccessful(true);
 			result.sampleEnd();
 		} else {
-			 System.out.println("调用接口fail");
+//			 System.out.println("调用接口fail");
 			result.setSuccessful(false);
 			result.sampleEnd();
 		}

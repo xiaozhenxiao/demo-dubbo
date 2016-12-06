@@ -19,6 +19,7 @@ public class DemoServiceImpl implements DemoService {
     @Override
     public MsgInfo returnMsgInfo(MsgInfo info) {
         info.getMsgs().add("处理完毕");
+        System.out.println("receive :" + info);
         return info;
     }
 }
