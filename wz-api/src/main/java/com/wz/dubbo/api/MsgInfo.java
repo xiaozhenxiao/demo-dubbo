@@ -29,4 +29,9 @@ public class MsgInfo implements Serializable{
     public void setMsgs(List<String> msgs) {
         this.msgs= msgs;
     }
+
+    @Override
+    public String toString(){
+        return "{id:" + id + ",name:" + name + ",mags" + msgs + "}";
+    }
 }

@@ -39,12 +39,12 @@ public class SearchPhoneOperator implements JavaSamplerClient {
 		params.setName(name);
 		MsgInfo response = demoService.returnMsgInfo(params);
 		 //System.out.println("调用接口的结果=========================" +response);
-		if (response != null && response.getId() == 0) {
-			// System.out.println("调用接口的结果=========================" +response);
+		if (response != null) {
+			 System.out.println("调用接口的结果=========================" +response);
 			result.setSuccessful(true);
 			result.sampleEnd();
 		} else {
-			// System.out.println("调用接口fail");
+			 System.out.println("调用接口fail");
 			result.setSuccessful(false);
 			result.sampleEnd();
 		}
