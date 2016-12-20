@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+    <bean id="abstractDataSource" abstract="true" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <!--最大连接池数量-->
+        <property name="maxActive" value="15"/>
+        <!--连接池初始化数量 add-->
+        <property name="initialSize" value="2"/>
+        <!--获取连接时最大等待时间，单位毫秒。配置了maxWait之后，缺省启用公平锁,需手动置为非公平锁-->
+        <property name="maxWait" value="60000"/>
+        <!-- 	最小连接池数量-->
+        <property name="minIdle" value="2"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="180000"/>
+
+        <property name="validationQuery" value="SELECT 'x'"/>
+        <!--建议配置为true，不影响性能，并且保证安全性。
+        申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，
+        执行validationQuery检测连接是否有效。-->
+        <property name="testWhileIdle" value="true"/>
+        <!--申请连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能。-->
+        <property name="testOnBorrow" value="false"/>
+        <!-- 	归还连接时执行validationQuery检测连接是否有效，做了这个配置会降低性能-->
+        <property name="testOnReturn" value="false"/>
+        <!--是否缓存preparedStatement，也就是PSCache。PSCache对支持游标的数据库性能提升巨大，比如说oracle。在mysql下建议关闭。-->
+        <property name="poolPreparedStatements" value="false"/>
+        <!--要启用PSCache，必须配置大于0，当大于0时，poolPreparedStatements自动触发修改为true>-->
+        <property name="maxPoolPreparedStatementPerConnectionSize" value="-1"/>
+
+        <!-- 配置监控统计拦截的filters -->
+        <property name="proxyFilters">
+            <list>
+                <bean class="com.alibaba.druid.filter.stat.StatFilter">
+                    <property name="slowSqlMillis" value="500"/>
+                    <property name="logSlowSql" value="true"/>
+                </bean>
+            </list>
+        </property>
+
+        <!--配置了maxWait druid默认使用公平锁,手动设置使用非公平锁-->
+        <property name="useUnfairLock" value="true"/>
+        <!--可以看到未关闭连接的具体堆栈信息,方便查看链接泄露-->
+        <property name="removeAbandoned" value="true"/>
+    </bean>
+
+
+    <bean id="masterDataSource" parent="abstractDataSource">
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/self?characterEncoding=UTF-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+        <!--数据源名字-->
+        <property name="name" value="local_master"/>
+    </bean>
+    <bean id="slaveDataSource" parent="abstractDataSource">
+        <property name="url" value="jdbc:mysql://127.0.0.1:3306/self1?characterEncoding=UTF-8"/>
+        <property name="username" value="root"/>
+        <property name="password" value="123456"/>
+        <!--数据源名字-->
+        <property name="name" value="local_slave"/>
+    </bean>
+
+
+        <!--多数据源配置-->
+       <bean id="dataSource" class="com.jd.datasource.DynamicDataSource">
+              <property name="defaultTargetDataSource" ref="masterDataSource" />
+              <property name="targetDataSources">
+                     <map>
+                            <entry key="MASTER" value-ref="masterDataSource" />
+                            <entry key="SLAVE" value-ref="slaveDataSource" />
+                     </map>
+              </property>
+       </bean>
+
+</beans>

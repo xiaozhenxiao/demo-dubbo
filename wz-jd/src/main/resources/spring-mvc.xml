@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!--字符串处理转换-->
+    <bean id="requestMappingHandlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean  class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name = "supportedMediaTypes">
+                        <list>
+                            <value>text/plain;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- json转换器 需要引入fastjson-->
+    <mvc:annotation-driven conversion-service="conversionService">
+        <mvc:message-converters register-defaults="true">
+            <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <!-- 这里顺序不能反，一定先写text/html,不然ie下出现下载提示 -->
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+                <property name="features">
+                    <list>
+                        <value>WriteMapNullValue</value>
+                        <value>QuoteFieldNames</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!--转换器-->
+    <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+        <property name="formatterRegistrars">
+            <bean class="com.jd.converter.DefaultFormatterRegistrar"/>
+        </property>
+    </bean>
+
+    <!-- velocity 配置，通过加载配置文件的方式进行 -->
+    <bean id="velocityConfig"
+          class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+        <property name="configLocation">
+            <!-- 从指定目录加载 -->
+            <value>/WEB-INF/velocity.properties</value>
+        </property>
+    </bean>
+
+    <!-- velocity视图解析，支持layout -->
+    <bean id="velocityViewResolver"
+          class="org.springframework.web.servlet.view.velocity.VelocityLayoutViewResolver">
+        <property name="cache" value="false" />
+        <property name="prefix" value="" />
+        <property name="suffix" value=".vm" />
+        <!--<property name="attributesMap" ref="_urlBuilderMap" />-->
+        <property name="toolboxConfigLocation" value="/WEB-INF/toolbox.xml" /><!--toolbox配置文件路径 -->
+        <property name="dateToolAttribute" value="date" /><!--日期函数名称 -->
+        <property name="numberToolAttribute" value="number" /><!--数字函数名称 -->
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="exposeSpringMacroHelpers" value="true" /><!--是否使用spring对宏定义的支持 -->
+        <property name="exposeRequestAttributes" value="true" /><!--是否开放request属性 -->
+        <property name="requestContextAttribute" value="rc" /><!--request属性引用名称 -->
+        <property name="layoutUrl" value="/layout/default.vm" /><!--指定layout文件 -->
+        <property name="allowRequestOverride" value="true" />
+    </bean>
+
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="viewResolvers">
+            <list>
+                <ref bean="velocityViewResolver"/>
+            </list>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <!-- for application/json -->
+                <bean class="com.alibaba.fastjson.support.spring.FastJsonJsonView"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 绑定资源文件 -->
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>i18n/messages</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8" />
+        <!--缓存时间默认s-->
+        <property name="cacheSeconds" value="5"/>
+        <!--找不到则返回key值,不抛出异常-->
+        <property name="useCodeAsDefaultMessage" value="true"/>
+    </bean>
+
+    <bean id="localeChangeInterceptor"
+          class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"  lazy-init="true">
+        <property name="paramName" value="lang" />
+    </bean>
+
+    <!-- locale related -->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="cookieName" value="_clientlocale"/>
+        <!--默认地区为中文-->
+        <property name="defaultLocale" value="zh_CN"/>
+        <property name="cookieMaxAge" value="2147483647"/>
+    </bean>
+
+    <bean id="handlerMapping"
+          class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="interceptors">
+            <ref bean="localeChangeInterceptor" />
+        </property>
+    </bean>
+
+
+    <!-- 全局异常配置 start -->
+    <bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">errors/error</prop>
+                <prop key="com.jd.jyk.util.IllegalHrmPrivilegeException">errors/access-denied</prop>
+            </props>
+        </property>
+        <property name="statusCodes">
+            <props>
+                <prop key="errors/error">500</prop>
+                <prop key="errors/error">400</prop>
+                <prop key="errors/404">404</prop>
+            </props>
+        </property>
+        <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+        <property name="warnLogCategory" value="WARN"></property>
+        <!-- 默认错误页面，当找不到上面mappings中指定的异常对应视图时，使用本默认配置 -->
+        <property name="defaultErrorView" value="errors/error"></property>
+        <!-- 默认HTTP状态码 -->
+        <property name="defaultStatusCode" value="500"></property>
+    </bean>
+    <!-- 全局异常配置 end -->
+
+
+    <!--<util:map id="_urlBuilderMap">-->
+        <!--<entry key="homeModule">-->
+            <!--<bean class="com.jd.common.web.url.UrlBuilder">-->
+                <!--&lt;!&ndash; web自己的域名访问地址，本地配host访问 &ndash;&gt;-->
+                <!--<constructor-arg value="http://${_sso.client.domain}/"/>-->
+            <!--</bean>-->
+        <!--</entry>-->
+        <!--<entry key="loginUrl">-->
+            <!--<bean class="com.jd.common.web.url.UrlBuilder">-->
+                <!--&lt;!&ndash; 单点登录跳转地址 &ndash;&gt;-->
+                <!--<constructor-arg value="${_sso.login.address}"/>-->
+            <!--</bean>-->
+        <!--</entry>-->
+        <!--&lt;!&ndash;京东地址&ndash;&gt;-->
+        <!--<entry key="jdModule">-->
+            <!--<bean class="com.jd.common.web.url.UrlBuilder">-->
+                <!--<constructor-arg value="http://${_sso.jd.domain}"/>-->
+            <!--</bean>-->
+        <!--</entry>-->
+        <!--&lt;!&ndash;样式、js、图片地址&ndash;&gt;-->
+        <!--<entry key="assetModule">-->
+            <!--<bean class="com.jd.common.web.url.UrlBuilder">-->
+                <!--<constructor-arg value="http://${_sso.server.misc.address}"/>-->
+            <!--</bean>-->
+        <!--</entry>-->
+        <!--&lt;!&ndash;passport的&ndash;&gt;-->
+        <!--<entry key="passportModule">-->
+            <!--<bean class="com.jd.common.web.url.UrlBuilder">-->
+                <!--<constructor-arg value="https://${_sso.server.passport.address}"/>-->
+            <!--</bean>-->
+        <!--</entry>-->
+    <!--</util:map>-->
+
+    <!--<bean id="urlBuilders" class="com.jd.common.web.url.UrlBuilders">-->
+        <!--<constructor-arg ref="_urlBuilderMap"/>-->
+    <!--</bean>-->
+
+</beans>

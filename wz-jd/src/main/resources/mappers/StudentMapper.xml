@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jd.dao.StudentMapper">
+    <resultMap id="BaseResultMap" type="com.jd.domain.Student">
+        <id column="id" property="id"/>
+        <result column="s_no" property="sno"/>
+        <result column="s_name" property="sname"/>
+        <result column="s_age" property="sage"/>
+        <result column="s_sex" property="ssex"/>
+    </resultMap>
+    <sql id="selectAll">
+      select id, s_no, s_name, s_age, s_sex from student
+    </sql>
+
+    <select id="getStudentById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        <include refid="selectAll"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertStudent" parameterType="com.jd.domain.Student">
+      insert into student (id, s_no, s_name, s_age, s_sex)
+      values (#{id}, #{sno},#{sname},#{sage},#{ssex} )
+    </insert>
+
+</mapper>

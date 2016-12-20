@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="
+              http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+              http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+              http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+       <!--<aop:aspectj-autoproxy expose-proxy="true"/>-->
+       <tx:annotation-driven transaction-manager="transactionManager"/>
+
+       <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+              <property name="dataSource" ref="dataSource"/>
+       </bean>
+       <!-- 以AspectJ方式 定义 AOP -->
+       <aop:config proxy-target-class="true">
+              <aop:pointcut id="service" expression="execution(* com.jd.service.*.*(..))"/>
+              <!-- 关键配置，切换数据源一定要比持久层代码更先执行（事务也算持久层代码） -->
+              <aop:advisor advice-ref="txAdvice" pointcut-ref="service" order="2"/>
+              <aop:advisor advice-ref="dataSourceExchange" pointcut-ref="service" order="1"/>
+       </aop:config>
+
+       <!-- 基本事务定义,使用transactionManager作事务管理,默认get* find*方法的事务为readonly,其余方法按默认设置.
+                默认的设置请参考Spring文档事务一章. -->
+       <tx:advice id="txAdvice" transaction-manager="transactionManager">
+              <tx:attributes>
+                     <tx:method name="delete*" rollback-for="Throwable" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+                     <tx:method name="add*" rollback-for="Throwable" propagation="REQUIRED" isolation="READ_COMMITTED"/>
+                     <tx:method name="modify*" rollback-for="Throwable" propagation="REQUIRES_NEW" isolation="READ_COMMITTED"/>
+                     <tx:method name="*" isolation="READ_COMMITTED" read-only="true"/>
+              </tx:attributes>
+       </tx:advice>
+
+</beans>
