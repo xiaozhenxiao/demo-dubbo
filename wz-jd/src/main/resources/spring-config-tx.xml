@@ -27,7 +27,7 @@
                      <tx:method name="delete*" rollback-for="Throwable" propagation="REQUIRED" isolation="READ_COMMITTED"/>
                      <tx:method name="add*" rollback-for="Throwable" propagation="REQUIRED" isolation="READ_COMMITTED"/>
                      <tx:method name="modify*" rollback-for="Throwable" propagation="REQUIRES_NEW" isolation="READ_COMMITTED"/>
-                     <tx:method name="*" isolation="READ_COMMITTED" read-only="true"/>
+                     <tx:method name="get*" isolation="READ_COMMITTED" read-only="true"/>
               </tx:attributes>
        </tx:advice>
 

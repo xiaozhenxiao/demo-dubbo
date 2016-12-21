@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jd.dao.TeacherMapper">
+    <resultMap id="BaseResultMap" type="com.jd.domain.Teacher">
+        <id column="id" property="id"/>
+        <result column="t_no" property="tno"/>
+        <result column="t_name" property="tname"/>
+    </resultMap>
+    <sql id="selectAll">
+      select id, t_no, t_name from teacher
+    </sql>
+
+    <select id="getTeacherById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        <include refid="selectAll"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertTeacher" parameterType="com.jd.domain.Teacher">
+      insert into teacher (id, t_no, t_name)
+      values (#{id}, #{tno},#{tname} )
+    </insert>
+
+</mapper>

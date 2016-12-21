@@ -9,5 +9,6 @@
        </typeHandlers>
        <mappers>
               <mapper resource="mappers/StudentMapper.xml"/>
+              <mapper resource="mappers/TeacherMapper.xml"/>
        </mappers>
 </configuration>

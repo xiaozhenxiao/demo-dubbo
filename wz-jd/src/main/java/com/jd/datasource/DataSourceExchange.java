@@ -27,12 +27,14 @@ class DataSourceExchange implements MethodInterceptor {
         if (dataSource == null) {
             logger.error("dataSource in invocation is null");
             DataSourceTypeManager.setDataSourceType(DataSourceType.MASTER);
+            System.out.println(Thread.currentThread().getName() + " - " + invocation.getMethod().getName() + " user database is MASTER");
             return invocation.proceed();
         }
         String dbname = dataSource.name();
         Object result = null;
         try {
             DataSourceTypeManager.setDataSourceType(DataSourceType.valueOf(dbname));
+            System.out.println(Thread.currentThread().getName() + " - " + invocation.getMethod().getName() + " user database is " + dbname);
             result = invocation.proceed();
         }catch (Exception e){
             logger.error("change datasource error!", e);

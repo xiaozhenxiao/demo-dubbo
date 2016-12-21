@@ -3,7 +3,9 @@ package com.jd.dao;
 import com.alibaba.druid.support.json.JSONUtils;
 import com.alibaba.fastjson.JSON;
 import com.jd.domain.Student;
+import com.jd.domain.Teacher;
 import com.jd.service.StudentService;
+import com.jd.service.TeacherService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,6 +22,8 @@ public class StudentTest {
 
     @Resource
     private StudentService studentService;
+    @Resource
+    private TeacherService teacherService;
 
     @Test
     public void testGetStudentById(){
@@ -35,5 +39,10 @@ public class StudentTest {
         student.setSage(22);
         student.setSsex("男");
         studentService.addStudent(student);
+    }
+
+    @Test
+    public void testMixOperator(){
+        System.out.println(studentService.mixOperator(2l));
     }
 }
