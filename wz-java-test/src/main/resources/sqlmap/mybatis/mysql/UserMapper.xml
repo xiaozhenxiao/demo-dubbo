@@ -20,11 +20,11 @@
         DELETE FROM users
         WHERE id = #{id,jdbcType=BIGINT}
     </delete>
-    <insert id="insert" parameterType="com.wz.web.domain.Demo">
+    <insert id="insert" parameterType="com.wz.web.domain.User">
         INSERT INTO users (id, username, password)
         VALUES (#{id,jdbcType=BIGINT}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR})
     </insert>
-    <insert id="insertSelective" parameterType="com.wz.web.domain.Demo">
+    <insert id="insertSelective" parameterType="com.wz.web.domain.User">
         INSERT INTO users
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -49,7 +49,7 @@
             </if>
         </trim>
     </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="com.wz.web.domain.Demo">
+    <update id="updateByPrimaryKeySelective" parameterType="com.wz.web.domain.User">
         UPDATE users
         <set>
             <if test="username != null">
@@ -61,7 +61,7 @@
         </set>
         WHERE id = #{id,jdbcType=BIGINT}
     </update>
-    <update id="updateByPrimaryKey" parameterType="com.wz.web.domain.Demo">
+    <update id="updateByPrimaryKey" parameterType="com.wz.web.domain.User">
         UPDATE users
         SET username = #{username,jdbcType=VARCHAR},
             password = #{password,jdbcType=VARCHAR}

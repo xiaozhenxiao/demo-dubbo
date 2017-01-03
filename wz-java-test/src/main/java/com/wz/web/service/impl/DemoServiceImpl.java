@@ -42,15 +42,16 @@ public class DemoServiceImpl implements DemoService {
         user.setPassword("654321");
         //此种情况，user可执行成功，demo回滚
         userService.modifyById(user);
+//        userService.addUserSelective(user);
 
         /*record.setId(2l);
         record.setUsername("振振");
         record.setPassword("654321");
 //      在add的事务中执行，发生异常，一起回滚
         modifyById(record);*/
-        if(result > 0){
-            throw new ParseException("测试事务回滚");
-        }
+//        if(result > 0){
+//            throw new ParseException("测试事务回滚");
+//        }
         return result;
     }
 

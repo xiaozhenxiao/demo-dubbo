@@ -48,5 +48,5 @@
 
 	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>
 
-	<!--<wz:people id="peoplewz" name="王振" age="27"/>-->
+	<wz:people id="peoplewz" name="王振" age="27"/>
 </beans>

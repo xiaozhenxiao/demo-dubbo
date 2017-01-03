@@ -8,13 +8,13 @@
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/aop
            http://www.springframework.org/schema/aop/spring-aop.xsd
-           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/wz_db?characterEncoding=utf8"/>
         <property name="username" value="root"/>
-        <property name="password" value="root"/>
+        <property name="password" value="123456"/>
         <property name="initialSize" value="5"/>
         <property name="minIdle" value="3"/>
         <property name="maxActive" value="20"/>
