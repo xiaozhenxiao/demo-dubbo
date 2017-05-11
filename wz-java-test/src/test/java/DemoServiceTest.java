@@ -43,4 +43,13 @@ public class DemoServiceTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testUpdateDemo(){
+        Demo demo = new Demo();
+        demo.setId(1L);
+        demo.setUsername("test");
+        demo.setPassword("99999");
+        demoService.modifyById(demo);
+    }
 }

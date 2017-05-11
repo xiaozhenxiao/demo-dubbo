@@ -2,7 +2,7 @@
 <configuration>
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%date [%5p] - %25c - %m%n</pattern>
+            <pattern>%date [%5p] - %25c [%X][%X{invokeNo}]- %m%n</pattern>
         </encoder>
     </appender>
 
