@@ -26,6 +26,23 @@
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.wz.web.dao"/>
     </bean>
+
+    <bean id="schemeRegistry" class="org.apache.http.conn.scheme.SchemeRegistry">
+        <property name="items">
+            <map>
+                <entry key="http">
+                    <bean class="org.apache.http.conn.scheme.Scheme">
+                        <constructor-arg value="http" />
+                        <constructor-arg value="80" />
+                        <constructor-arg>
+                            <bean class="org.apache.http.conn.scheme.PlainSocketFactory" factory-method="getSocketFactory" />
+                        </constructor-arg>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+    </bean>
+
     <!--beanPostProcessors的测试-->
     <!--<bean id="demo" class="com.wz.web.domain.Demo">
         <property name="id" value="1"/>
