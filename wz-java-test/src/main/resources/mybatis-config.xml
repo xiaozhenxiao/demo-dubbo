@@ -4,4 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 
 <configuration>
+    <plugins>
+        <plugin interceptor="com.wz.web.mybatis.plugin.MyPlugin">
+            <property name="dbType" value="mysql"/>
+        </plugin>
+    </plugins>
 </configuration>
