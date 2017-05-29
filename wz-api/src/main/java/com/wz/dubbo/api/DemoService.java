@@ -23,4 +23,12 @@ public interface DemoService {
 
 	MsgInfo returnMsgInfo(MsgInfo info);
 
+	static String staticMethod(){
+		return "STATIC";
+	}
+
+	static void test(){
+
+	}
+
 }
