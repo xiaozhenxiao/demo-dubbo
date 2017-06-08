@@ -44,11 +44,11 @@
     </bean>
 
     <!--beanPostProcessors的测试-->
-    <!--<bean id="demo" class="com.wz.web.domain.Demo">
+    <bean id="demo" class="com.wz.web.domain.Demo">
         <property name="id" value="1"/>
         <property name="username" value="本名"/>
     </bean>
-    <bean id="demPostProcessor" class="com.wz.web.beanPostProcessors.DemoPostProcessor"/>-->
+    <bean id="demPostProcessor" class="com.wz.web.beanPostProcessors.DemoPostProcessor"/>
     <!-- spring-data-redis操作集群 -->
     <!--<bean id="redisSentinelConfiguration" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
         <property name="master">

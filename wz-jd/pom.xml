@@ -34,7 +34,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.21</version>
         </dependency>
 
 
@@ -42,7 +41,6 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.0.13</version>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
