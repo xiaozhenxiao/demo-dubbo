@@ -3,13 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.wz.dubbo</groupId>
+        <groupId>com.wz.prodect</groupId>
         <artifactId>wz-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../wz-parent/pom.xml</relativePath>
     </parent>
 
-    <groupId>com.wz.dubbo</groupId>
     <artifactId>wz-jmeter</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>

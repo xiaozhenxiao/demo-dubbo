@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.wz.dubbo</groupId>
+    <groupId>com.wz.prodect</groupId>
     <artifactId>wz-parent</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
@@ -18,6 +18,7 @@
         <module>../wz-spark</module>
         <module>../wz-jd</module>
         <module>../wz-jmeter</module>
+        <module>../wz-jd-tbschedule</module>
     </modules>
 
     <properties>
