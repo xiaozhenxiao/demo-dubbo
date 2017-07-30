@@ -65,7 +65,7 @@ class Son extends Father{
     }
 }
 
-class daughter extends Father{
+class Daughter extends Father{
     public void increase(){
         i += 10;
     }
