@@ -7,5 +7,11 @@
 #set($age="男")
 性别: ${age}
 <h1>序号:$!{index}</h1>
+
+<FORM action="/vm/body" method="post">
+    <input name="name" type="text"/>
+    <input name="age" type="text"/>
+    <input type="submit" value="提交">
+</FORM>
 </body>
 </html>

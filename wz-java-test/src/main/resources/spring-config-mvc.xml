@@ -3,13 +3,15 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="
-           http://www.springframework.org/schema/beans
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
            http://www.springframework.org/schema/beans/spring-beans.xsd
            http://www.springframework.org/schema/context
            http://www.springframework.org/schema/context/spring-context.xsd
            http://www.springframework.org/schema/mvc
-           http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+           http://www.springframework.org/schema/mvc/spring-mvc.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util.xsd">
     <!-- spring mvc related -->
 
     <!-- mvc controller -->
@@ -17,6 +19,46 @@
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository"/>
     </context:component-scan>
+
+    <!--<bean id="requestMappingHandlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters" ref="messageConverters"/>
+    </bean>
+
+    <util:list id="messageConverters">
+        <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+        <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
+        <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+            <property name="supportedMediaTypes">
+                <list>
+                    <value>text/html;charset=UTF-8</value>
+                    <value>text/plain;charset=UTF-8</value>
+                    <value>application/json;charset=UTF-8</value>
+                    <value>application/*+json;charset=UTF-8</value>
+                </list>
+            </property>
+            <property name="objectMapper">
+                <bean class="com.fasterxml.jackson.databind.ObjectMapper">
+                    <property name="serializationInclusion">
+                        <value type="com.fasterxml.jackson.annotation.JsonInclude$Include">NON_NULL</value>
+                    </property>
+                    <property name="dateFormat">
+                        <bean class="java.text.SimpleDateFormat">
+                            <constructor-arg value="yyyy-MM-dd HH:mm:ss"/>
+                        </bean>
+                    </property>
+                </bean>
+            </property>
+        </bean>
+        <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+        <bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter"/>
+        <bean  class="org.springframework.http.converter.StringHttpMessageConverter">
+            <property name = "supportedMediaTypes">
+                <list>
+                    <value>*/*;charset=UTF-8</value>
+                </list>
+            </property>
+        </bean>
+    </util:list>-->
 
     <mvc:interceptors>
         <mvc:interceptor>
@@ -33,8 +75,9 @@
 
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
-            <bean id="jacksonMessageConverter"
-                  class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+            <bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="supportedMediaTypes">
                     <list>
                         <value>text/html;charset=UTF-8</value>
@@ -56,17 +99,28 @@
                     </bean>
                 </property>
             </bean>
+            <bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <property name = "supportedMediaTypes">
+                    <list>
+                        <value>*/*;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <!-- 处理静态资源 -->
     <mvc:default-servlet-handler/>
 
     <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="templateLoaderPath" value="/WEB-INF/views/"/>
+        <property name="defaultEncoding" value="UTF-8"/>
         <!-- 编码设置 -->
         <property name="freemarkerSettings">
             <props>
-                <prop key="defaultEncoding">UTF-8</prop>
+                <prop key="classic_compatible">true</prop>
             </props>
         </property>
     </bean>

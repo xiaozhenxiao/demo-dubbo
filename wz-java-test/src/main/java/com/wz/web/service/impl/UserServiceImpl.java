@@ -8,6 +8,7 @@ import com.wz.web.exception.ParseException;
 import com.wz.web.service.DemoService;
 import com.wz.web.service.UserService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -18,6 +19,8 @@ import javax.annotation.Resource;
 public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
+    @Resource
+    private DemoDao demoDao;
 
 
     @Override
@@ -26,8 +29,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int addUser(User record) {
-        return userDao.insert(record);
+    @Transactional
+    public int addUser(User user) {
+        Demo demo = new Demo();
+        demo.setUsername(user.getUsername());
+        demo.setPassword(user.getPassword());
+        demoDao.insert(demo);
+        return userDao.insert(user);
     }
 
     @Override
