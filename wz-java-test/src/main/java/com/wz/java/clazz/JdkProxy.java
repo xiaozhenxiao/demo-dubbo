@@ -1,5 +1,7 @@
 package com.wz.java.clazz;
 
+import org.apache.ibatis.reflection.ExceptionUtil;
+
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
@@ -11,14 +13,30 @@ public class JdkProxy {
     public static void main(String[] args) {
         ObjectProxy proxy = new ObjectProxy();
         BookFacade bookProxy = (BookFacade) proxy.bind(new BookFacadeImpl());
+        System.out.println("********************************BookFacadeImpl*******************************");
         bookProxy.addBook();
+        System.out.println("********************************BookFacadeImpl*******************************");
         BookFacade people = (BookFacade) proxy.bind(new People());
+        System.out.println("********************************People*******************************");
         people.addBook();
+        System.out.println("********************************People*******************************");
+
+        Object object = Proxy.newProxyInstance(JdkProxy.class.getClassLoader(), new Class[] { BookFacade.class }, new ObjectIntercepter());
+        System.out.println("********************************Object*******************************");
+        System.out.println("====hashCode:" + object.hashCode());
+        System.out.println("====toString:" + object.toString());
+        System.out.println("********************************Object*******************************");
+
+        BookFacade peopleSelf = (BookFacade) Proxy.newProxyInstance(JdkProxy.class.getClassLoader(), new Class[] { BookFacade.class }, new ObjectIntercepter());
+        System.out.println("********************************peopleSelf*******************************");
+        peopleSelf.addBook();
+        System.out.println("********************************peopleSelf*******************************");
+
     }
 }
 
 interface BookFacade {
-    public void addBook();
+    void addBook();
 }
 
 class BookFacadeImpl implements BookFacade {
@@ -54,12 +72,27 @@ class ObjectProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args)
             throws Throwable {
-        Object result=null;
         System.out.println("事物开始");
-        //执行方法
-        result=method.invoke(target, args);
+        //执行方法 target
+        Object result = method.invoke(target, args);
         System.out.println("事物结束");
         return result;
     }
 
+}
+
+class ObjectIntercepter implements InvocationHandler {
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        System.out.println("代理class:" + method.getDeclaringClass());
+        if (Object.class.equals(method.getDeclaringClass())) {
+            try {
+                return method.invoke(this, args);
+            } catch (Throwable t) {
+                throw ExceptionUtil.unwrapThrowable(t);
+            }
+        }
+        //执行方法
+        return method.invoke(new People(), args);
+    }
 }

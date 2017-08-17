@@ -17,11 +17,15 @@ public class Main {
 
         ArrayList<String> list = new ArrayList<String>();
 
-        ArrayList<String> byte_list= new ArrayList<String>();
+        ArrayList<String> byte_list = new ArrayList<String>();
 
         byte_list.add(s);
 
-        bt=jt.getByte(byte_list);//通过调用getByte()方法得到bt[]数组。
-        list=jt.getArrayList(bt);
+        bt = jt.getByte(byte_list);//通过调用getByte()方法得到bt[]数组。
+        list = jt.getArrayList(bt);
+
+        int i16 = 0x1;
+        int i16_2 = 0x2;
+        System.out.println("============" + (i16 + i16_2));
     }
 }
