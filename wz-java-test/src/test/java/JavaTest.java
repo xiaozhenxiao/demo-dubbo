@@ -5,9 +5,7 @@ import org.joda.time.Minutes;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 /**
  * Created by Administrator on 2016/7/23.
@@ -119,5 +117,7 @@ public class JavaTest {
 
         int parent = (9 - 1) >>> 1;
         System.out.println("二叉树计算父节点:" + parent);
+
+        dt7.toString().contains("Factory");
     }
 }

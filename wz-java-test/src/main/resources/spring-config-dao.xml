@@ -10,7 +10,6 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-    <tx:annotation-driven/>
 
     <!-- 数据库操作Session工厂 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
@@ -23,13 +22,14 @@
             </list>
         </property>
     </bean>
+    <tx:annotation-driven/>
     <!--用mybatis:scan替代-->
     <!--<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.wz.web.dao"/>
     </bean>-->
     <mybatis:scan base-package="com.wz.web.dao" />
 
-    <bean id="schemeRegistry" class="org.apache.http.conn.scheme.SchemeRegistry">
+    <!--<bean id="schemeRegistry" class="org.apache.http.conn.scheme.SchemeRegistry">
         <property name="items">
             <map>
                 <entry key="http">
@@ -43,14 +43,14 @@
                 </entry>
             </map>
         </property>
-    </bean>
+    </bean>-->
 
     <!--beanPostProcessors的测试-->
-    <bean id="demo" class="com.wz.web.domain.Demo">
+    <!--<bean id="demo" class="com.wz.web.domain.Demo">
         <property name="id" value="1"/>
         <property name="username" value="本名"/>
-    </bean>
-    <bean id="demPostProcessor" class="com.wz.web.beanPostProcessors.DemoPostProcessor"/>
+    </bean>-->
+    <!--<bean id="demPostProcessor" class="com.wz.web.beanPostProcessors.DemoPostProcessor"/>-->
     <!-- spring-data-redis操作集群 -->
     <!--<bean id="redisSentinelConfiguration" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
         <property name="master">
