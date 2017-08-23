@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--suppress ALL -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jd.web.dao.ScheduleTaskMapper">
+    <resultMap id="BaseResultMap" type="com.jd.web.domain.ScheduleTask">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="deal_count" property="dealCount" jdbcType="INTEGER"/>
+        <result column="sts" property="sts" jdbcType="VARCHAR"/>
+        <result column="own_sign" property="ownSign" jdbcType="VARCHAR"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, deal_count, sts, own_sign
+    </sql>
+    <select id="select" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        SELECT 
+        <include refid="Base_Column_List"/>
+        FROM schedule_task
+        WHERE id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="selectUnDeal" resultMap="BaseResultMap" parameterMap="com.jd.web.domain.TaskQuery">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM schedule_task
+        WHERE sts = 'N' AND own_sign = #{ownSign, jdbcType=VARCHAR}
+        <if test="orderIdList != null and orderIdList.size() > 0">
+            AND mod(#{id, jdbcType=BIGINT}, #{taskItemNum, jdbcType=BIGINT}) IN
+            <foreach collection="condition" item="item" index="index" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        LIMIT #{fetchNum,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM schedule_task
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.jd.web.domain.ScheduleTask">
+        INSERT INTO schedule_task
+        VALUES (#{id,jdbcType=BIGINT}, #{deal_count,jdbcType=INTEGER}, #{sts,jdbcType=VARCHAR}, #{own_sign, jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.jd.web.domain.ScheduleTask">
+        UPDATE schedule_task
+        <set>
+            <if test="dealCount != null">
+                deal_count = #{dealCount,jdbcType=INTEGER},
+            </if>
+            <if test="sts != null">
+                sts = #{sts,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>
