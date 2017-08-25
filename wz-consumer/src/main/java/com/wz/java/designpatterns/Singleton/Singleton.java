@@ -1,8 +1,9 @@
 package com.wz.java.designpatterns.Singleton;
 
-import java.util.concurrent.TimeUnit;
-
 /**
+ * 饿汉式 private static Singleton instance=new Singleton();  初始化时即创建实例
+ * 懒汉式 if (single == null) { single = new Singleton(); } 多线程时须加锁，造成锁竞争
+ * 静态内部内 只有在第一次调用的时候才创建实例
  * @author wangzhen
  * @version 1.0
  * @date 2016-10-26 10:26
