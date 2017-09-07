@@ -14,7 +14,19 @@
     <!-- 加载配置文件 -->
     <context:property-placeholder location="classpath:development.properties"/>
 
-    <bean id="scheduleManagerFactory"
+    <bean id="scheduleManagerFactory" class="com.taobao.pamirs.schedule.strategy.TBScheduleManagerFactory" init-method="init">
+        <property name="zkConfig">
+            <map>
+                <entry key="zkConnectString" value="${schedule.zookeeper.address}" />
+                <entry key="rootPath" value="${schedule.root.catalog}" />
+                <entry key="zkSessionTimeout" value="${schedule.timeout}" />
+                <entry key="userName" value="${schedule.username}" />
+                <entry key="password" value="${schedule.password}" />
+                <entry key="isCheckParentPath" value="true" />
+            </map>
+        </property>
+    </bean>
+    <!--<bean id="scheduleManagerFactory1"
           class="com.taobao.pamirs.schedule.strategy.TBScheduleManagerFactory"
           init-method="init">
         <property name="zkConfig">
@@ -27,7 +39,7 @@
                 <entry key="isCheckParentPath" value="true" />
             </map>
         </property>
-    </bean>
+    </bean>-->
     <!-- 数据源导入 -->
     <import resource="spring-config-datasource-druid.xml"/>
     <import resource="spring-config-dao.xml"/>
