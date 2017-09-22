@@ -9,7 +9,9 @@ package com.wz.java.designpatterns.Singleton;
  * @date 2016-10-26 10:26
  **/
 public class Singleton {
-    private Singleton() {}
+    private Singleton() {
+        System.out.println("初始化了 Singleton");
+    }
 
     /**
      * 懒汉式单例类.在第一次调用的时候实例化自己
@@ -26,9 +28,19 @@ public class Singleton {
      * 静态内部类
      */
     private static class LazyHolder {
-        private static final Singleton INSTANCE = new Singleton();
+        private static Singleton INSTANCE = new Singleton();
+
+        public LazyHolder(){
+            System.out.println("初始化LazyHolder…………");
+        }
     }
-    public static final Singleton getStaticInstance() {
+    public static Singleton getStaticInstance() {
+        try {
+            Thread.sleep(2000);
+            System.out.println("Singleton静态内部类睡了2秒");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return LazyHolder.INSTANCE;
     }
 
@@ -36,7 +48,7 @@ public class Singleton {
     public synchronized void methodA(){
         System.out.println("this is methodA! " + Thread.currentThread().getName());
         try {
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -47,9 +59,13 @@ public class Singleton {
         System.out.println("this is methodB End! " + Thread.currentThread().getName());
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
+        System.out.println("Main Class start…………");
+        Singleton1 singleton1 = Singleton1.getInstance();
         Singleton singleton = Singleton.getStaticInstance();
-        new Thread(()-> singleton.methodA()).start();
-        new Thread(()-> singleton.methodB()).start();
+        Thread.sleep(2000);
+//        new Thread(()-> singleton.methodA()).start();
+//        new Thread(()-> singleton.methodB()).start();
+
     }
 }

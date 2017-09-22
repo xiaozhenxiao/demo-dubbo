@@ -11,6 +11,8 @@ import java.lang.reflect.Proxy;
  */
 public class JdkProxy {
     public static void main(String[] args) {
+        System.getProperties().put("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
+
         ObjectProxy proxy = new ObjectProxy();
         BookFacade bookProxy = (BookFacade) proxy.bind(new BookFacadeImpl());
         System.out.println("********************************BookFacadeImpl*******************************");

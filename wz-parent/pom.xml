@@ -19,6 +19,7 @@
         <module>../wz-jd</module>
         <module>../wz-jmeter</module>
         <module>../wz-jd-tbschedule</module>
+        <module>../wz-java</module>
     </modules>
 
     <properties>
