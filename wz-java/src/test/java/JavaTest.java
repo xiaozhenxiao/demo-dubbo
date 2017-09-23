@@ -12,13 +12,13 @@ public class JavaTest {
     static int ii = 1;
     public static void main(String[] args) {
         int i = 0x0001;
-        int j = 0x0002;
-        int k = 0x0004;
-        int l = 0x0008;
-        int m = 0x0010;
-        int n = 0x0040;
-        int o = 0x0080;
-        int p = 0x1000;
+        int j = 0x0010;
+        int k = 0x0020;
+        int l = 0x0200;
+        int m = 0x0400;
+        int n = 0x1000;
+        int o = 0x2000;
+        int p = 0x4000;
 
         int a = 11;
         String aHex = Integer.toHexString(a);
@@ -40,6 +40,12 @@ public class JavaTest {
         System.out.println("inc:" + inc());
 
         System.out.println("ii=" + ii);
+
+        String name = "12)34567890";
+        int ix = name.indexOf(')');
+        System.out.println("index:" + ix);
+        System.out.println("subStart:" + name.substring(0, ix+1));
+        System.out.println("substring:"+name.substring(ix+1));
     }
 
     public static int inc(){

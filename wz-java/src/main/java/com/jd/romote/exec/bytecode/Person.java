@@ -10,10 +10,15 @@ import java.io.Serializable;
 public class Person implements Serializable{
     private String firstName;
     private String lastName;
+    private float weight = 88.999f;
+    private int age = 188888888;
+    private double money = 99999.7788;
+    private long high = 5555566l;
 
-    public Person(String firstName, String lastName) {
+    public Person(String firstName, String lastName, float weight) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.weight = weight;
     }
 
     public String getFirstName() {
@@ -30,5 +35,20 @@ public class Person implements Serializable{
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+
+    public int methodTest(){
+        int i = 0 ;
+        int j = 1;
+        return i+j;
     }
 }
