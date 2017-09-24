@@ -8,6 +8,7 @@ import java.io.Serializable;
  * 2017/9/22.
  */
 public class Person implements Serializable{
+    private static final String hobby = "music";
     private String firstName;
     private String lastName;
     private float weight = 88.999f;
@@ -47,8 +48,14 @@ public class Person implements Serializable{
 
 
     public int methodTest(){
-        int i = 0 ;
-        int j = 1;
-        return i+j;
+        int result = 0;
+        try {
+            int i = 0;
+            int j = 1;
+            result = i + j;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 }

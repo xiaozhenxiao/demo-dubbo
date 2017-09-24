@@ -32,41 +32,44 @@ public class BytecodeAnalysis {
     private static Map<Integer, String> constantMap;
 
     public static void bindClass(String classPathName) throws IOException {
-        FileInputStream is = new FileInputStream(classPathName);
-        classByte = new byte[is.available()];
-        is.read(classByte);
-        is.close();
+        try (FileInputStream is = new FileInputStream(classPathName)) {
+            classByte = new byte[is.available()];
+            int length = is.read(classByte);
+            System.out.println("#################################################");
+            System.out.println("class size:" + length);
+            System.out.println("#################################################");
+        }
     }
 
     public static String analysis() {
         int offset = 0;
-        /** 读取魔数 **/
+        /* 读取魔数 */
         int magic = ByteUtils.bytes2Int(classByte, offset, u4);
         System.out.println("magic: " + String.valueOf(Integer.toHexString(magic).toUpperCase()));
 
         offset += u4;
-        /** 版本号 **/
+        /* 版本号 */
         int minorVersion = ByteUtils.bytes2Int(classByte, offset, u2);
         offset += u2;
         int majorVersion = ByteUtils.bytes2Int(classByte, offset, u2);
         System.out.println("version:" + (minorVersion == 0 ? "" : minorVersion + ".") + majorVersion);
         offset += u2;
-        /** 解析常量池 **/
+        /* 解析常量池 */
         offset = analysisConstantPool(offset);
         analysisSymbolReference();
 
-        /** 解析访问标志 **/
+        /* 解析访问标志 */
         int accessFlags = ByteUtils.bytes2Int(classByte, offset, u2);
         System.out.printf("access_flags:0x%04x\n", accessFlags);
         offset += u2;
 
-        /** 解析类索引，父类索引，接口索引 **/
+        /* 解析类索引，父类索引，接口索引 */
         offset = analysisClassIndex(offset);
 
-        /** 解析字段表集合 **/
+        /* 解析字段表集合 */
         offset = analysisFiledTables(offset);
 
-        /** 解析方法表集合 **/
+        /* 解析方法表集合 */
         offset = analysisMethodTables(offset);
         return null;
     }
@@ -75,11 +78,11 @@ public class BytecodeAnalysis {
         for (Integer index : constantIndexMap.keySet()) {
             ContantIndex contantIndex = constantIndexMap.get(index);
             if (contantIndex.getTag() < 7) {
-                constantMap.put(index, contantIndex.getValue());
+                constantMap.put(index, contantIndex.getValue().replace("/", "."));
                 continue;
             }
             if (contantIndex.getTag() < 9) {
-                constantMap.put(index, constantIndexMap.get(Integer.valueOf(contantIndex.getValue())).getValue());
+                constantMap.put(index, constantIndexMap.get(Integer.valueOf(contantIndex.getValue())).getValue().replace("/", "."));
                 continue;
             }
             if (contantIndex.getTag() < 12) {
@@ -92,22 +95,21 @@ public class BytecodeAnalysis {
                 int nameIndex = Integer.valueOf(nameAndType[0]);
                 int typeIndex = Integer.valueOf(nameAndType[1]);
                 String name = constantIndexMap.get(nameIndex).getValue();
-                String descriptor = constantIndexMap.get(typeIndex).getValue();
+                String descriptor = constantIndexMap.get(typeIndex).getValue().replace("/", ".");
                 int ix = descriptor.indexOf(')') + 1;
-                StringBuffer allName = new StringBuffer(descriptor.substring(ix)).append(" ");
-                allName.append(className.replaceAll("/", ".")).append(".").append(name).append(descriptor.substring(0, ix));
-                constantMap.put(index, allName.toString());
+                String allName = descriptor.substring(ix) + " " + className.replaceAll("/", ".") + "." + name + descriptor.substring(0, ix);
+                constantMap.put(index, allName);
             }
-            if(contantIndex.getTag() == 12){
+            if (contantIndex.getTag() == 12) {
                 ContantIndex nameAndTypeIndex = constantIndexMap.get(index);
                 String[] nameAndType = nameAndTypeIndex.getValue().split(":");
                 int nameIndex = Integer.valueOf(nameAndType[0]);
                 int typeIndex = Integer.valueOf(nameAndType[1]);
                 String name = constantIndexMap.get(nameIndex).getValue();
-                String descriptor = constantIndexMap.get(typeIndex).getValue();
+                String descriptor = constantIndexMap.get(typeIndex).getValue().replace("/", ".");
                 int ix = descriptor.indexOf(')') + 1;
-                StringBuffer allName = new StringBuffer(descriptor.substring(ix)).append(" ").append(name).append(descriptor.substring(0, ix));
-                constantMap.put(index, allName.toString());
+                String allName = descriptor.substring(ix) + " " + name + descriptor.substring(0, ix);
+                constantMap.put(index, allName);
             }
         }
     }
@@ -122,16 +124,16 @@ public class BytecodeAnalysis {
             int accessFlags = ByteUtils.bytes2Int(classByte, offset, u2);
             System.out.printf("access_flags:0x%04x\n", accessFlags);
             int nameIndex = ByteUtils.bytes2Int(classByte, offset + u2, u2);
-            System.out.println("name_index:#" + nameIndex);
+            System.out.println("name_index:#" + nameIndex + "->" + constantMap.get(nameIndex));
             int descriptorIndex = ByteUtils.bytes2Int(classByte, offset + u4, u2);
-            System.out.println("descriptor_index:#" + descriptorIndex);
+            System.out.println("descriptor_index:#" + descriptorIndex + "->" + constantMap.get(descriptorIndex));
 
             offset += u2 + u4;
             int attributesCount = ByteUtils.bytes2Int(classByte, offset, u2);
             System.out.println("attributes_count:" + attributesCount);
             offset += u2;
             for (int j = 0; j < attributesCount; j++) {
-                /** 解析属性 **/
+                /* 解析属性 */
                 offset = analysisAttribute(offset);
             }
         }
@@ -149,16 +151,16 @@ public class BytecodeAnalysis {
             int accessFlags = ByteUtils.bytes2Int(classByte, offset, u2);
             System.out.printf("access_flags:0x%04x\n", accessFlags);
             int nameIndex = ByteUtils.bytes2Int(classByte, offset + u2, u2);
-            System.out.println("name_index:#" + nameIndex);
+            System.out.println("name_index:#" + nameIndex + "->" + constantMap.get(nameIndex));
             int descriptorIndex = ByteUtils.bytes2Int(classByte, offset + u4, u2);
-            System.out.println("descriptor_index:#" + descriptorIndex);
+            System.out.println("descriptor_index:#" + descriptorIndex + "->" + constantMap.get(descriptorIndex));
 
             offset += u2 + u4;
             int attributesCount = ByteUtils.bytes2Int(classByte, offset, u2);
             System.out.println("attributes_count:" + attributesCount);
             offset += u2;
             for (int j = 0; j < attributesCount; j++) {
-                /** 解析属性 **/
+                /* 解析属性 */
                 offset = analysisAttribute(offset);
             }
         }
@@ -167,26 +169,106 @@ public class BytecodeAnalysis {
     }
 
     private static int analysisCodeAttr(int offset) {
+        int maxStack = ByteUtils.bytes2Int(classByte, offset, u2);
+        int maxLocals = ByteUtils.bytes2Int(classByte, offset + u2, u2);
+        offset += u4;
+        System.out.println("max_stack:" + maxStack);
+        System.out.println("max_locals:" + maxLocals);
 
-
+        int codeLength = ByteUtils.bytes2Int(classByte, offset, u4);
+        System.out.println("code_length:" + codeLength);
+        // TODO: 2017/9/24 解析字节码
+        offset += u4 + codeLength;
+        int exceptionTableLength = ByteUtils.bytes2Int(classByte, offset, u2);
+        offset += u2;
+        System.out.println("exception_table_length:" + exceptionTableLength);//exception_table_length代表exception_table[]的大小
+        for (int i = 0; i < exceptionTableLength; i++) {
+            int startPc = ByteUtils.bytes2Int(classByte, offset, u2);
+            offset += u2;
+            int endPc = ByteUtils.bytes2Int(classByte, offset, u2);
+            offset += u2;
+            int handlerPc = ByteUtils.bytes2Int(classByte, offset, u2);
+            offset += u2;
+            int catchTypeIndex = ByteUtils.bytes2Int(classByte, offset, u2);
+            offset += u2;
+            System.out.println("start_pc:" + startPc);
+            System.out.println("end_pc:" + endPc);
+            System.out.println("handler_pc:" + handlerPc);
+            System.out.println("catch_type:#" + catchTypeIndex);
+        }
+        int attributesCount = ByteUtils.bytes2Int(classByte, offset, u2);
+        System.out.println("attributes_count:" + attributesCount);
+        offset += u2;
+        for (int i = 0; i < attributesCount; i++) {
+            offset = analysisAttribute(offset);
+        }
         return offset;
     }
 
     private static int analysisAttribute(int offset) {
         int attributeNameIndex = ByteUtils.bytes2Int(classByte, offset, u2);
-        System.out.println("attribute_name_index:#" + attributeNameIndex);
+        System.out.println("attribute_name_index:#" + attributeNameIndex + "->" + constantMap.get(attributeNameIndex));
         int attributeLength = ByteUtils.bytes2Int(classByte, offset + u2, u4);
         offset += u4 + u2;
         System.out.println("attribute_length:" + attributeLength);
-        // TODO: 2017/9/23 属性解析
-        return offset + attributeLength;
+
+        if (constantMap.get(attributeNameIndex).equals("Code")) {//解析Code属性
+            System.out.println("====================Code START=======================");
+            offset = analysisCodeAttr(offset);
+            System.out.println("====================Code END=======================");
+        } else if (constantMap.get(attributeNameIndex).equals("LineNumberTable")) {
+            int lineNumberTableLength = ByteUtils.bytes2Int(classByte, offset, u2);
+            offset += u2;
+            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^LineNumberTable START^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+            System.out.println("line_number_table_length:" + lineNumberTableLength);
+            System.out.println("start_pc  <--->  line_number");
+            for (int i = 0; i < lineNumberTableLength; i++) {
+                int startPc = ByteUtils.bytes2Int(classByte, offset, u2);
+                int lineNumber = ByteUtils.bytes2Int(classByte, offset + u2, u2);
+                System.out.println(startPc + "  <--->  " + lineNumber);
+                offset += u4;
+            }
+            System.out.println("^^^^^^^^^^^^^^^^^^^^^^^LineNumberTable END^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+        } else if (constantMap.get(attributeNameIndex).equals("LocalVariableTable")) {
+            int localVariableTableLength = ByteUtils.bytes2Int(classByte, offset, u2);
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!LocalVariableTable START!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+            System.out.println("local_variable_table_length:" + localVariableTableLength);
+            offset += u2;
+            for (int i = 0; i < localVariableTableLength; i++) {
+                int startPc = ByteUtils.bytes2Int(classByte, offset, u2);
+                offset += u2;
+                int length = ByteUtils.bytes2Int(classByte, offset, u2);
+                offset += u2;
+                int nameIndex = ByteUtils.bytes2Int(classByte, offset, u2);
+                offset += u2;
+                int descriptorIndex = ByteUtils.bytes2Int(classByte, offset, u2);
+                offset += u2;
+                int index = ByteUtils.bytes2Int(classByte, offset, u2);
+                offset += u2;
+                System.out.println("----------Variable" + i + "-----------");
+                System.out.println("start_pc:" + startPc);
+                System.out.println("length:" + length);
+                System.out.println("name_index:#" + nameIndex + "->" + constantMap.get(nameIndex));
+                System.out.println("descriptor_index:#" + descriptorIndex + "->" + constantMap.get(descriptorIndex));
+                System.out.println("index:" + index);
+            }
+            System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!LocalVariableTable END!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+        } else if (constantMap.get(attributeNameIndex).equals("ConstantValue")) {
+            int constantvalueIndex = ByteUtils.bytes2Int(classByte, offset, u2);
+            offset += u2;
+            System.out.println("constantvalue_index:#" + constantvalueIndex + " -> " + constantMap.get(constantvalueIndex));
+        } else {
+            // TODO: 2017/9/23 属性解析
+            offset += attributeLength;
+        }
+        return offset;
     }
 
     private static int analysisClassIndex(int offset) {
         int thisClassIndex = ByteUtils.bytes2Int(classByte, offset, u2);
         int superClassIndex = ByteUtils.bytes2Int(classByte, offset + u2, u2);
-        System.out.println("this_class_index:#" + thisClassIndex);
-        System.out.println("super_class_index:#" + superClassIndex);
+        System.out.println("this_class_index:#" + thisClassIndex + "->" + constantMap.get(thisClassIndex));
+        System.out.println("super_class_index:#" + superClassIndex + "->" + constantMap.get(superClassIndex));
         offset += u4;
 
         int interfacesCount = ByteUtils.bytes2Int(classByte, offset, u2);
@@ -195,14 +277,14 @@ public class BytecodeAnalysis {
         offset += u2;
         for (int i = 0; i < interfacesCount; i++) {
             int interfaceIndex = ByteUtils.bytes2Int(classByte, offset, u2);
-            System.out.println("interface_index:#" + interfaceIndex);
+            System.out.println("interface_index:#" + interfaceIndex + "->" + constantMap.get(interfaceIndex));
             offset += u2;
         }
         return offset;
     }
 
     private static int analysisConstantPool(int offset) {
-        /** 常量池大小 **/
+        /* 常量池大小 */
         int cpc = ByteUtils.bytes2Int(classByte, offset, u2);
         constantMap = new HashMap<>(cpc);
         constantIndexMap = new HashMap<>(cpc);
