@@ -55,6 +55,8 @@ public class Person implements Serializable{
             result = i + j;
         } catch (Exception e) {
             e.printStackTrace();
+        }catch (Throwable throwable){
+            throwable.printStackTrace();
         }
         return result;
     }

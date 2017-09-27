@@ -11,13 +11,13 @@ package com.jd.jvm.init;
 public class NotInitialization {
     public static void main(String[] args) {
         /** 被动引用例一 **/
-//        System.out.println(SubClass.value);
+        System.out.println(SubClass.value);
 
         /** 被动引用例二 **/
-        SuperClass[] sca = new SuperClass[10];
-        System.out.println(sca.length);
+//        SuperClass[] sca = new SuperClass[10];
+//        System.out.println(sca.length);
 
         /** 被动引用例三 **/
-        System.out.println(ConstClass.HELLOWORLD);
+//        System.out.println(ConstClass.HELLOWORLD);
     }
 }

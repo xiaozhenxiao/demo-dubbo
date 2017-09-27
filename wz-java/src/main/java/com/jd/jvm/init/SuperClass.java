@@ -7,7 +7,12 @@ package com.jd.jvm.init;
  */
 public class SuperClass {
     public static int value = 123;
+    private String superString = "superString";
     static {
-        System.out.println("SuperClass init!");
+        System.out.println("SuperClass static init!");
+    }
+
+    public SuperClass() {
+        System.out.println("super Class constructor:" + superString);
     }
 }
