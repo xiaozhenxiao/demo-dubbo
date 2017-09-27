@@ -1,3 +1,9 @@
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -15,6 +21,17 @@ public class JavaTest {
     static int ii = 1;
 
     public static void main(String[] args) {
+//        bina();
+        try {
+            http();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void bina() {
         int i = 0x0001;
         int j = 0x0010;
         int k = 0x0020;
@@ -74,6 +91,37 @@ public class JavaTest {
             return x;
         } finally {
             x = 3;
+        }
+    }
+
+    public static void http() throws IOException, InterruptedException {
+        String[] paths = {"http://blog.csdn.net/a_zhenzhen/article/details/77977345",
+                "http://blog.csdn.net/a_zhenzhen/article/details/77917991",
+                "http://blog.csdn.net/a_zhenzhen/article/details/77862607",
+                "http://blog.csdn.net/a_zhenzhen/article/details/78112312",
+                "http://blog.csdn.net/a_zhenzhen/article/details/78036920",
+                "http://blog.csdn.net/a_zhenzhen/article/details/78028706",
+                "http://blog.csdn.net/a_zhenzhen/article/details/77946471"
+        };
+        for (int i = 0; i < 1000; i++) {
+            for (String path : paths) {
+                URL url = new URL(path.trim());
+                //打开连接
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                if (200 == urlConnection.getResponseCode()) {
+                    //得到输入流
+                    InputStream is = urlConnection.getInputStream();
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    byte[] buffer = new byte[1024];
+                    int len;
+                    while (-1 != (len = is.read(buffer))) {
+                        baos.write(buffer, 0, len);
+                        baos.flush();
+                    }
+                    System.out.println(i + " - " + path);
+                }
+            }
+            Thread.sleep(60*1000);
         }
     }
 }
