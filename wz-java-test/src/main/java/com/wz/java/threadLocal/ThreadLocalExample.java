@@ -1,5 +1,7 @@
 package com.wz.java.threadLocal;
 
+import java.util.Random;
+
 /**
  * TODO
  * wangzhen23
@@ -7,9 +9,9 @@ package com.wz.java.threadLocal;
  */
 public class ThreadLocalExample {
     public static class MyRunnable implements Runnable {
-        private ThreadLocal threadLocal = new ThreadLocal();
+        private ThreadLocal<Integer> threadLocal = new ThreadLocal<>();
         public void run() {
-            int i = (int) (Math.random() * 100D);
+            int i = new Random().nextInt(100);
             threadLocal.set(i);
             System.out.println(threadLocal + "---" + Thread.currentThread().getName() + " set- " + i);
             try {
@@ -17,7 +19,7 @@ public class ThreadLocalExample {
             } catch (InterruptedException e) {
 
             }
-            System.out.println(threadLocal + "---" + Thread.currentThread().getName() + " - " + threadLocal.get());
+            System.out.println(threadLocal + "---" + Thread.currentThread().getName() + " get- " + threadLocal.get());
         }
     }
 
