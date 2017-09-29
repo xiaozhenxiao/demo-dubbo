@@ -35,6 +35,13 @@ public class JavaTest {
 
         int r = 0 << 8 | 3;
         System.out.println("r=" + r);
+
+        int[] src = new int[]{1,2,3,4,5,6,7,8,9,0};
+        int[] dest = new int[10];
+        System.arraycopy(src, 1, dest, 0, 8);
+        for (int i : dest) {
+            System.out.println(i);
+        }
     }
 
     private static void stack() {

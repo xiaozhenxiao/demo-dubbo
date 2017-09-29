@@ -30,6 +30,10 @@ public class BytecodeAnalysis {
     private static int u4 = 4;
     private static int u8 = 8;
 
+    private static String[] addVariables;
+    private static boolean localFlag = false;
+    private static ArrayList<Integer> addCode;
+
     static {
         InputStream is = BytecodeAnalysis.class.getResourceAsStream("/bytecode.properties");
         try {
@@ -108,6 +112,8 @@ public class BytecodeAnalysis {
 
         /* 解析方法表集合 */
         offset = analysisMethodTables(offset, classFile);
+        decompileByteCode();
+        System.out.println("offset:" + offset);
         return classFile;
     }
 
@@ -169,6 +175,11 @@ public class BytecodeAnalysis {
             int nameIndex = ByteUtils.bytes2Int(classByte, offset + u2, u2);
             methodInfo.setNameIndex(nameIndex);
             System.out.println("name_index:#" + nameIndex + "->" + constantMap.get(nameIndex));
+            if(constantMap.get(nameIndex).equals("add")){
+                localFlag = true;
+            }else{
+                localFlag = false;
+            }
             int descriptorIndex = ByteUtils.bytes2Int(classByte, offset + u4, u2);
             System.out.println("descriptor_index:#" + descriptorIndex + "->" + constantMap.get(descriptorIndex));
             methodInfo.setDescriptorIndex(descriptorIndex);
@@ -296,8 +307,7 @@ public class BytecodeAnalysis {
                     i++;
                     code.add(operand);
                     name += " " + operand;
-                }
-                if (instructions_2.contains(opcode)) {
+                }else if (instructions_2.contains(opcode)) {
                     int operand1 = ByteUtils.bytes2Int(classByte, index, u1);
                     int operand2 = ByteUtils.bytes2Int(classByte, index + u1, u1);
                     index += u2;
@@ -310,8 +320,78 @@ public class BytecodeAnalysis {
             }
         }
         codeAttribute.setCode(code);
+        if(localFlag){
+            addCode = code;
+        }
         System.out.println("=========指令END==========");
         return offset + u4 + codeLength;
+    }
+
+    private static void decompileByteCode(){
+        Stack<String> javaCodeStack = new Stack<>();
+        for (int i = 0; i < addCode.size(); i++) {
+            int opcode = addCode.get(i);
+            if (Objects.nonNull(opcode)) {
+                if (instructions_1.contains(opcode)) {
+                    decompile(opcode, addCode.get(++i), javaCodeStack);
+                }else if (instructions_2.contains(opcode)) {
+                    decompile(opcode, addCode.get(++i), javaCodeStack);
+                    decompile(opcode, addCode.get(++i), javaCodeStack);
+                }else {
+                    decompile(opcode, null, javaCodeStack);
+                }
+            }
+        }
+        System.out.println("==================================反编译========================================");
+        for (String s : javaCodeStack) {
+            System.out.println(s + ";");
+        }
+        System.out.println("==================================反编译========================================");
+    }
+    private static Stack<String> decompile(Integer opcode, Integer operand, Stack<String> javaCodeStack){
+        if(opcode.equals(Integer.parseInt("1b", 16))){//iload_1
+            javaCodeStack.push(addVariables[1]);
+        }else if(opcode.equals(Integer.parseInt("03", 16))){//iconst_0
+            javaCodeStack.push("0");
+        }else if(opcode.equals(Integer.parseInt("04", 16))){//iconst_1
+            javaCodeStack.push("1");
+        }else if(opcode.equals(Integer.parseInt("05", 16))){//iconst_2
+            javaCodeStack.push("2");
+        }else if(opcode.equals(Integer.parseInt("06", 16))){//iconst_3
+            javaCodeStack.push("3");
+        }else if(opcode.equals(Integer.parseInt("07", 16))){//iconst_4
+            javaCodeStack.push("4");
+        }else if(opcode.equals(Integer.parseInt("08", 16))){//iconst_5
+            javaCodeStack.push("5");
+        }else if(opcode.equals(Integer.parseInt("1c", 16))){//iload_2
+            javaCodeStack.push(addVariables[2]);
+        }else if(opcode.equals(Integer.parseInt("1d", 16))){//iload_3
+            javaCodeStack.push(addVariables[3]);
+        }else if(opcode.equals(Integer.parseInt("60", 16))){//iadd
+            pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " + ");//iadd
+        }else if(opcode.equals(Integer.parseInt("3e", 16))){//istore_3
+            javaCodeStack.push("int " + addVariables[3] + " = " + javaCodeStack.pop());
+        }else if(opcode.equals(Integer.parseInt("3d", 16))){//istore_2
+            javaCodeStack.push("int " + addVariables[23] + " = " + javaCodeStack.pop());
+        }else if(opcode.equals(Integer.parseInt("3c", 16))){//istore_1
+            javaCodeStack.push("int " + addVariables[1] + " = " + javaCodeStack.pop());
+        }else if(opcode.equals(Integer.parseInt("3b", 16))){//istore_0
+            javaCodeStack.push("int " + addVariables[0] + " = " + javaCodeStack.pop());
+        }else if(opcode.equals(Integer.parseInt("68", 16))){//imul
+            pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " + ");//imul
+        }else if(opcode.equals(Integer.parseInt("36", 16))){//istore
+            javaCodeStack.push("int " + addVariables[operand] + " = " + javaCodeStack.pop());
+        }else if(opcode.equals(Integer.parseInt("15", 16))){//iload
+            javaCodeStack.push(addVariables[operand]);
+        }else if(opcode.equals(Integer.parseInt("ac", 16))){//ireturn
+            javaCodeStack.push("return " + javaCodeStack.pop());//ireturn
+        }
+
+        return javaCodeStack;
+    }
+    public static Stack<String> pushCalc(Stack<String> stack, String second, String first, String operateType) {
+        stack.push(first + operateType + second);
+        return stack;
     }
 
     private static int analysisAttribute(int offset, ArrayList<AttributeInfo> attributes) {
@@ -368,6 +448,10 @@ public class BytecodeAnalysis {
         localVariableTable.setLocalVariableTable(localVariables);
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!LocalVariableTable START!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
         System.out.println("local_variable_table_length:" + localVariableTableLength);
+
+        if(localFlag){
+            addVariables = new String[localVariableTableLength];
+        }
         offset += u2;
         for (int i = 0; i < localVariableTableLength; i++) {
             LocalVariableInfo localVariableInfo = new LocalVariableInfo();
@@ -386,6 +470,9 @@ public class BytecodeAnalysis {
             offset += u2;
             int index = ByteUtils.bytes2Int(classByte, offset, u2);
             localVariableInfo.setIndex(index);
+            if(localFlag) {
+                addVariables[index] = constantMap.get(nameIndex);
+            }
             offset += u2;
             System.out.println("----------Variable" + i + "-----------");
             System.out.println("start_pc:" + startPc);

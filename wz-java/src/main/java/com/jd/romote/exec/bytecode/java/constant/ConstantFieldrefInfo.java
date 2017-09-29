@@ -21,12 +21,22 @@ public class ConstantFieldrefInfo extends ConstantPoolInfo{
         return classIndex;
     }
 
+    public String getClassIndexVaule(ConstantPoolInfo[] constantPool){
+        return ((ConstantClassInfo)constantPool[this.classIndex]).getValue(constantPool);
+    }
+
     public void setClassIndex(int classIndex) {
         this.classIndex = classIndex;
     }
 
     public int getNameAndTypeIndex() {
         return nameAndTypeIndex;
+    }
+    public String getNameIndexValue(ConstantPoolInfo[] constantPool) {
+        return ((ConstantNameAndTypeInfo)constantPool[this.nameAndTypeIndex]).getNameIndexValue(constantPool);
+    }
+    public String getTypeIndexValue(ConstantPoolInfo[] constantPool) {
+        return ((ConstantNameAndTypeInfo)constantPool[this.nameAndTypeIndex]).getTypeIndexValue(constantPool);
     }
 
     public void setNameAndTypeIndex(int nameAndTypeIndex) {

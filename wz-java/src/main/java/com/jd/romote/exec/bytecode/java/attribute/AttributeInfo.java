@@ -10,6 +10,8 @@ public class AttributeInfo {
     private int attributeNameIndex;
     private int attributeLength;
 
+    private byte[] attributeByte;
+
     public int getAttributeNameIndex() {
         return attributeNameIndex;
     }
@@ -24,5 +26,13 @@ public class AttributeInfo {
 
     public void setAttributeLength(int attributeLength) {
         this.attributeLength = attributeLength;
+    }
+
+    public byte[] getAttributeByte() {
+        return attributeByte;
+    }
+
+    public void setAttributeByte(byte[] attributeByte) {
+        this.attributeByte = attributeByte;
     }
 }

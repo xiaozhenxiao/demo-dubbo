@@ -21,4 +21,8 @@ public class ConstantClassInfo extends ConstantPoolInfo {
     public void setIndex(int index) {
         this.index = index;
     }
+
+    public String getValue(ConstantPoolInfo[] constantPool){
+        return ((ConstantUtf8Info)constantPool[this.index]).getBytes();
+    }
 }

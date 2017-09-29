@@ -14,7 +14,8 @@ public class MainClass {
         String classPath = "E:/myworkspaces/idea-dubbo/wz-java/target/classes/com/jd/romote/exec/bytecode/Person.class";
         BytecodeAnalysis.bindClass(classPath);
         ClassFile classFile = BytecodeAnalysis.analysis();
-        System.out.println(classFile);
+//        String java = BytecodeAnalysis.generateJava(classFile).toString();
+//        System.out.println(java.replaceAll("/", "."));
     }
 
     public static void printByte(byte[] bytes) {

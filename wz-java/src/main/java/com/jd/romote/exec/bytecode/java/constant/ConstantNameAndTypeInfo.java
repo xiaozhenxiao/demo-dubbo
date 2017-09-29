@@ -20,6 +20,9 @@ public class ConstantNameAndTypeInfo extends ConstantPoolInfo {
     public int getNameIndex() {
         return nameIndex;
     }
+    public String getNameIndexValue(ConstantPoolInfo[] constantPool) {
+        return ((ConstantUtf8Info)constantPool[this.nameIndex]).getBytes();
+    }
 
     public void setNameIndex(int nameIndex) {
         this.nameIndex = nameIndex;
@@ -27,6 +30,9 @@ public class ConstantNameAndTypeInfo extends ConstantPoolInfo {
 
     public int getTypeIndex() {
         return typeIndex;
+    }
+    public String getTypeIndexValue(ConstantPoolInfo[] constantPool) {
+        return ((ConstantUtf8Info)constantPool[this.typeIndex]).getBytes();
     }
 
     public void setTypeIndex(int typeIndex) {

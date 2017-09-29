@@ -32,4 +32,16 @@ public class ConstantInterfaceMethodrefInfo extends ConstantPoolInfo {
     public void setNameAndTypeIndex(int nameAndTypeIndex) {
         this.nameAndTypeIndex = nameAndTypeIndex;
     }
+
+    public String getClassIndexVaule(ConstantPoolInfo[] constantPool) {
+        return ((ConstantClassInfo) constantPool[this.classIndex]).getValue(constantPool);
+    }
+
+    public String getNameIndexValue(ConstantPoolInfo[] constantPool) {
+        return ((ConstantNameAndTypeInfo) constantPool[this.nameAndTypeIndex]).getNameIndexValue(constantPool);
+    }
+
+    public String getTypeIndexValue(ConstantPoolInfo[] constantPool) {
+        return ((ConstantNameAndTypeInfo) constantPool[this.nameAndTypeIndex]).getTypeIndexValue(constantPool);
+    }
 }

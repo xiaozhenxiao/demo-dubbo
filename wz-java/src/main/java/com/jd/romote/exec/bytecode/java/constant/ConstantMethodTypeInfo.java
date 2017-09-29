@@ -21,4 +21,8 @@ public class ConstantMethodTypeInfo extends ConstantPoolInfo {
     public void setDescreptorIndex(int descreptorIndex) {
         this.descreptorIndex = descreptorIndex;
     }
+
+    public String getDescreptorVaule(ConstantPoolInfo[] constantPool) {
+        return ((ConstantUtf8Info) constantPool[this.descreptorIndex]).getBytes();
+    }
 }
