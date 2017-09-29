@@ -6,6 +6,7 @@ package com.jd.jvm.referemce;
  * 2017/9/26.
  */
 public class MyObject {
+    public Integer test;
     @Override
     public String toString() {
         return "I am MyObject";

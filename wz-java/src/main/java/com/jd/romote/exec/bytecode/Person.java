@@ -1,9 +1,10 @@
 package com.jd.romote.exec.bytecode;
 
+import com.jd.jvm.referemce.MyObject;
+
 import java.io.Serializable;
 
 /**
- * TODO
  * wangzhen23
  * 2017/9/22.
  */
@@ -12,11 +13,11 @@ public class Person implements Serializable{
     private String firstName;
     private String lastName;
     private float weight = 88.999f;
-    private int age = 188888888;
+    private int age = 18;
     private double money = 99999.7788;
     private long high = 5555566l;
 
-    public Person(String firstName, String lastName, float weight) {
+    /*public Person(String firstName, String lastName, float weight) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.weight = weight;
@@ -38,20 +39,19 @@ public class Person implements Serializable{
         this.lastName = lastName;
     }
 
-    public float getWeight() {
-        return weight;
+    public int getAge() {
+        return age;
     }
 
-    public void setWeight(float weight) {
-        this.weight = weight;
+    public void setAge(int age) {
+        this.age = age;
     }
-
 
     public int methodTest(){
         int result = 0;
         try {
-            int i = 0;
-            int j = 1;
+            int i = getAge();
+            int j = new MyObject().test;
             result = i + j;
         } catch (Exception e) {
             e.printStackTrace();
@@ -59,5 +59,12 @@ public class Person implements Serializable{
             throwable.printStackTrace();
         }
         return result;
+    }*/
+
+    public int add(int a, int b){
+        int i = a + b;
+        int j = a * b;
+        int k = i + j;
+        return k;
     }
 }

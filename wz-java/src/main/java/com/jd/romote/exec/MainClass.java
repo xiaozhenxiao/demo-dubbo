@@ -1,11 +1,11 @@
 package com.jd.romote.exec;
 
 import com.jd.romote.exec.bytecode.BytecodeAnalysis;
+import com.jd.romote.exec.bytecode.java.ClassFile;
 
 import java.io.IOException;
 
 /**
- * TODO
  * wangzhen23
  * 2017/9/22.
  */
@@ -13,7 +13,8 @@ public class MainClass {
     public static void main(String[] args) throws IOException {
         String classPath = "E:/myworkspaces/idea-dubbo/wz-java/target/classes/com/jd/romote/exec/bytecode/Person.class";
         BytecodeAnalysis.bindClass(classPath);
-        BytecodeAnalysis.analysis();
+        ClassFile classFile = BytecodeAnalysis.analysis();
+        System.out.println(classFile);
     }
 
     public static void printByte(byte[] bytes) {

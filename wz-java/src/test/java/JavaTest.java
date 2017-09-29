@@ -1,9 +1,8 @@
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -22,13 +21,76 @@ public class JavaTest {
 
     public static void main(String[] args) {
 //        bina();
-        try {
-            http();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+//        stack();
+//        try {
+//            http();
+//            read();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        int test = Integer.parseInt("02",16);
+//        System.out.println("test:" + test);
+
+        int r = 0 << 8 | 3;
+        System.out.println("r=" + r);
+    }
+
+    private static void stack() {
+        Stack<String> javaCodeStack = new Stack<String>();
+        javaCodeStack.push("a");//loadattributes
+        javaCodeStack.push("b");
+        pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " + ");//iadd
+        javaCodeStack.push("int i = " + javaCodeStack.pop());//istore
+        javaCodeStack.push("a");//iload
+        javaCodeStack.push("b");//iload
+        pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " * ");//imul
+        javaCodeStack.push("int j = " + javaCodeStack.pop());//istore 4
+        javaCodeStack.push("i");//iload_3
+        javaCodeStack.push("j");//iload_4
+        pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " + ");//iadd
+        javaCodeStack.push("int k = " + javaCodeStack.pop());//istore 5
+        javaCodeStack.push("k");//iload 5
+        javaCodeStack.push("return " + javaCodeStack.pop());//ireturn
+        int num = 0;
+        for (String s : javaCodeStack) {
+            System.out.println(num + ": " + s);
+            num++;
         }
+    }
+
+    public static Stack<String> pushCalc(Stack<String> stack, String second, String first, String operateType) {
+        stack.push(first + operateType + second);
+        return stack;
+    }
+
+    enum OperateType {
+        ADD, SUBTRACT, MULTIPLY, DIVIDE
+    }
+
+    public static void read() throws IOException {
+        FileReader fr = new FileReader("C:/Users/wangzhen23/Desktop/class.txt");
+        FileWriter fw = new FileWriter("E:/bytecode.txt");
+        BufferedReader br = new BufferedReader(fr);
+        BufferedWriter bw = new BufferedWriter(fw);
+        String line = null;
+        while ((line = br.readLine()) != null) {
+            if (line != null) {
+                String[] line2 = line.trim().split("\\s+");
+                if (line2.length > 1) {
+                    String ll = line2[0].trim() + " " + line2[1].trim() + "\r\n";
+                    System.out.println("====" + ll);
+                    bw.write(ll);
+                    bw.flush();
+                }
+            }
+        }
+        bw.flush();
+        fr.close();
+        br.close();
+        fw.close();
+        bw.close();
     }
 
     private static void bina() {
@@ -70,15 +132,6 @@ public class JavaTest {
         System.out.println("index:" + ix);
         System.out.println("subStart:" + name.substring(0, ix + 1));
         System.out.println("substring:" + name.substring(ix + 1));
-
-        Stack<String> javaCodeStack = new Stack<String>();
-        javaCodeStack.push("var1");
-        javaCodeStack.push("var2");
-        javaCodeStack.push(javaCodeStack.pop() + "+" + javaCodeStack.pop());
-        javaCodeStack.push("return " + javaCodeStack.pop());
-        for (String s : javaCodeStack) {
-            System.out.println("=====:" + s);
-        }
     }
 
     public static int inc() {
@@ -95,13 +148,17 @@ public class JavaTest {
     }
 
     public static void http() throws IOException, InterruptedException {
-        String[] paths = {"http://blog.csdn.net/a_zhenzhen/article/details/77977345",
-                "http://blog.csdn.net/a_zhenzhen/article/details/77917991",
-                "http://blog.csdn.net/a_zhenzhen/article/details/77862607",
-                "http://blog.csdn.net/a_zhenzhen/article/details/78112312",
-                "http://blog.csdn.net/a_zhenzhen/article/details/78036920",
-                "http://blog.csdn.net/a_zhenzhen/article/details/78028706",
-                "http://blog.csdn.net/a_zhenzhen/article/details/77946471"
+        String[] paths = {
+                "http://blog.csdn.net/a_zhenzhen/article/details/77962376",
+                "http://blog.csdn.net/a_zhenzhen/article/details/77865310",
+                "http://blog.csdn.net/a_zhenzhen/article/details/77867589"
+//                "http://blog.csdn.net/a_zhenzhen/article/details/77977345",
+//                "http://blog.csdn.net/a_zhenzhen/article/details/77917991",
+//                "http://blog.csdn.net/a_zhenzhen/article/details/77862607",
+//                "http://blog.csdn.net/a_zhenzhen/article/details/78112312",
+//                "http://blog.csdn.net/a_zhenzhen/article/details/78036920",
+//                "http://blog.csdn.net/a_zhenzhen/article/details/78028706",
+//                "http://blog.csdn.net/a_zhenzhen/article/details/77946471"
         };
         for (int i = 0; i < 1000; i++) {
             for (String path : paths) {
@@ -121,7 +178,7 @@ public class JavaTest {
                     System.out.println(i + " - " + path);
                 }
             }
-            Thread.sleep(60*1000);
+            Thread.sleep(60 * 1000);
         }
     }
 }
