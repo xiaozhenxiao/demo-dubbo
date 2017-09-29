@@ -378,7 +378,7 @@ public class BytecodeAnalysis {
         }else if(opcode.equals(Integer.parseInt("3b", 16))){//istore_0
             javaCodeStack.push("int " + addVariables[0] + " = " + javaCodeStack.pop());
         }else if(opcode.equals(Integer.parseInt("68", 16))){//imul
-            pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " + ");//imul
+            pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " * ");//imul
         }else if(opcode.equals(Integer.parseInt("36", 16))){//istore
             javaCodeStack.push("int " + addVariables[operand] + " = " + javaCodeStack.pop());
         }else if(opcode.equals(Integer.parseInt("15", 16))){//iload
