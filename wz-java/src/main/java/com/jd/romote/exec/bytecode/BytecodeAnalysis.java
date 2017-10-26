@@ -372,7 +372,7 @@ public class BytecodeAnalysis {
         }else if(opcode.equals(Integer.parseInt("3e", 16))){//istore_3
             javaCodeStack.push("int " + addVariables[3] + " = " + javaCodeStack.pop());
         }else if(opcode.equals(Integer.parseInt("3d", 16))){//istore_2
-            javaCodeStack.push("int " + addVariables[23] + " = " + javaCodeStack.pop());
+            javaCodeStack.push("int " + addVariables[2] + " = " + javaCodeStack.pop());
         }else if(opcode.equals(Integer.parseInt("3c", 16))){//istore_1
             javaCodeStack.push("int " + addVariables[1] + " = " + javaCodeStack.pop());
         }else if(opcode.equals(Integer.parseInt("3b", 16))){//istore_0

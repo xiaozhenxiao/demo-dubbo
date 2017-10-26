@@ -22,18 +22,18 @@ public class JavaTest {
     public static void main(String[] args) {
 //        bina();
 //        stack();
-//        try {
-//            http();
+        try {
+            http();
 //            read();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 //        int test = Integer.parseInt("02",16);
 //        System.out.println("test:" + test);
 
-        int r = 0 << 8 | 3;
+        /*int r = 0 << 8 | 3;
         System.out.println("r=" + r);
 
         int[] src = new int[]{1,2,3,4,5,6,7,8,9,0};
@@ -41,7 +41,7 @@ public class JavaTest {
         System.arraycopy(src, 1, dest, 0, 8);
         for (int i : dest) {
             System.out.println(i);
-        }
+        }*/
     }
 
     private static void stack() {
@@ -70,10 +70,6 @@ public class JavaTest {
     public static Stack<String> pushCalc(Stack<String> stack, String second, String first, String operateType) {
         stack.push(first + operateType + second);
         return stack;
-    }
-
-    enum OperateType {
-        ADD, SUBTRACT, MULTIPLY, DIVIDE
     }
 
     public static void read() throws IOException {
@@ -158,14 +154,14 @@ public class JavaTest {
         String[] paths = {
                 "http://blog.csdn.net/a_zhenzhen/article/details/77962376",
                 "http://blog.csdn.net/a_zhenzhen/article/details/77865310",
-                "http://blog.csdn.net/a_zhenzhen/article/details/77867589"
-//                "http://blog.csdn.net/a_zhenzhen/article/details/77977345",
-//                "http://blog.csdn.net/a_zhenzhen/article/details/77917991",
-//                "http://blog.csdn.net/a_zhenzhen/article/details/77862607",
-//                "http://blog.csdn.net/a_zhenzhen/article/details/78112312",
-//                "http://blog.csdn.net/a_zhenzhen/article/details/78036920",
-//                "http://blog.csdn.net/a_zhenzhen/article/details/78028706",
-//                "http://blog.csdn.net/a_zhenzhen/article/details/77946471"
+                "http://blog.csdn.net/a_zhenzhen/article/details/77867589",
+                "http://blog.csdn.net/a_zhenzhen/article/details/77977345",
+                "http://blog.csdn.net/a_zhenzhen/article/details/77917991",
+                "http://blog.csdn.net/a_zhenzhen/article/details/77862607",
+                "http://blog.csdn.net/a_zhenzhen/article/details/78112312",
+                "http://blog.csdn.net/a_zhenzhen/article/details/78036920",
+                "http://blog.csdn.net/a_zhenzhen/article/details/78028706",
+                "http://blog.csdn.net/a_zhenzhen/article/details/77946471"
         };
         for (int i = 0; i < 1000; i++) {
             for (String path : paths) {

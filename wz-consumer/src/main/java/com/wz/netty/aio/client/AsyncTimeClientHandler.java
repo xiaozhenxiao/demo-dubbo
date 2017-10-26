@@ -67,18 +67,15 @@ public class AsyncTimeClientHandler implements
 									readBuffer,
 									new CompletionHandler<Integer, ByteBuffer>() {
 										@Override
-										public void completed(Integer result,
-												ByteBuffer buffer) {
+										public void completed(Integer result, ByteBuffer buffer) {
 											buffer.flip();
 											byte[] bytes = new byte[buffer
 													.remaining()];
 											buffer.get(bytes);
 											String body;
 											try {
-												body = new String(bytes,
-														"UTF-8");
-												System.out.println("Now is : "
-														+ body);
+												body = new String(bytes,"UTF-8");
+												System.out.println("Now is : " + body);
 												latch.countDown();
 											} catch (UnsupportedEncodingException e) {
 												e.printStackTrace();

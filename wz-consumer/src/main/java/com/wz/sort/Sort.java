@@ -8,11 +8,12 @@ import java.util.Arrays;
  */
 public class Sort {
     public static void main(String[] args) {
-        int [] array = {1, 5, 8, 2, 7, 4, 3, 6, 9, 15, 10, 11, 13};
+        int [] array = {11, 5, 8, 2, 7, 4, 3, 6, 9, 15, 10, 1, 13};
+        int [] array1 = {4, 3, 6, 2, 5, 1, 7};
         printArray("排序前：",  array);
-        radixSort(array, 10, 4);
+//        radixSort(array, 10, 4);
 //        bubbleSort(array);
-//        kuaipai(array, 0, array.length-1);
+        kuaipai(array1, 0, array1.length-1);
         printArray("排序：", array);
     }
 
