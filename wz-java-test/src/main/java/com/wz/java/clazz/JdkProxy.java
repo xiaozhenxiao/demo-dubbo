@@ -5,6 +5,7 @@ import org.apache.ibatis.reflection.ExceptionUtil;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.sql.Connection;
 
 /**
  * Created by wangzhen on 2016-07-24.
@@ -23,7 +24,7 @@ public class JdkProxy {
         people.addBook();
         System.out.println("********************************People*******************************");
 
-        Object object = Proxy.newProxyInstance(JdkProxy.class.getClassLoader(), new Class[] { BookFacade.class }, new ObjectIntercepter());
+        Connection object = (Connection)Proxy.newProxyInstance(JdkProxy.class.getClassLoader(), new Class[] { Connection.class }, new ObjectIntercepter());
         System.out.println("********************************Object*******************************");
         System.out.println("====hashCode:" + object.hashCode());
         System.out.println("====toString:" + object.toString());

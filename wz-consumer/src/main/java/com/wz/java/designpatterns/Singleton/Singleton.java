@@ -61,11 +61,11 @@ public class Singleton {
 
     public static void main(String[] args) throws InterruptedException {
         System.out.println("Main Class start…………");
-        Singleton1 singleton1 = Singleton1.getInstance();
+//        Singleton1 singleton1 = Singleton1.getInstance();
         Singleton singleton = Singleton.getStaticInstance();
         Thread.sleep(2000);
-//        new Thread(()-> singleton.methodA()).start();
-//        new Thread(()-> singleton.methodB()).start();
+        new Thread(()-> singleton.methodA()).start();
+        new Thread(()-> singleton.methodB()).start();
 
     }
 }
