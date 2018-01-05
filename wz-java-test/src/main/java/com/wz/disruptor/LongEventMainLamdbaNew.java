@@ -35,21 +35,24 @@ public class LongEventMainLamdbaNew {
         //替换executor
         ThreadFactory myThreadFactory = new MyThreadFactory("xiao");
 
+        // The factory for the event
+        LongEventFactory factory = new LongEventFactory();
         // Specify the size of the ring buffer, must be power of 2.
         int bufferSize = 1024;
 
         // Construct the Disruptor
 //        Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent::new, bufferSize, myThreadFactory);
         //调优参数
-        Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent::new, bufferSize, myThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
+//        Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent::new, bufferSize, myThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
+        Disruptor<LongEvent> disruptor = new Disruptor<>(factory, bufferSize, myThreadFactory, ProducerType.MULTI, new BlockingWaitStrategy());
 
         // Connect the handler
         /*************************************************************************************************************************************************************/
         /** ①,  ①和②可以并行执行**/
-        disruptor.handleEventsWith((event, sequence, endOfBatch) -> {
+        /*disruptor.handleEventsWith((event, sequence, endOfBatch) -> {
             Thread.sleep(3000);
             System.out.println(Thread.currentThread().getName() + " ++ " + sequence + " - " + endOfBatch + " - " + "Event: " + event);
-        });
+        });*/
         /** ②, ⑴、⑵和⑶按顺序执行**/
         disruptor.handleEventsWith(LongEventMainLamdbaNew::handleEvent) //⑴
                 //⑵
@@ -62,14 +65,14 @@ public class LongEventMainLamdbaNew {
         /*************************************************************************************************************************************************************/
         /**+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++**/
         /**①和②并行执行，③在①和②之后执行**/
-        disruptor.handleEventsWith(LongEventMainLamdbaNew::handleEvent) /**①**/
-                .and(disruptor.handleEventsWith((event, sequence, endOfBatch) -> { /**②**/
+        /*disruptor.handleEventsWith(LongEventMainLamdbaNew::handleEvent) *//**①**//*
+                .and(disruptor.handleEventsWith((event, sequence, endOfBatch) -> { *//**②**//*
                     Thread.sleep(3000);
                     System.out.println(Thread.currentThread().getName() + " ++ " + sequence + " - " + endOfBatch + " - " + "Event: " + event);
-                }).then((event, sequence, endOfBatch) -> { /**③**/
+                }).then((event, sequence, endOfBatch) -> { *//**③**//*
                             System.out.println(Thread.currentThread().getName() + " # " +  + sequence + " - " + endOfBatch + " - " + "Event: " + event);
                             event.clear();
-                        }));
+                        }));*/
         /**+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++**/
 
         // Start the Disruptor, starts all threads running
@@ -78,11 +81,19 @@ public class LongEventMainLamdbaNew {
         // Get the ring buffer from the Disruptor to be used for publishing.
         RingBuffer<LongEvent> ringBuffer = disruptor.getRingBuffer();
 
-        ByteBuffer bb = ByteBuffer.allocate(8);
+        /*ByteBuffer bb = ByteBuffer.allocate(8);
         for (long l = 0; true; l++) {
             bb.putLong(0, l);
             ringBuffer.publishEvent(LongEventMainLamdbaNew::translate, bb);
             Thread.sleep(1000);
+        }*/
+
+        /**多个生产者**/
+        for (int i = 0; i < 5; i++) {
+            new Thread(new ProducerThread(ringBuffer)).start();
+        }
+        while (true) {
+            Thread.sleep(10000);
         }
     }
 }
