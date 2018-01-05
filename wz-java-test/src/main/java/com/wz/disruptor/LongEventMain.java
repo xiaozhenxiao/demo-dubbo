@@ -1,4 +1,4 @@
-package com.jd.disruptor.demo;
+package com.wz.disruptor;
 
 import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.dsl.Disruptor;
@@ -6,16 +6,20 @@ import com.lmax.disruptor.dsl.Disruptor;
 import java.nio.ByteBuffer;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 /**
- * Created by wangzhen23 on 2016/11/17.
+ * TODO
+ * wangzhen23
+ * 2018/1/4.
  */
 public class LongEventMain {
     public static void main(String[] args) throws Exception {
         // Executor that will be used to construct new threads for consumers
         Executor executor = Executors.newCachedThreadPool();
+        //替换executor
+        ThreadFactory myThreadFactory = new MyThreadFactory("xiao");
 
-        System.out.println();
         // The factory for the event
         LongEventFactory factory = new LongEventFactory();
 
@@ -23,7 +27,7 @@ public class LongEventMain {
         int bufferSize = 1024;
 
         // Construct the Disruptor
-        Disruptor<LongEvent> disruptor = new Disruptor<>(factory, bufferSize, executor);
+        Disruptor<LongEvent> disruptor = new Disruptor<>(factory, bufferSize, myThreadFactory);
 
         // Connect the handler
         disruptor.handleEventsWith(new LongEventHandler());

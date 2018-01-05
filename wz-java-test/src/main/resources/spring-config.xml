@@ -2,15 +2,30 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://www.springframework.org/schema/context
-           http://www.springframework.org/schema/context/spring-context.xsd">
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
     <context:component-scan base-package="com.wz.web">
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
+    <context:component-scan base-package="com.wz.spring"/>
     <context:annotation-config/>
+
+    <!--<bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5" />
+        <property name="maxPoolSize" value="10" />
+        <property name="queueCapacity" value="25" />
+    </bean>
+
+    <bean id="taskExecutorExample" class="com.wz.spring.task.TaskExecutorExample">
+        <constructor-arg ref="taskExecutor" />
+    </bean>-->
+
+    <task:annotation-driven executor="taskExecutor" scheduler="taskSchedule"/>
+    <task:executor id="taskExecutor" pool-size="5"/>
+    <task:scheduler id="taskSchedule" pool-size="10"/>
 
     <!-- 数据源导入 -->
     <import resource="spring-config-datasource-druid.xml"/>

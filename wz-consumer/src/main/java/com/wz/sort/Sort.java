@@ -13,7 +13,8 @@ public class Sort {
         printArray("排序前：",  array);
 //        radixSort(array, 10, 4);
 //        bubbleSort(array);
-        kuaipai(array1, 0, array1.length-1);
+//        kuaipai(array1, 0, array1.length-1);
+        mergeSort(array, 0, array.length-1);
         printArray("排序：", array);
     }
 

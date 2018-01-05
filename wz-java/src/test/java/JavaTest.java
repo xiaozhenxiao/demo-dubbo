@@ -161,6 +161,9 @@ public class JavaTest {
                 "http://blog.csdn.net/a_zhenzhen/article/details/78112312",
                 "http://blog.csdn.net/a_zhenzhen/article/details/78036920",
                 "http://blog.csdn.net/a_zhenzhen/article/details/78028706",
+                "http://blog.csdn.net/a_zhenzhen/article/details/78830812",
+                "http://blog.csdn.net/a_zhenzhen/article/details/78831866",
+                "http://blog.csdn.net/a_zhenzhen/article/details/78829892",
                 "http://blog.csdn.net/a_zhenzhen/article/details/77946471"
         };
         for (int i = 0; i < 1000; i++) {
