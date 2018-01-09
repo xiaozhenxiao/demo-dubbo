@@ -11,7 +11,7 @@ public class LongEventFactory implements EventFactory<LongEvent> {
     private int i = 0;
     @Override
     public LongEvent newInstance() {
-        System.out.println(Thread.currentThread().getName() + " @ " + i++);
+//        System.out.println(Thread.currentThread().getName() + " @ " + i++);
         return new LongEvent();
     }
 }
