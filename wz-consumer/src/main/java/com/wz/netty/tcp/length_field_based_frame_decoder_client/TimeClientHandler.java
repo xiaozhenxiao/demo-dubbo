@@ -13,13 +13,15 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.wz.netty.tcp.line_string_decoder_client;
+package com.wz.netty.tcp.length_field_based_frame_decoder_client;
 
+import com.wz.netty.pojo.SubscribeReq;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.nio.ByteOrder;
 import java.util.logging.Logger;
 
 /**
@@ -29,12 +31,8 @@ import java.util.logging.Logger;
  */
 public class TimeClientHandler extends ChannelHandlerAdapter {
 
-    private static final Logger logger = Logger
-            .getLogger(TimeClientHandler.class.getName());
+    private static final Logger logger = Logger.getLogger(TimeClientHandler.class.getName());
 
-    private int counter;
-
-    private byte[] req;
 
     /**
      * Creates a client-side handler.
@@ -45,19 +43,23 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        ByteBuf message = null;
-        for (int i = 0; i < 100; i++) {
-            req = ("QUERY TIME ORDER " + ++counter + System.getProperty("line.separator")).getBytes();
-            message = Unpooled.buffer(req.length);
-            message.writeBytes(req);
-            ctx.writeAndFlush(message);
-        }
+        String xin = new SubscribeReq(1, "xiaoxiao", "product", "18311381796", "address").toString();
+        ByteBuf message = Unpooled.buffer(20 + xin.getBytes().length, 20 + xin.getBytes().length);
+//        message.order(ByteOrder.LITTLE_ENDIAN);
+        message.writeInt(0xAB65AB65);
+        message.writeInt(xin.getBytes().length);
+        message.writeInt(1111);
+        message.writeInt(0x0000800);
+        message.writeInt(758954412);
+        message.writeBytes(xin.getBytes());
+        System.out.println("发送字节数:" + xin.getBytes().length);
+        ctx.writeAndFlush(message);
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         String body = (String) msg;
-        System.out.println(Thread.currentThread().getName() + " Now is : " + body);
+        System.out.println(Thread.currentThread().getName() + " Now is : " + body + " length:" + body.getBytes().length);
     }
 
     @Override

@@ -1,5 +1,11 @@
 package com.wz.java.test;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.IntBuffer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -44,5 +50,28 @@ public class JavaTest {
         for (int i = 0; i < subList.size(); i++) {
             System.out.println(subList.get(i));
         }
+
+        //2875566949
+        Integer sign = 0xAB65AB65;
+        long sign1 = 0xAB65AB65FFFFFFFFL;
+        System.out.println((sign1 >>> 32) + "***********************" + sign);
+        long signLong = sign & 0xffffffffL;
+        System.out.println(signLong + "-----------------------" + sign);
+
+        System.out.println("#############" + Long.toHexString(signLong));
+        System.out.println("#############" + Long.toUnsignedString(signLong, 16));
+        ByteBuffer byteBuffer = ByteBuffer.allocate(4);
+        byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        byteBuffer.asIntBuffer().put(1);
+        System.out.println(byteBuffer.array()[0] + " " + byteBuffer.array()[1] + " " + byteBuffer.array()[2]+ " " + byteBuffer.array()[3]);
+        byteBuffer.order(ByteOrder.BIG_ENDIAN);
+        byteBuffer.asIntBuffer().put(1);
+        System.out.println(byteBuffer.array()[0] + " " + byteBuffer.array()[1] + " " + byteBuffer.array()[2]+ " " + byteBuffer.array()[3]);
+
+        byte[] bytes = {(byte)0xAB,(byte)0x65,(byte)0xAB,(byte)0x65};
+        ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
+        long r = byteBuf.getUnsignedInt(0);
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!" + r);
+
     }
 }

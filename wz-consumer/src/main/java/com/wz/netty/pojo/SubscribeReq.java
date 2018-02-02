@@ -39,6 +39,17 @@ public class SubscribeReq implements Serializable {
 
     private String address;
 
+    public SubscribeReq() {
+    }
+
+    public SubscribeReq(int subReqID, String userName, String productName, String phoneNumber, String address) {
+        this.subReqID = subReqID;
+        this.userName = userName;
+        this.productName = productName;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
     /**
      * @return the subReqID
      */

@@ -20,6 +20,7 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.File;
 import java.util.logging.Logger;
 
 /**
@@ -34,23 +35,33 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 
     private int counter;
 
-    private byte[] req;
+    private int sendCounter;
+
+    private String req;
 
     /**
+     * System.getProperty("line.separator")
      * Creates a client-side handler.
      */
     public TimeClientHandler() {
-        req = ("QUERY TIME ORDER" + System.getProperty("line.separator"))
-                .getBytes();
+        req = "QUERY TIME ORDER" + ++sendCounter;
     }
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        ByteBuf message = null;
-        for (int i = 0; i < 100; i++) {
-            message = Unpooled.buffer(req.length);
+        Thread[] sendThreads = new Thread[10];
+        for (int i = 0; i < 10; i++) {
+            /*message = Unpooled.buffer(req.length);
             message.writeBytes(req);
-            ctx.writeAndFlush(message);
+            ctx.writeAndFlush(message);*/
+            ByteBuf message = Unpooled.buffer(req.length() + 1);
+            sendThreads[i] = new Thread(() -> {
+                message.writeBytes((req + ++sendCounter).getBytes());
+                ctx.writeAndFlush(message);
+            });
+        }
+        for (Thread sendThread : sendThreads) {
+            sendThread.start();
         }
     }
 
@@ -61,15 +72,13 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
         byte[] req = new byte[buf.readableBytes()];
         buf.readBytes(req);
         String body = new String(req, "UTF-8");
-        System.out.println("Now is : " + body + " ; the counter is : "
-                + ++counter);
+        System.out.println("Now is : " + body + " ; the counter is : " + ++counter);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
         // 释放资源
-        logger.warning("Unexpected exception from downstream : "
-                + cause.getMessage());
+        logger.warning("Unexpected exception from downstream : " + cause.getMessage());
         ctx.close();
     }
 }

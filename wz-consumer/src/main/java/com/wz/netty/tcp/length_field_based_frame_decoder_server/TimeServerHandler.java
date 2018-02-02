@@ -13,57 +13,44 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.wz.netty.tcp.line_string_decoder_client;
+package com.wz.netty.tcp.length_field_based_frame_decoder_server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
+import org.apache.commons.lang.math.RandomUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 
-import java.util.logging.Logger;
+import java.nio.ByteOrder;
 
 /**
  * @author lilinfeng
  * @version 1.0
  * @date 2014年2月14日
  */
-public class TimeClientHandler extends ChannelHandlerAdapter {
-
-    private static final Logger logger = Logger
-            .getLogger(TimeClientHandler.class.getName());
-
-    private int counter;
-
-    private byte[] req;
-
-    /**
-     * Creates a client-side handler.
-     */
-    public TimeClientHandler() {
-//        req = ("QUERY TIME ORDER " + ++counter + System.getProperty("line.separator")).getBytes();
-    }
-
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) {
-        ByteBuf message = null;
-        for (int i = 0; i < 100; i++) {
-            req = ("QUERY TIME ORDER " + ++counter + System.getProperty("line.separator")).getBytes();
-            message = Unpooled.buffer(req.length);
-            message.writeBytes(req);
-            ctx.writeAndFlush(message);
-        }
-    }
+public class TimeServerHandler extends ChannelHandlerAdapter {
+//    private int counter;
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         String body = (String) msg;
-        System.out.println(Thread.currentThread().getName() + " Now is : " + body);
+        System.out.println(Thread.currentThread().getName() + " The time server receive order : " + body + " length:" + body.getBytes().length);
+        String currentTime = DateFormatUtils.format(new java.util.Date(), "yyyy-MM-dd hh:mm:ss") + System.getProperty("line.separator");
+        ByteBuf resp = Unpooled.buffer(20 + currentTime.getBytes().length,20 + currentTime.getBytes().length);
+//        resp.order(ByteOrder.LITTLE_ENDIAN);
+        resp.writeInt(0xAB65AB65);
+        resp.writeInt(currentTime.getBytes().length);
+        resp.writeInt(1111);
+        resp.writeInt(0x0000800);
+        resp.writeInt(758954411);
+        resp.writeBytes(currentTime.getBytes());
+        System.out.println("返回字节数:" + currentTime.getBytes().length);
+        ctx.writeAndFlush(resp);
     }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-        // 释放资源
-        logger.warning("Unexpected exception from downstream : " + cause.getMessage());
         ctx.close();
     }
 }
