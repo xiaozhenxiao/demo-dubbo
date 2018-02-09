@@ -58,16 +58,6 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.jd.jim.cli</groupId>
-            <artifactId>jim-cli-jedis</artifactId>
-            <version>1.4.4-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jd.jim.cli</groupId>
-            <artifactId>jim-cli-api</artifactId>
-            <version>1.4.4-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>io.reactivex</groupId>
             <artifactId>rxjava</artifactId>
             <version>1.2.2</version>
