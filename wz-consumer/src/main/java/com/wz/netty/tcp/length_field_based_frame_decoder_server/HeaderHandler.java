@@ -1,6 +1,7 @@
 package com.wz.netty.tcp.length_field_based_frame_decoder_server;
 
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.ByteBufUtil;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -17,7 +18,7 @@ public class HeaderHandler extends ChannelHandlerAdapter {
         int companyId = buf.readInt();
         int type = buf.readInt();
         int id = buf.readInt();
-        System.out.println(Thread.currentThread().getName() + " Header : sign-" + Integer.toHexString(sign) + " length-" + dataSize + " companyId-" + companyId + " type-" + type + " id-" + id);
+        System.out.println(Thread.currentThread().getName() + " Header : sign-" + ByteBufUtil.hexDump(buf, 0,4) + " length-" + dataSize + " companyId-" + companyId + " type-" + type + " id-" + id);
         ctx.fireChannelRead(buf.readBytes(dataSize));
     }
 

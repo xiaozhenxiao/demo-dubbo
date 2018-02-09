@@ -73,5 +73,14 @@ public class JavaTest {
         long r = byteBuf.getUnsignedInt(0);
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!" + r);
 
+        int code = 0x80008002;
+        int co = 0x00008002;
+        System.out.println(" code > 0 " + (code > 0));
+        System.out.println(" code < 0 " + (code < 0));
+        System.out.println(" co > 0 " + (co > 0));
+        System.out.println(" co < 0 " + (co < 0));
+
+
+
     }
 }

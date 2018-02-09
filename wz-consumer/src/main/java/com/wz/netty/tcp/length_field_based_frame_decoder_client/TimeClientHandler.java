@@ -43,17 +43,23 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        String xin = new SubscribeReq(1, "xiaoxiao", "product", "18311381796", "address").toString();
-        ByteBuf message = Unpooled.buffer(20 + xin.getBytes().length, 20 + xin.getBytes().length);
+//        for (int i = 0; i < 100; i++) {
+            String xin = new SubscribeReq(1, "xiaoxiao", "product", "18311381796", "address").toString();
+            ByteBuf message = Unpooled.buffer(20 + xin.getBytes().length, 20 + xin.getBytes().length);
 //        message.order(ByteOrder.LITTLE_ENDIAN);
+            buildHeader(xin, message);
+            System.out.println("发送字节数:" + xin.getBytes().length);
+            ctx.writeAndFlush(message);
+//        }
+    }
+
+    private void buildHeader(String xin, ByteBuf message) {
         message.writeInt(0xAB65AB65);
         message.writeInt(xin.getBytes().length);
         message.writeInt(1111);
         message.writeInt(0x0000800);
         message.writeInt(758954412);
         message.writeBytes(xin.getBytes());
-        System.out.println("发送字节数:" + xin.getBytes().length);
-        ctx.writeAndFlush(message);
     }
 
     @Override
