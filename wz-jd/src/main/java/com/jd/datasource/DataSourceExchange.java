@@ -3,8 +3,6 @@ package com.jd.datasource;
 import com.jd.annotation.DataSource;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +15,7 @@ import java.util.Arrays;
 @Component
 class DataSourceExchange implements MethodInterceptor {
 
-    private Logger logger = LoggerFactory.getLogger(DataSourceExchange.class);
+//    private Logger logger = LoggerFactory.getLogger(DataSourceExchange.class);
 
     @Override
     public Object invoke(MethodInvocation invocation) throws Throwable {
@@ -25,7 +23,7 @@ class DataSourceExchange implements MethodInterceptor {
         System.out.println("Method arguments : " + Arrays.toString(invocation.getArguments()));
         DataSource dataSource = this.getDataSource(invocation);
         if (dataSource == null) {
-            logger.error("dataSource in invocation is null");
+//            logger.error("dataSource in invocation is null");
             DataSourceTypeManager.setDataSourceType(DataSourceType.MASTER);
             System.out.println(Thread.currentThread().getName() + " - " + invocation.getMethod().getName() + " user database is MASTER");
             return invocation.proceed();
@@ -37,7 +35,7 @@ class DataSourceExchange implements MethodInterceptor {
             System.out.println(Thread.currentThread().getName() + " - " + invocation.getMethod().getName() + " user database is " + dbname);
             result = invocation.proceed();
         }catch (Exception e){
-            logger.error("change datasource error!", e);
+//            logger.error("change datasource error!", e);
         }finally {
             DataSourceTypeManager.setDataSourceType(DataSourceType.MASTER);
         }

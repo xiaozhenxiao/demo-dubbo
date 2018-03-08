@@ -33,24 +33,6 @@ public class WZRpcResult implements Result{
         return result;
     }
 
-    /**
-     * @see com.alibaba.dubbo.rpc.RpcResult#getValue()
-     * @deprecated Replace to getValue()
-     */
-    @Deprecated
-    public Object getResult() {
-        return getValue();
-    }
-
-    /**
-     * @see com.alibaba.dubbo.rpc.RpcResult#setValue(Object)
-     * @deprecated Replace to setValue()
-     */
-    @Deprecated
-    public void setResult(Object result) {
-        setValue(result);
-    }
-
     public Object getValue() {
         return result;
     }
