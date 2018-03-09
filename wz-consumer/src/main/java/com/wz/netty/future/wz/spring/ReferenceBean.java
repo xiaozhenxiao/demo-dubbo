@@ -1,4 +1,4 @@
-package com.wz.netty.future.wz.netty.client;
+package com.wz.netty.future.wz.spring;
 
 import com.wz.netty.future.wz.Constants;
 import com.wz.netty.future.wz.ProxyFactory;
@@ -101,5 +101,21 @@ public class ReferenceBean<T> implements FactoryBean {
 
         // create service proxy
         return (T) proxyFactory.getProxy(invoker);
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getInterfaceName() {
+        return interfaceName;
+    }
+
+    public void setInterfaceName(String interfaceName) {
+        this.interfaceName = interfaceName;
     }
 }

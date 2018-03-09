@@ -1,8 +1,5 @@
 package com.wz.netty.future.wz.netty.server;
 
-import com.wz.netty.tcp.length_field_based_frame_decoder_server.HeaderHandler;
-import com.wz.netty.tcp.length_field_based_frame_decoder_server.TimeServer;
-import com.wz.netty.tcp.length_field_based_frame_decoder_server.TimeServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.channel.ChannelFuture;
@@ -12,10 +9,6 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.string.StringDecoder;
-
-import java.nio.ByteOrder;
 
 /**
  * RPC netty server
@@ -55,10 +48,8 @@ public class WZNettyServer {
             //4,4,12,20 只读消息体
 //            arg0.pipeline().addLast(new LengthFieldBasedFrameDecoder(ByteOrder.BIG_ENDIAN, Integer.MAX_VALUE, 4, 4, 12, 20, true));
             //4,4,12,0 读消息头和消息体
-            arg0.pipeline().addLast(new LengthFieldBasedFrameDecoder(ByteOrder.BIG_ENDIAN, Integer.MAX_VALUE, 4, 4, 12, 0, true));
-            arg0.pipeline().addLast(new HeaderHandler()); // TODO: 2018/3/3  
-//            arg0.pipeline().addLast(new StringDecoder());
-//            arg0.pipeline().addLast(new TimeServerHandler());
+//            arg0.pipeline().addLast(new LengthFieldBasedFrameDecoder(ByteOrder.BIG_ENDIAN, Integer.MAX_VALUE, 4, 4, 12, 0, true));
+            arg0.pipeline().addLast(new ServerHandler());
         }
     }
 

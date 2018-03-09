@@ -12,8 +12,8 @@ import org.slf4j.LoggerFactory;
  * wangzhen23
  * 2018/3/3.
  */
-public class ClientHander extends ChannelHandlerAdapter {
-    private Logger logger = LoggerFactory.getLogger(ClientHander.class);
+public class ClientHandler extends ChannelHandlerAdapter {
+    private Logger logger = LoggerFactory.getLogger(ClientHandler.class);
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {

@@ -49,4 +49,9 @@
 	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>
 
 	<wz:people id="peoplewz" name="王振" age="27"/>
+
+	<bean id="consumer1" class="com.wz.netty.future.wz.spring.ReferenceBean">
+		<property name="address" value="127.0.0.1"/>
+		<property name="interfaceName" value="com.wz.dubbo.api.DemoService"/>
+	</bean>
 </beans>
