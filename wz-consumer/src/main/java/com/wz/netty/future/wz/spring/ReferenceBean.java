@@ -89,7 +89,7 @@ public class ReferenceBean<T> implements FactoryBean {
     private String[] getMethodNames(Class<?> clazz) {
         Method[] methods = clazz.getMethods();
         String[] methodNames = new String[methods.length];
-        for (int i = 0; i <= methods.length; i++) {
+        for (int i = 0; i < methods.length; i++) {
             methodNames[i] = methods[i].getName();
         }
         return methodNames;

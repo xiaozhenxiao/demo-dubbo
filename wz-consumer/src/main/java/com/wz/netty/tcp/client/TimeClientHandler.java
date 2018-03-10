@@ -20,7 +20,6 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 /**
@@ -49,20 +48,9 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        Thread[] sendThreads = new Thread[10];
-        for (int i = 0; i < 10; i++) {
-            /*message = Unpooled.buffer(req.length);
-            message.writeBytes(req);
-            ctx.writeAndFlush(message);*/
-            ByteBuf message = Unpooled.buffer(req.length() + 1);
-            sendThreads[i] = new Thread(() -> {
-                message.writeBytes((req + ++sendCounter).getBytes());
-                ctx.writeAndFlush(message);
-            });
-        }
-        for (Thread sendThread : sendThreads) {
-            sendThread.start();
-        }
+        ByteBuf message = Unpooled.buffer(req.getBytes().length);
+        message.writeBytes(req.getBytes());
+        ctx.writeAndFlush(message);
     }
 
     @Override

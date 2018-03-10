@@ -13,7 +13,9 @@ public class ServerHandler extends ChannelHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        super.exceptionCaught(ctx, cause);
+        System.out.println("+++++++++++++++++++++++++++");
+        System.out.println("exception");
+        System.out.println("+++++++++++++++++++++++++++");
     }
 
     @Override
@@ -21,9 +23,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
         ByteBuf buf = (ByteBuf) msg;
         byte[] req = new byte[buf.readableBytes()];
         buf.readBytes(req);
-        String body = new String(req, "UTF-8").substring(0, req.length);
-
-        System.out.println("The server receive message : " + body);
+        System.out.println("The server receive message : " + new String(req, "UTF-8"));
 
         String currentTime = "server response " + new java.util.Date(System.currentTimeMillis()).toString();
         ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());

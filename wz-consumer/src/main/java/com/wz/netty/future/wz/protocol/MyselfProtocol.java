@@ -39,7 +39,7 @@ public class MyselfProtocol implements Protocol {
     }
 
     private WZNettyClient[] getClient(String host) {
-        WZNettyClient[] wzNettyClients = new WZNettyClient[0];
+        WZNettyClient[] wzNettyClients = new WZNettyClient[1];
         WZNettyClient wzNettyClient = referenceClientMap.get(host);
         if (wzNettyClient == null) {
             wzNettyClients[0] = new WZNettyClient(host);

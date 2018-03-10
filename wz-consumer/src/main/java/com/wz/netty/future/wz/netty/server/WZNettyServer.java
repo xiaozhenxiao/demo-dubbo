@@ -17,10 +17,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
  */
 public class WZNettyServer {
 
-    public void bind(int port) throws Exception {
+    private void bind(int port) throws Exception {
         // 配置服务端的NIO线程组
         EventLoopGroup bossGroup = new NioEventLoopGroup();
-        EventLoopGroup workerGroup = new NioEventLoopGroup(5);
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
@@ -59,5 +59,10 @@ public class WZNettyServer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        WZNettyServer wzNettyServer = new WZNettyServer();
+
     }
 }

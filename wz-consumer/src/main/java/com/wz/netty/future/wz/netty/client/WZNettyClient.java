@@ -1,18 +1,18 @@
 package com.wz.netty.future.wz.netty.client;
 
+import com.alibaba.fastjson.JSON;
+import com.wz.netty.future.Request;
+import com.wz.netty.future.wz.rpc.DefaultWZFuture;
 import com.wz.netty.future.wz.rpc.WZResponseFuture;
-import com.wz.netty.tcp.length_field_based_frame_decoder_client.TimeClientHandler;
-import com.wz.netty.tcp.length_field_based_frame_decoder_server.HeaderHandler;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
-import io.netty.handler.codec.string.StringDecoder;
 
-import java.nio.ByteOrder;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -35,25 +35,45 @@ public class WZNettyClient {
                     .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        public void initChannel(SocketChannel ch){
-                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(ByteOrder.BIG_ENDIAN, Integer.MAX_VALUE, 4, 4, 12, 0, true));
-                            ch.pipeline().addLast(new HeaderHandler());// TODO: 2018/3/3
-                            ch.pipeline().addLast(new StringDecoder());
-                            ch.pipeline().addLast(new TimeClientHandler());
+                        public void initChannel(SocketChannel ch) {
+//                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(ByteOrder.BIG_ENDIAN, Integer.MAX_VALUE, 4, 4, 12, 0, true));
+//                            ch.pipeline().addLast(new HeaderHandler());// TODO: 2018/3/3
+//                            ch.pipeline().addLast(new StringDecoder());
+                            ch.pipeline().addLast(new ClientHandler());
                         }
                     });
 
             // 发起异步连接操作
-            ChannelFuture future = b.connect(host, port).sync();
+            ChannelFuture future = b.connect(host, port);
 
-            if(future.awaitUninterruptibly(3000, TimeUnit.MILLISECONDS) && future.isSuccess()){
-                channel = future.channel();
+            try {
+                boolean ret = future.awaitUninterruptibly(3000, TimeUnit.MILLISECONDS);
+
+                if (ret && future.isSuccess()) {
+                    Channel newChannel = future.channel();
+                    try {
+                        // Close old channel
+                        Channel oldChannel = WZNettyClient.this.channel; // copy reference
+                        if (oldChannel != null) {
+                            try {
+                                System.out.println("Close old netty channel " + oldChannel + " on create new netty channel " + newChannel);
+                                oldChannel.close();
+                            } finally {
+//                                NettyChannel.removeChannelIfDisconnected(oldChannel);
+                            }
+                        }
+                    } finally {
+                        this.channel = newChannel;
+                    }
+                } else if (future.cause() != null) {
+                    throw new RuntimeException("");
+                } else {
+                    throw new RuntimeException("");
+                }
+            } finally {
+
             }
-            // 等待客户端链路关闭
-            future.channel().closeFuture().sync();
         } finally {
-            // 优雅退出，释放NIO线程组
-            group.shutdownGracefully();
         }
     }
 
@@ -65,9 +85,14 @@ public class WZNettyClient {
         }
     }
 
-    public WZResponseFuture request(Object message, int timeout){
-        channel.writeAndFlush(message);
-
-        return null;
+    public WZResponseFuture request(Object message, int timeout) {
+        System.out.println("client send message:" + JSON.toJSONString(message));
+        Request req = new Request();
+        req.setVersion("2.0.0");
+        req.setTwoWay(true);
+        req.setData(message);
+        DefaultWZFuture future = new DefaultWZFuture(channel, req, timeout);
+        channel.writeAndFlush(req);
+        return future;
     }
 }

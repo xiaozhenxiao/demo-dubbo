@@ -16,13 +16,13 @@
  */
 package com.wz.netty.future.wz.rpc;
 
-import com.alibaba.dubbo.common.Constants;
-import com.alibaba.dubbo.remoting.Channel;
+
 import com.alibaba.dubbo.remoting.RemotingException;
-import com.alibaba.dubbo.remoting.TimeoutException;
 import com.alibaba.dubbo.remoting.exchange.ResponseCallback;
 import com.wz.netty.future.Request;
 import com.wz.netty.future.Response;
+import com.wz.netty.future.wz.Constants;
+import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -68,7 +68,7 @@ public class DefaultWZFuture implements WZResponseFuture {
         this.channel = channel;
         this.request = request;
         this.id = request.getId();
-        this.timeout = timeout > 0 ? timeout : channel.getUrl().getPositiveParameter(Constants.TIMEOUT_KEY, Constants.DEFAULT_TIMEOUT);
+        this.timeout = timeout;
         // put into waiting map.
         FUTURES.put(id, this);
         CHANNELS.put(id, channel);
@@ -128,7 +128,7 @@ public class DefaultWZFuture implements WZResponseFuture {
                 lock.unlock();
             }
             if (!isDone()) {
-                throw new TimeoutException(sent > 0, channel, getTimeoutMessage(false));
+                throw new RuntimeException("Response is null");
             }
         }
         return returnFromResponse();
@@ -175,28 +175,27 @@ public class DefaultWZFuture implements WZResponseFuture {
         c = null;
         Response res = response;
         if (res == null) {
-            throw new IllegalStateException("response cannot be null. url:" + channel.getUrl());
+            throw new IllegalStateException("response cannot be null. url:");
         }
 
         if (res.getStatus() == Response.OK) {
             try {
                 callbackCopy.done(res.getResult());
             } catch (Exception e) {
-                logger.error("callback invoke error .reasult:" + res.getResult() + ",url:" + channel.getUrl(), e);
+                logger.error("callback invoke error .reasult:" + res.getResult() + ",url:", e);
             }
         } else if (res.getStatus() == Response.CLIENT_TIMEOUT || res.getStatus() == Response.SERVER_TIMEOUT) {
             try {
-                TimeoutException te = new TimeoutException(res.getStatus() == Response.SERVER_TIMEOUT, channel, res.getErrorMessage());
-                callbackCopy.caught(te);
+                System.out.println("==================================================");
             } catch (Exception e) {
-                logger.error("callback invoke error ,url:" + channel.getUrl(), e);
+                logger.error("callback invoke error ,url:", e);
             }
         } else {
             try {
                 RuntimeException re = new RuntimeException(res.getErrorMessage());
                 callbackCopy.caught(re);
             } catch (Exception e) {
-                logger.error("callback invoke error ,url:" + channel.getUrl(), e);
+                logger.error("callback invoke error ,url:", e);
             }
         }
     }
@@ -210,9 +209,9 @@ public class DefaultWZFuture implements WZResponseFuture {
             return res.getResult();
         }
         if (res.getStatus() == Response.CLIENT_TIMEOUT || res.getStatus() == Response.SERVER_TIMEOUT) {
-            throw new TimeoutException(res.getStatus() == Response.SERVER_TIMEOUT, channel, res.getErrorMessage());
+            throw new RuntimeException();
         }
-        throw new RemotingException(channel, res.getErrorMessage());
+        throw new RuntimeException();
     }
 
     private long getId() {
@@ -267,8 +266,8 @@ public class DefaultWZFuture implements WZResponseFuture {
                 + (sent > 0 ? " client elapsed: " + (sent - start)
                 + " ms, server elapsed: " + (nowTimestamp - sent)
                 : " elapsed: " + (nowTimestamp - start)) + " ms, timeout: "
-                + timeout + " ms, request: " + request + ", channel: " + channel.getLocalAddress()
-                + " -> " + channel.getRemoteAddress();
+                + timeout + " ms, request: " + request + ", channel: " + channel
+                + " -> " + channel;
     }
 
     private static class RemotingInvocationTimeoutScan implements Runnable {
