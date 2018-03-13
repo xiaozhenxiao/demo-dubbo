@@ -35,7 +35,7 @@ public class ConsumerMain {
         info.setMsgs(msgs);
 
         ds.sayHello("test 测试");
-        System.out.println(ds.returnMsgInfo(info).getMsgs());
+//        System.out.println(ds.returnMsgInfo(info).getMsgs());
 
         People people = context.getBean("peoplewz", People.class);
         System.out.println("people age:" + people.getAge());

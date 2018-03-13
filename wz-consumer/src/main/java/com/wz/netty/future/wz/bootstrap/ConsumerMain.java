@@ -1,8 +1,11 @@
 package com.wz.netty.future.wz.bootstrap;
 
 import com.wz.dubbo.api.DemoService;
+import com.wz.dubbo.api.MsgInfo;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.util.ArrayList;
 
 /**
  * TODO
@@ -16,7 +19,19 @@ public class ConsumerMain {
         DemoService ds = (DemoService) context.getBean("consumer1");
 
         System.out.println("===============================================");
-        System.out.println(ds.sayHello("客户端调用"));
+        MsgInfo info = new MsgInfo();
+        info.setId(1);
+        info.setName("zhangsan");
+        info.setMsgs(new ArrayList<String>());
+        System.out.println(ds.returnMsgInfo(info));
+
         System.out.println("===============================================");
+        while (true) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

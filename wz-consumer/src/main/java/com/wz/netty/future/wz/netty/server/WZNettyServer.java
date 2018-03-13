@@ -9,6 +9,9 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 
 /**
  * RPC netty server
@@ -26,7 +29,6 @@ public class WZNettyServer {
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 1024)
-                    .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
                     .childOption(ChannelOption.SO_REUSEADDR, Boolean.TRUE)
                     .childOption(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                     .childHandler(new ChildChannelHandler());
@@ -44,12 +46,11 @@ public class WZNettyServer {
 
     private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
         @Override
-        protected void initChannel(SocketChannel arg0) {
-            //4,4,12,20 只读消息体
-//            arg0.pipeline().addLast(new LengthFieldBasedFrameDecoder(ByteOrder.BIG_ENDIAN, Integer.MAX_VALUE, 4, 4, 12, 20, true));
-            //4,4,12,0 读消息头和消息体
-//            arg0.pipeline().addLast(new LengthFieldBasedFrameDecoder(ByteOrder.BIG_ENDIAN, Integer.MAX_VALUE, 4, 4, 12, 0, true));
-            arg0.pipeline().addLast(new ServerHandler());
+        protected void initChannel(SocketChannel ch) {
+            ch.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE,
+                                    ClassResolvers.weakCachingConcurrentResolver(this.getClass().getClassLoader())));
+            ch.pipeline().addLast(new ObjectEncoder());
+            ch.pipeline().addLast(new ServerHandler());
         }
     }
 

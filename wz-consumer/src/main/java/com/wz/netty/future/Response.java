@@ -16,10 +16,12 @@
  */
 package com.wz.netty.future;
 
+import java.io.Serializable;
+
 /**
  * Response
  */
-public class Response {
+public class Response implements Serializable{
 
     public static final String HEARTBEAT_EVENT = null;
 

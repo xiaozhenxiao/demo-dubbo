@@ -16,6 +16,7 @@
 package com.wz.netty.serializable.netty.client;
 
 import com.wz.netty.pojo.SubscribeReq;
+import com.wz.netty.pojo.SubscribeResp;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 

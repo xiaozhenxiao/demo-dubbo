@@ -1,5 +1,6 @@
 package com.wz.netty.future.wz.result;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import java.util.Map;
  * wangzhen23
  * 2018/2/8.
  */
-public class WZRpcResult implements Result{
+public class WZRpcResult implements Result, Serializable{
     private Object result;
 
     private Throwable exception;

@@ -46,11 +46,11 @@ public class DefaultWZFuture implements WZResponseFuture {
 
     private static final Map<Long, DefaultWZFuture> FUTURES = new ConcurrentHashMap<Long, DefaultWZFuture>();
 
-    static {
+    /*static {
         Thread th = new Thread(new RemotingInvocationTimeoutScan(), "DubboResponseTimeoutScanTimer");
         th.setDaemon(true);
         th.start();
-    }
+    }*/
 
     // invoke id.
     private final long id;
@@ -118,9 +118,9 @@ public class DefaultWZFuture implements WZResponseFuture {
             try {
                 while (!isDone()) {
                     done.await(timeout, TimeUnit.MILLISECONDS);
-                    if (isDone() || System.currentTimeMillis() - start > timeout) {
+                    /*if (isDone() || System.currentTimeMillis() - start > timeout) {
                         break;
-                    }
+                    }*/
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);

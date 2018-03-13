@@ -18,12 +18,13 @@ package com.wz.netty.future;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Request.
  */
-public class Request {
+public class Request implements Serializable{
 
     public static final String HEARTBEAT_EVENT = null;
 

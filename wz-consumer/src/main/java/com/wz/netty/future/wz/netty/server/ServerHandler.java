@@ -1,7 +1,13 @@
 package com.wz.netty.future.wz.netty.server;
 
+import com.alibaba.fastjson.JSON;
+import com.wz.netty.future.Request;
+import com.wz.netty.future.Response;
+import com.wz.netty.future.wz.result.WZRpcResult;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -15,18 +21,36 @@ public class ServerHandler extends ChannelHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         System.out.println("+++++++++++++++++++++++++++");
         System.out.println("exception");
+        super.exceptionCaught(ctx, cause);
+        cause.printStackTrace();
         System.out.println("+++++++++++++++++++++++++++");
+        ctx.close();
     }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf buf = (ByteBuf) msg;
-        byte[] req = new byte[buf.readableBytes()];
-        buf.readBytes(req);
-        System.out.println("The server receive message : " + new String(req, "UTF-8"));
+        Request request = (Request) msg;
+        System.out.println("The server receive message request: " + JSON.toJSONString(request));
 
-        String currentTime = "server response " + new java.util.Date(System.currentTimeMillis()).toString();
-        ByteBuf resp = Unpooled.copiedBuffer(currentTime.getBytes());
-        ctx.writeAndFlush(resp);
+        Response res = new Response(request.getId(), request.getVersion());
+        WZRpcResult result = new WZRpcResult();
+        result.setValue("response data!!");
+        res.setStatus(Response.OK);
+        res.setResult(result);
+        ChannelFuture future = ctx.writeAndFlush(res);
+        System.out.println("response success:" + future.isSuccess());
+
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        super.channelReadComplete(ctx);
+        ctx.flush();
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+        ctx.close();
     }
 }

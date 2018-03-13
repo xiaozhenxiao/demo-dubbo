@@ -5,13 +5,14 @@ import com.wz.netty.future.Request;
 import com.wz.netty.future.wz.rpc.DefaultWZFuture;
 import com.wz.netty.future.wz.rpc.WZResponseFuture;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,16 +30,14 @@ public class WZNettyClient {
         try {
             Bootstrap b = new Bootstrap();
             b.group(group).channel(NioSocketChannel.class)
-                    .option(ChannelOption.TCP_NODELAY, true)
                     .option(ChannelOption.SO_KEEPALIVE, true)
-                    .option(ChannelOption.TCP_NODELAY, true)
+//                    .option(ChannelOption.TCP_NODELAY, true)
                     .option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
                         public void initChannel(SocketChannel ch) {
-//                            ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(ByteOrder.BIG_ENDIAN, Integer.MAX_VALUE, 4, 4, 12, 0, true));
-//                            ch.pipeline().addLast(new HeaderHandler());// TODO: 2018/3/3
-//                            ch.pipeline().addLast(new StringDecoder());
+                            ch.pipeline().addLast(new ObjectEncoder());
+                            ch.pipeline().addLast(new ObjectDecoder(Integer.MAX_VALUE, ClassResolvers.cacheDisabled(this.getClass().getClassLoader())));
                             ch.pipeline().addLast(new ClientHandler());
                         }
                     });
@@ -47,7 +46,7 @@ public class WZNettyClient {
             ChannelFuture future = b.connect(host, port);
 
             try {
-                boolean ret = future.awaitUninterruptibly(3000, TimeUnit.MILLISECONDS);
+                boolean ret = future.awaitUninterruptibly(30000, TimeUnit.MILLISECONDS);
 
                 if (ret && future.isSuccess()) {
                     Channel newChannel = future.channel();
@@ -66,9 +65,9 @@ public class WZNettyClient {
                         this.channel = newChannel;
                     }
                 } else if (future.cause() != null) {
-                    throw new RuntimeException("");
+                    throw new RuntimeException("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
                 } else {
-                    throw new RuntimeException("");
+                    throw new RuntimeException("cccccccccccccccccccccccccccccccccccccccc");
                 }
             } finally {
 

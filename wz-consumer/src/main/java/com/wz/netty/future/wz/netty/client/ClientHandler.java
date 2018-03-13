@@ -1,7 +1,9 @@
 package com.wz.netty.future.wz.netty.client;
 
+import com.alibaba.fastjson.JSON;
 import com.wz.netty.future.Response;
 import com.wz.netty.future.wz.rpc.DefaultWZFuture;
+import com.wz.netty.future.wz.rpc.WZResponseFuture;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,6 +20,9 @@ public class ClientHandler extends ChannelHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         super.exceptionCaught(ctx, cause);
+        System.out.println("client exception!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        cause.printStackTrace();
+        ctx.close();
     }
 
     @Override
@@ -28,14 +33,22 @@ public class ClientHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        ByteBuf buf = (ByteBuf) msg;
-        byte[] req = new byte[buf.readableBytes()];
-        buf.readBytes(req);
-        System.out.println("client recived response:" + new String(req));
-
-        /*Response response = (Response) msg;
+        Response response = (Response) msg;
+        System.out.println("client recived response:" + JSON.toJSONString(response));
         if (response != null && !response.isHeartbeat()) {
             DefaultWZFuture.received(response);
-        }*/
+        }
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        super.channelInactive(ctx);
+        ctx.close();
+    }
+
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        super.channelReadComplete(ctx);
+        ctx.flush();
     }
 }
