@@ -21,11 +21,11 @@ public class ThreadCondition {
         Consumer consumer = test.new Consumer();
 
         consumer.start();
-        try {
-            Thread.sleep(2000);
+        /*try {
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        }*/
         producer.start();
     }
 
@@ -38,7 +38,7 @@ public class ThreadCondition {
 
         private void consume() {
             int i = 0;
-            while(i++ < 10){
+            while(i++ < 100){
                 System.out.println("consume: " + Thread.currentThread().getName());
                 lock.lock();
                 try {
@@ -69,7 +69,7 @@ public class ThreadCondition {
 
         private void produce() {
             int j = 0;
-            while(j++ < 10){
+            while(j++ < 100){
                 lock.lock();
                 System.out.println("produce: " + Thread.currentThread().getName());
                 try {
@@ -84,6 +84,9 @@ public class ThreadCondition {
                     queue.offer(1);        //每次插入一个元素
                     notEmpty.signal();
                     System.out.println("向队列取中插入一个元素，队列剩余空间："+(queueSize-queue.size()));
+                    Thread.sleep(10);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 } finally{
                     lock.unlock();
                 }

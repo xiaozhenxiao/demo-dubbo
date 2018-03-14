@@ -40,17 +40,17 @@
 	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
 	<dubbo:application name="consumer-of-helloworld-app" />
 	<!-- zookeeper注册中心 -->
-	<dubbo:registry  protocol="zookeeper" address="127.0.0.1:2181" />
+	<!--<dubbo:registry  protocol="zookeeper" address="127.0.0.1:2181" />-->
 	<!-- 使用multicast广播注册中心暴露的服务地址 -->
 	<!--<dubbo:registry address="multicast://10.57.41.19:1234" /> -->
 	 <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
-	<dubbo:reference id="demoService" interface="com.wz.dubbo.api.DemoService" timeout="10000"/>
+	<!--<dubbo:reference id="demoService" interface="com.wz.dubbo.api.DemoService" timeout="10000"/>
 
-	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>
+	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>-->
 
 	<wz:people id="peoplewz" name="王振" age="27"/>
 
-	<bean id="consumer1" class="com.wz.netty.future.wz.spring.ReferenceBean">
+	<bean id="consumer1" class="wz.smile.future.wz.spring.ReferenceBean">
 		<property name="address" value="127.0.0.1:2222"/>
 		<property name="interfaceName" value="com.wz.dubbo.api.DemoService"/>
 	</bean>
