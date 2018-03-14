@@ -9,6 +9,7 @@ import com.wz.netty.future.wz.result.Result;
  * 2018/2/8.
  */
 public interface WZInvoker<T> {
+
     Class<T> getInterface();
 
     /**
@@ -19,4 +20,9 @@ public interface WZInvoker<T> {
      * @throws RpcException
      */
     Result invoke(WZInvocation invocation) throws RpcException;
+
+    /**
+     * destroy.
+     */
+    void destroy();
 }

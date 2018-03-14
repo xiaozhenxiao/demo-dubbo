@@ -3,11 +3,9 @@ package com.wz.netty.future.wz.netty.server;
 import com.alibaba.fastjson.JSON;
 import com.wz.netty.future.Request;
 import com.wz.netty.future.Response;
+import com.wz.netty.future.wz.handler.ChannelHandler;
 import com.wz.netty.future.wz.result.WZRpcResult;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -16,6 +14,11 @@ import io.netty.channel.ChannelHandlerContext;
  * 2018/3/9.
  */
 public class ServerHandler extends ChannelHandlerAdapter {
+    private ChannelHandler handler;
+
+    public ServerHandler(ChannelHandler handler) {
+        this.handler = handler;
+    }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
@@ -34,7 +37,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
 
         Response res = new Response(request.getId(), request.getVersion());
         WZRpcResult result = new WZRpcResult();
-        result.setValue("response data!!");
+        result.setValue(handler.reply(ctx.channel(), request.getData()));
         res.setStatus(Response.OK);
         res.setResult(result);
         ChannelFuture future = ctx.writeAndFlush(res);

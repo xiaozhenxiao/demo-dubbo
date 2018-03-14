@@ -51,4 +51,8 @@ public abstract class AbatractWZInvoker<T> implements WZInvoker {
 
     protected abstract Result doInvoke(WZInvocation invocation) throws Throwable;
 
+    @Override
+    public void destroy() {
+        System.out.println("==========================");
+    }
 }

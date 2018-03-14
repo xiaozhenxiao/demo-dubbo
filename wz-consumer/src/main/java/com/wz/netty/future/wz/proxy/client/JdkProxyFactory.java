@@ -16,13 +16,14 @@
  */
 package com.wz.netty.future.wz.proxy.client;
 
-
+import com.wz.netty.future.wz.invoker.AbstractProxyInvoker;
 import com.wz.netty.future.wz.invoker.WZInvoker;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
 /**
- * JavaassistRpcProxyFactory
+ * JdkProxyFactory
  */
 public class JdkProxyFactory extends AbstractProxyFactory {
 
@@ -33,7 +34,7 @@ public class JdkProxyFactory extends AbstractProxyFactory {
 
     @Override
     public <T> WZInvoker<T> getInvoker(T proxy, Class<T> type) {
-        /*return new AbstractProxyInvoker<T>(proxy, type, url) {
+        return new AbstractProxyInvoker<T>(proxy, type) {
             @Override
             protected Object doInvoke(T proxy, String methodName,
                                       Class<?>[] parameterTypes,
@@ -41,8 +42,7 @@ public class JdkProxyFactory extends AbstractProxyFactory {
                 Method method = proxy.getClass().getMethod(methodName, parameterTypes);
                 return method.invoke(proxy, arguments);
             }
-        };*/
-        return null;
+        };
     }
 
 }

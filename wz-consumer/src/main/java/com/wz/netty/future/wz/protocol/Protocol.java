@@ -1,7 +1,7 @@
 package com.wz.netty.future.wz.protocol;
 
 import com.alibaba.dubbo.rpc.RpcException;
-import com.wz.netty.future.Exporter;
+import com.wz.netty.future.wz.export.Exporter;
 import com.wz.netty.future.wz.invoker.WZInvoker;
 
 /**
@@ -30,7 +30,7 @@ public interface Protocol {
      * @return exporter reference for exported service, useful for unexport the service later
      * @throws RpcException thrown when error occurs during export the service, for example: port is occupied
      */
-    <T> Exporter<T> export(WZInvoker<T> invoker) throws RpcException;
+    <T> Exporter<T> export(WZInvoker<T> invoker, Integer port) throws RpcException;
 
     /**
      * Refer a remote service: <br>

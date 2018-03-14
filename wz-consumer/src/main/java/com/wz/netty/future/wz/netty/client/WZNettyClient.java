@@ -76,9 +76,9 @@ public class WZNettyClient {
         }
     }
 
-    public WZNettyClient(String host) {
+    public WZNettyClient(String host, Integer port) {
         try {
-            connect(8080, host);
+            connect(port, host);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,4 +94,5 @@ public class WZNettyClient {
         channel.writeAndFlush(req);
         return future;
     }
+
 }

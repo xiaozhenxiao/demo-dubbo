@@ -51,7 +51,7 @@
 	<wz:people id="peoplewz" name="王振" age="27"/>
 
 	<bean id="consumer1" class="com.wz.netty.future.wz.spring.ReferenceBean">
-		<property name="address" value="127.0.0.1"/>
+		<property name="address" value="127.0.0.1:2222"/>
 		<property name="interfaceName" value="com.wz.dubbo.api.DemoService"/>
 	</bean>
 </beans>

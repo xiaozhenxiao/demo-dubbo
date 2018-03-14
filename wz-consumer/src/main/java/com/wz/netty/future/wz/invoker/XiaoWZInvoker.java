@@ -8,7 +8,6 @@ import com.wz.netty.future.wz.netty.client.WZNettyClient;
 import com.wz.netty.future.wz.result.Result;
 
 import java.util.Set;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * TODO
@@ -21,8 +20,6 @@ public class XiaoWZInvoker<T> extends AbatractWZInvoker<T> {
     private final AtomicPositiveInteger index = new AtomicPositiveInteger();
 
     private final String version;
-
-    private final ReentrantLock destroyLock = new ReentrantLock();
 
     private final Set<WZInvoker<?>> invokers;
 
@@ -55,7 +52,7 @@ public class XiaoWZInvoker<T> extends AbatractWZInvoker<T> {
             return new WZRpcResult();*/
 
             /** 同步调用 **/
-            return (Result)currentClient.request(inv, 5000).get();
+            return (Result) currentClient.request(inv, 5000).get();
 
         } catch (TimeoutException e) {
             throw new RpcException(RpcException.TIMEOUT_EXCEPTION, "Invoke remote method timeout. method: " + invocation.getMethodName() + ", cause: " + e.getMessage(), e);
