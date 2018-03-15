@@ -53,5 +53,6 @@
 	<bean id="consumer1" class="wz.smile.future.wz.spring.ReferenceBean">
 		<property name="address" value="127.0.0.1:2222"/>
 		<property name="interfaceName" value="com.wz.dubbo.api.DemoService"/>
+		<property name="async" value="true"/>
 	</bean>
 </beans>

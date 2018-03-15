@@ -72,7 +72,10 @@ public class WZRpcContext {
      * @return context
      */
     public static WZRpcContext getContext() {
-        return LOCAL.get();
+        System.out.println("++++++++++++++++++++++" + Thread.currentThread().getName());
+        WZRpcContext context = LOCAL.get();
+        System.out.println(context);
+        return context;
     }
 
     /**

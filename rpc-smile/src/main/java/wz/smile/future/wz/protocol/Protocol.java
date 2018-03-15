@@ -47,7 +47,7 @@ public interface Protocol {
      * @return invoker service's local proxy
      * @throws RpcException when there's any error while connecting to the service provider
      */
-    <T> WZInvoker<T> refer(Class<T> type, String address) throws RpcException;
+    <T> WZInvoker<T> refer(Class<T> type, String address, boolean isAsync) throws RpcException;
 
     /**
      * Destroy protocol: <br>

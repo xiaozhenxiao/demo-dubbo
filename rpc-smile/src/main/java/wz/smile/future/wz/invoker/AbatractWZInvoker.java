@@ -15,15 +15,18 @@ import java.lang.reflect.InvocationTargetException;
  */
 public abstract class AbatractWZInvoker<T> implements WZInvoker {
     private final Class<T> type;
+    private Boolean isAsync;
 
-    public AbatractWZInvoker(Class<T> type) {
+    public AbatractWZInvoker(Class<T> type, boolean isAsync) {
         this.type = type;
+        this.isAsync = isAsync;
     }
 
     public Result invoke(WZInvocation inv) throws RpcException {
         WZRpcInvocation invocation = (WZRpcInvocation) inv;
         invocation.setInvoker(this);
         invocation.setAttachment(Constants.INTERFACE_KEY, this.type.getName());
+        invocation.setAttachment(Constants.ASYNC_KEY, isAsync().toString());
         try {
             return doInvoke(invocation);
         } catch (InvocationTargetException e) { // biz exception
@@ -56,5 +59,9 @@ public abstract class AbatractWZInvoker<T> implements WZInvoker {
     @Override
     public void destroy() {
         System.out.println("==========================");
+    }
+
+    public Boolean isAsync() {
+        return isAsync;
     }
 }

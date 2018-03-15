@@ -98,8 +98,8 @@ public class MyselfProtocol implements Protocol {
     }
 
     @Override
-    public <T> WZInvoker<T> refer(Class<T> type, String address) throws RpcException {
-        return new XiaoWZInvoker(type, getClient(address.split(":")[0], Integer.valueOf(address.split(":")[1])));
+    public <T> WZInvoker<T> refer(Class<T> type, String address, boolean isAsync) throws RpcException {
+        return new XiaoWZInvoker(type, isAsync, getClient(address.split(":")[0], Integer.valueOf(address.split(":")[1])));
     }
 
     private WZNettyClient[] getClient(String host, Integer port) {

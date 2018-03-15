@@ -7,11 +7,13 @@ import io.netty.channel.ChannelHandlerContext;
 import wz.smile.future.Request;
 import wz.smile.future.Response;
 import wz.smile.future.wz.handler.ChannelHandler;
+import io.netty.channel.ChannelHandler.Sharable;
 
 /**
  * wangzhen23
  * 2018/3/9.
  */
+@Sharable
 public class ServerHandler extends ChannelHandlerAdapter {
     private ChannelHandler handler;
 
@@ -26,7 +28,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
         super.exceptionCaught(ctx, cause);
         cause.printStackTrace();
         System.out.println("+++++++++++++++++++++++++++");
-        ctx.close();
+//        ctx.close();
     }
 
     @Override
@@ -50,6 +52,6 @@ public class ServerHandler extends ChannelHandlerAdapter {
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
         super.channelInactive(ctx);
-        ctx.close();
+//        ctx.close();
     }
 }

@@ -4,8 +4,13 @@ import com.alibaba.dubbo.common.utils.AtomicPositiveInteger;
 import com.alibaba.dubbo.remoting.RemotingException;
 import com.alibaba.dubbo.remoting.TimeoutException;
 import com.alibaba.dubbo.rpc.RpcException;
+import wz.smile.future.wz.Constants;
 import wz.smile.future.wz.netty.client.WZNettyClient;
 import wz.smile.future.wz.result.Result;
+import wz.smile.future.wz.result.WZRpcResult;
+import wz.smile.future.wz.rpc.FutureAdapter;
+import wz.smile.future.wz.rpc.WZResponseFuture;
+import wz.smile.future.wz.rpc.WZRpcContext;
 
 import java.util.Set;
 
@@ -23,12 +28,12 @@ public class XiaoWZInvoker<T> extends AbatractWZInvoker<T> {
 
     private final Set<WZInvoker<?>> invokers;
 
-    public XiaoWZInvoker(Class<T> serviceType, WZNettyClient[] clients) {
-        this(serviceType, clients, "1.0", null);
+    public XiaoWZInvoker(Class<T> serviceType, boolean isAsync, WZNettyClient[] clients) {
+        this(serviceType, isAsync, clients, "1.0", null);
     }
 
-    public XiaoWZInvoker(Class<T> type, WZNettyClient[] clients, String version, Set<WZInvoker<?>> invokers) {
-        super(type);
+    public XiaoWZInvoker(Class<T> type, boolean isAsync, WZNettyClient[] clients, String version, Set<WZInvoker<?>> invokers) {
+        super(type, isAsync);
         this.clients = clients;
         this.version = version;
         this.invokers = invokers;
@@ -46,14 +51,14 @@ public class XiaoWZInvoker<T> extends AbatractWZInvoker<T> {
             currentClient = clients[index.getAndIncrement() % clients.length];
         }
         try {
-            /** 异步调用 **/
-            /*WZResponseFuture future = currentClient.request(inv, 5000);
-            WZRpcContext.getContext().setFuture(new FutureAdapter<Object>(future));
-            return new WZRpcResult();*/
-
+            if (Boolean.TRUE.toString().equals(inv.getAttachment(Constants.ASYNC_KEY))) {
+                /** 异步调用 **/
+                WZResponseFuture future = currentClient.request(inv, 5000);
+                WZRpcContext.getContext().setFuture(new FutureAdapter<Object>(future));
+                return new WZRpcResult();
+            }
             /** 同步调用 **/
             return (Result) currentClient.request(inv, 5000).get();
-
         } catch (TimeoutException e) {
             throw new RpcException(RpcException.TIMEOUT_EXCEPTION, "Invoke remote method timeout. method: " + invocation.getMethodName() + ", cause: " + e.getMessage(), e);
         } catch (RemotingException e) {

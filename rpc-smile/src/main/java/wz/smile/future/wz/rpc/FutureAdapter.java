@@ -18,8 +18,8 @@ package wz.smile.future.wz.rpc;
 
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.alibaba.dubbo.remoting.RemotingException;
-import com.alibaba.dubbo.rpc.Result;
 import com.alibaba.dubbo.rpc.RpcException;
+import wz.smile.future.wz.result.WZRpcResult;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -53,7 +53,7 @@ public class FutureAdapter<V> implements Future<V> {
     @SuppressWarnings("unchecked")
     public V get() throws InterruptedException, ExecutionException {
         try {
-            return (V) (((Result) future.get()).recreate());
+            return (V) (((WZRpcResult) future.get()).recreate());
         } catch (RemotingException e) {
             throw new ExecutionException(e.getMessage(), e);
         } catch (Throwable e) {
@@ -65,7 +65,7 @@ public class FutureAdapter<V> implements Future<V> {
     public V get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         int timeoutInMillis = (int) unit.convert(timeout, TimeUnit.MILLISECONDS);
         try {
-            return (V) (((Result) future.get(timeoutInMillis)).recreate());
+            return (V) (((WZRpcResult) future.get(timeoutInMillis)).recreate());
         } catch (com.alibaba.dubbo.remoting.TimeoutException e) {
             throw new TimeoutException(StringUtils.toString(e));
         } catch (RemotingException e) {

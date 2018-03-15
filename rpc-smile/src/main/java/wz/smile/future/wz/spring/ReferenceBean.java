@@ -25,6 +25,7 @@ public class ReferenceBean<T> implements FactoryBean {
     private Logger logger = LoggerFactory.getLogger(getClass());
     //host
     private String address;
+    private boolean async;
     private transient volatile T ref;
     private transient volatile WZInvoker<?> invoker;
     private transient volatile boolean initialized;
@@ -97,7 +98,7 @@ public class ReferenceBean<T> implements FactoryBean {
 
     private T createProxy(Map<String, String> map) {
 
-        invoker = refprotocol.refer(interfaceClass, address);
+        invoker = refprotocol.refer(interfaceClass, address, async);
 
         // create service proxy
         return (T) proxyFactory.getProxy(invoker);
@@ -109,6 +110,14 @@ public class ReferenceBean<T> implements FactoryBean {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public boolean isAsync() {
+        return async;
+    }
+
+    public void setAsync(boolean async) {
+        this.async = async;
     }
 
     public String getInterfaceName() {
