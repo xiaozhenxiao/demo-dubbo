@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:wz="http://xiaoxiao.wz/schema/people"
     xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://xiaoxiao.wz/schema/people
-        http://xiaoxiao.wz/schema/people/people.xsd
         http://code.alibabatech.com/schema/dubbo
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
         default-lazy-init = "false">
@@ -38,7 +35,7 @@
 	</bean>-->
 
 	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
-	<dubbo:application name="consumer-of-helloworld-app" />
+	<!--<dubbo:application name="consumer-of-helloworld-app" />-->
 	<!-- zookeeper注册中心 -->
 	<!--<dubbo:registry  protocol="zookeeper" address="127.0.0.1:2181" />-->
 	<!-- 使用multicast广播注册中心暴露的服务地址 -->
@@ -48,9 +45,9 @@
 
 	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>-->
 
-	<wz:people id="peoplewz" name="王振" age="27"/>
+	<!--<wz:people id="peoplewz" name="王振" age="27"/>-->
 
-	<bean id="consumer1" class="wz.smile.future.wz.spring.ReferenceBean">
+	<bean id="consumer1" class="com.smile.wz.spring.ReferenceBean">
 		<property name="address" value="127.0.0.1:2222"/>
 		<property name="interfaceName" value="com.wz.dubbo.api.DemoService"/>
 		<property name="async" value="true"/>

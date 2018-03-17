@@ -4,7 +4,7 @@ import com.wz.dubbo.api.DemoService;
 import com.wz.dubbo.api.MsgInfo;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import wz.smile.future.wz.rpc.WZRpcContext;
+import com.smile.wz.rpc.WZRpcContext;
 
 import java.util.ArrayList;
 import java.util.List;
