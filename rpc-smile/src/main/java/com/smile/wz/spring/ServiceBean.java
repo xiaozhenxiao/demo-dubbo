@@ -26,6 +26,7 @@ import java.util.List;
  * 2018/3/13.
  */
 public class ServiceBean<T> implements InitializingBean, DisposableBean, ApplicationContextAware, ApplicationListener<ContextRefreshedEvent>, BeanNameAware {
+    private String id;
     private Integer port;
     private String interfaceName;
     private Class<?> interfaceClass;
@@ -108,6 +109,14 @@ public class ServiceBean<T> implements InitializingBean, DisposableBean, Applica
     @Override
     public void destroy() throws Exception {
 
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public Integer getPort() {

@@ -28,8 +28,8 @@ public class ServerHandler extends ChannelHandlerAdapter {
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         System.out.println("+++++++++++++++++++++++++++");
         System.out.println("exception");
-        super.exceptionCaught(ctx, cause);
-        cause.printStackTrace();
+//        super.exceptionCaught(ctx, cause);
+//        cause.printStackTrace();
         System.out.println("+++++++++++++++++++++++++++");
 //        ctx.close();
     }

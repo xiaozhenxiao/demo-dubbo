@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns:wz="http://www.wz/schema/smile"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://code.alibabatech.com/schema/dubbo
-        http://code.alibabatech.com/schema/dubbo/dubbo.xsd"
+        http://www.wz/schema/smile
+        http://www.wz/schema/smile/smile.xsd"
         default-lazy-init = "false">
 	<!--<bean id="dependService" class="com.wz.spring.depends.test.service.impl.DependServiceImpl" name="DependService实现">
 		<property name="dependDao" ref="dependDao"/>
@@ -35,21 +35,18 @@
 	</bean>-->
 
 	<!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
-	<!--<dubbo:application name="consumer-of-helloworld-app" />-->
-	<!-- zookeeper注册中心 -->
-	<!--<dubbo:registry  protocol="zookeeper" address="127.0.0.1:2181" />-->
-	<!-- 使用multicast广播注册中心暴露的服务地址 -->
-	<!--<dubbo:registry address="multicast://10.57.41.19:1234" /> -->
-	 <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
-	<!--<dubbo:reference id="demoService" interface="com.wz.dubbo.api.DemoService" timeout="10000"/>
+	<!--<dubbo:application name="consumer-of-helloworld-app" />
+	&lt;!&ndash; zookeeper注册中心 &ndash;&gt;
+	<dubbo:registry  protocol="zookeeper" address="127.0.0.1:2181" />
+	&lt;!&ndash; 使用multicast广播注册中心暴露的服务地址 &ndash;&gt;
+	&lt;!&ndash;<dubbo:registry address="multicast://10.57.41.19:1234" /> &ndash;&gt;
+	 &lt;!&ndash; 生成远程服务代理，可以和本地bean一样使用demoService &ndash;&gt;
+	<dubbo:reference id="demoService" interface="com.wz.dubbo.api.DemoService" timeout="10000"/>
 
 	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>-->
 
-	<!--<wz:people id="peoplewz" name="王振" age="27"/>-->
+	<wz:people id="peoplewz" name="王振" age="27"/>
 
-	<bean id="consumer1" class="com.smile.wz.spring.ReferenceBean">
-		<property name="address" value="127.0.0.1:2222"/>
-		<property name="interfaceName" value="com.wz.dubbo.api.DemoService"/>
-		<property name="async" value="true"/>
-	</bean>
+	<wz:reference id="myService" interface="com.wz.dubbo.api.DemoService" address="127.0.0.1:2222" async="true"/>
+
 </beans>

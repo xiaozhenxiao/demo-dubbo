@@ -20,7 +20,7 @@ public class ClientBootstrap {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         String configLocation = "dubbo-consumer.xml";
         ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
-        DemoService ds = (DemoService) context.getBean("consumer1");
+        DemoService ds = (DemoService) context.getBean("myService");
 
         System.out.println("===============================================");
         MsgInfo info = new MsgInfo();
@@ -46,12 +46,6 @@ public class ClientBootstrap {
         System.out.println(infoResultAsync2);
 
         System.out.println("===============================================");
-        while (true) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 }

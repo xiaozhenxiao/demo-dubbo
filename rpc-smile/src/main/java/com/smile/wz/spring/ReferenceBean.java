@@ -23,6 +23,7 @@ import java.util.Map;
  */
 public class ReferenceBean<T> implements FactoryBean {
     private Logger logger = LoggerFactory.getLogger(getClass());
+    private String id;
     //host
     private String address;
     private boolean async;
@@ -102,6 +103,14 @@ public class ReferenceBean<T> implements FactoryBean {
 
         // create service proxy
         return (T) proxyFactory.getProxy(invoker);
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getAddress() {
