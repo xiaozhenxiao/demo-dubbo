@@ -18,7 +18,7 @@ import java.util.concurrent.Future;
  */
 public class ClientBootstrap {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
-        String configLocation = "dubbo-consumer.xml";
+        String configLocation = "smile-consumer.xml";
         ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
         DemoService ds = (DemoService) context.getBean("myService");
 

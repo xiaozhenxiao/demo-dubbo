@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Main {
     public static void main(String[] args) {
-        String configLocation="dubbo-consumer.xml";
+        String configLocation= "smile-consumer.xml";
         ApplicationContext context =new ClassPathXmlApplicationContext(configLocation);
 //        DependService ds = context.getBean("dependService", DependService.class);
 //        System.out.println("=====================" + ds.getDomain());
