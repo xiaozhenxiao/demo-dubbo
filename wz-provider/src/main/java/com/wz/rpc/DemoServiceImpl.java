@@ -1,4 +1,4 @@
-package com.wz.dubbo.provider;
+package com.wz.rpc;
 
 import com.wz.dubbo.api.DemoService;
 import com.wz.dubbo.api.MsgInfo;

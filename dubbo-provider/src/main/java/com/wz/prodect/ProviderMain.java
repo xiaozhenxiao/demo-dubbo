@@ -1,4 +1,4 @@
-package com.wz.dubbo.provider;
+package com.wz.prodect;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 

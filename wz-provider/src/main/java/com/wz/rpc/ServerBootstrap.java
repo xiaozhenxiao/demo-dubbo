@@ -8,7 +8,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class ServerBootstrap {
     public static void main(String[] args) throws InterruptedException {
-        String configLocation="dubbo-provider.xml";
+        String configLocation= "smile-provider.xml";
         ClassPathXmlApplicationContext context =new ClassPathXmlApplicationContext(configLocation);
         context.start();
         String[] names=context.getBeanDefinitionNames();
