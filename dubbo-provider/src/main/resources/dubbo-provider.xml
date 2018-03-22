@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xmlns:wz="http://www.wz/schema/smile"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
-        http://www.wz/schema/smile
-        http://www.wz/schema/smile/smile.xsd
+        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         ">
-	<!--<dubbo:application name="hello-world-app" />
+	<dubbo:application name="hello-world-app" />
 	
-	&lt;!&ndash; zookeeper注册中心 &ndash;&gt;
+	<!-- zookeeper注册中心 -->
 	<dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" />
-	&lt;!&ndash; 使用multicast广播注册中心暴露服务地址 &ndash;&gt;
-	&lt;!&ndash; <dubbo:registry address="multicast://10.57.41.19:1234" /> &ndash;&gt;
+	<!-- 使用multicast广播注册中心暴露服务地址 -->
+	<!-- <dubbo:registry address="multicast://10.57.41.19:1234" /> -->
 	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>
-	<dubbo:service interface="com.wz.dubbo.api.DemoService" ref="demoService" />-->
+	<dubbo:service interface="com.wz.dubbo.api.DemoService" ref="demoService" />
 	<!-- 和本地bean一样实现服务 -->
-	<bean id="demoService" class="com.wz.dubbo.provider.DemoServiceImpl" />
+	<bean id="demoService" class="com.wz.prodect.DemoServiceImpl" />
 
-	<wz:service interface="com.wz.dubbo.api.DemoService" ref="demoService" port="2222"/>
+	<bean id="callbackService" class="com.wz.prodect.CallbackServiceImpl"/>
+
+	<dubbo:service interface="com.wz.dubbo.api.CallbackService" ref="callbackService"
+				   connections="1" callbacks="1000">
+		<dubbo:method name="addListener">
+			<dubbo:argument index="1" callback="true"/>
+			<!--<dubbo:argument type="com.demo.CallbackListener" callback="true" />-->
+		</dubbo:method>
+	</dubbo:service>
+
+	<bean id="normalDemoService" class="com.wz.prodect.NormalDemoService"/>
+	<dubbo:service interface="com.wz.dubbo.api.IDemoService" ref="normalDemoService"/>
 </beans>

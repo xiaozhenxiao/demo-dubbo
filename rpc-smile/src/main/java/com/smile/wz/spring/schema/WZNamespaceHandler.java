@@ -11,7 +11,6 @@ import org.springframework.beans.factory.xml.NamespaceHandlerSupport;
 public class WZNamespaceHandler  extends NamespaceHandlerSupport {
     @Override
     public void init() {
-        registerBeanDefinitionParser("people", new WZBeanDefinitionParser(People.class));
         registerBeanDefinitionParser("service", new WZBeanDefinitionParser(ServiceBean.class));
         registerBeanDefinitionParser("reference", new WZBeanDefinitionParser(ReferenceBean.class));
     }
