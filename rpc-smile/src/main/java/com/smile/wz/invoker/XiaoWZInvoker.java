@@ -12,6 +12,7 @@ import com.smile.wz.rpc.FutureAdapter;
 import com.smile.wz.rpc.WZResponseFuture;
 import com.smile.wz.rpc.WZRpcContext;
 
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -28,12 +29,12 @@ public class XiaoWZInvoker<T> extends AbatractWZInvoker<T> {
 
     private final Set<WZInvoker<?>> invokers;
 
-    public XiaoWZInvoker(Class<T> serviceType, boolean isAsync, WZNettyClient[] clients) {
-        this(serviceType, isAsync, clients, "1.0", null);
+    public XiaoWZInvoker(Class<T> serviceType, Map<String, String> attachment, WZNettyClient[] clients) {
+        this(serviceType, attachment, clients, "1.0", null);
     }
 
-    public XiaoWZInvoker(Class<T> type, boolean isAsync, WZNettyClient[] clients, String version, Set<WZInvoker<?>> invokers) {
-        super(type, isAsync);
+    public XiaoWZInvoker(Class<T> type, Map<String, String> attachment, WZNettyClient[] clients, String version, Set<WZInvoker<?>> invokers) {
+        super(type, attachment);
         this.clients = clients;
         this.version = version;
         this.invokers = invokers;

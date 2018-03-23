@@ -17,7 +17,6 @@
 package com.smile.wz.rpc;
 
 import com.alibaba.dubbo.remoting.RemotingException;
-import com.alibaba.dubbo.remoting.exchange.ResponseCallback;
 
 public interface WZResponseFuture {
 

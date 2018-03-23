@@ -10,7 +10,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
-import com.smile.Request;
+import com.smile.wz.Request;
 import com.smile.wz.rpc.DefaultWZFuture;
 import com.smile.wz.rpc.WZResponseFuture;
 
@@ -65,7 +65,7 @@ public class WZNettyClient {
                         this.channel = newChannel;
                     }
                 } else if (future.cause() != null) {
-                    throw new RuntimeException("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+                    throw new RuntimeException("连接服务端失败！！！！！！！！！！！！！");
                 } else {
                     throw new RuntimeException("cccccccccccccccccccccccccccccccccccccccc");
                 }

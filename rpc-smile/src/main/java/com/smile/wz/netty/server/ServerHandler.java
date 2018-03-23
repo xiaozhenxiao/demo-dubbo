@@ -36,7 +36,7 @@ public class ServerHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-        System.out.println("The server receive message request: " + JSON.toJSONString(msg));
+//        System.out.println("The server receive message request: " + JSON.toJSONString(msg));
 
         ExecutorService cexecutor = getExecutorService();
         try {

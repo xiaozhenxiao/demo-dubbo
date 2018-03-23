@@ -18,10 +18,9 @@ package com.smile.wz.rpc;
 
 
 import com.alibaba.dubbo.remoting.RemotingException;
-import com.alibaba.dubbo.remoting.exchange.ResponseCallback;
 import com.smile.wz.Constants;
-import com.smile.Request;
-import com.smile.Response;
+import com.smile.wz.Request;
+import com.smile.wz.Response;
 import io.netty.channel.Channel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -186,7 +185,7 @@ public class DefaultWZFuture implements WZResponseFuture {
             }
         } else if (res.getStatus() == Response.CLIENT_TIMEOUT || res.getStatus() == Response.SERVER_TIMEOUT) {
             try {
-                System.out.println("==================================================");
+                System.out.println("=========================TIMEOUT=========================");
             } catch (Exception e) {
                 logger.error("callback invoke error ,url:", e);
             }

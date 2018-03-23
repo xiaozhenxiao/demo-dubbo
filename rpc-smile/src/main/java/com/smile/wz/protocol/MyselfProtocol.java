@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class MyselfProtocol implements Protocol {
     private Logger logger = LoggerFactory.getLogger(MyselfProtocol.class);
-    private Integer port = 22222;
+    private Integer port = 2222;
     protected final Map<String, Exporter<?>> exporterMap = new ConcurrentHashMap<String, Exporter<?>>();
     private final Map<String, WZServer> serverMap = new ConcurrentHashMap<String, WZServer>();
 
@@ -44,12 +44,12 @@ public class MyselfProtocol implements Protocol {
     @Override
     public <T> Exporter<T> export(WZInvoker<T> invoker, Integer port) throws RpcException {
         // export service.
-        this.port = port;
+        this.port = port == null ? getDefaultPort() : port;
         String key = serviceKey(invoker);
         WZExporter<T> exporter = new WZExporter<T>(invoker, key, exporterMap);
         exporterMap.put(key, exporter);
 
-        openServer(invoker, port);
+        openServer(invoker, this.port);
         return exporter;
     }
 
@@ -98,8 +98,8 @@ public class MyselfProtocol implements Protocol {
     }
 
     @Override
-    public <T> WZInvoker<T> refer(Class<T> type, String address, boolean isAsync) throws RpcException {
-        return new XiaoWZInvoker(type, isAsync, getClient(address.split(":")[0], Integer.valueOf(address.split(":")[1])));
+    public <T> WZInvoker<T> refer(Class<T> type, String address, Map<String, String> attachment) throws RpcException {
+        return new XiaoWZInvoker(type, attachment, getClient(address.split(":")[0], Integer.valueOf(address.split(":")[1])));
     }
 
     private WZNettyClient[] getClient(String host, Integer port) {

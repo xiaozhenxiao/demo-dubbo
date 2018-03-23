@@ -1,7 +1,7 @@
 package com.smile.wz.netty.client;
 
 import com.alibaba.fastjson.JSON;
-import com.smile.Response;
+import com.smile.wz.Response;
 import com.smile.wz.rpc.DefaultWZFuture;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
@@ -30,7 +30,7 @@ public class ClientHandler extends ChannelHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         Response response = (Response) msg;
-        System.out.println("client recived response:" + JSON.toJSONString(response));
+//        System.out.println("client recived response:" + JSON.toJSONString(response));
         if (response != null && !response.isHeartbeat()) {
             DefaultWZFuture.received(response);
         }

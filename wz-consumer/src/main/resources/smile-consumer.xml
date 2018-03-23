@@ -45,7 +45,10 @@
 
 	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>-->
 
+	<!--<wz:reference id="myService" interface="com.wz.dubbo.api.DemoService" address="127.0.0.1:2222" async="true"/>-->
 
-	<wz:reference id="myService" interface="com.wz.dubbo.api.DemoService" address="127.0.0.1:2222" async="true"/>
-
+	<bean id ="demoCallback" class = "com.wz.prodect.callback.NotifyImpl" />
+	<wz:reference id="demoService1" interface="com.wz.dubbo.api.IDemoService" address="127.0.0.1:2222">
+		<wz:method name="get" async="true" oninvoke="demoCallback.oninvoke" onreturn="demoCallback.onreturn" onthrow="demoCallback.onthrow" />
+	</wz:reference>
 </beans>

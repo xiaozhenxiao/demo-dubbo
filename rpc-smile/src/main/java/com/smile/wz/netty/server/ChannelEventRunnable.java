@@ -1,7 +1,7 @@
 package com.smile.wz.netty.server;
 
-import com.smile.Request;
-import com.smile.Response;
+import com.smile.wz.Request;
+import com.smile.wz.Response;
 import com.smile.wz.handler.ChannelHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -72,7 +72,7 @@ public class ChannelEventRunnable implements Runnable {
                     res.setStatus(Response.OK);
                     res.setResult(handler.reply(channel, request.getData()));
                     ChannelFuture future = channel.writeAndFlush(res);
-                    System.out.println(Thread.currentThread().getName() + " response success:" + future.isSuccess());
+//                    System.out.println(Thread.currentThread().getName() + " response success:" + future.isSuccess());
                 } catch (Exception e) {
                     logger.warn("ChannelEventRunnable handle " + state + " operation error, channel is " + channel
                             + ", message is " + message, e);

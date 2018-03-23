@@ -68,7 +68,7 @@ public class WZNettyServer implements WZServer {
             channelFuture.syncUninterruptibly();
             channel = channelFuture.channel();
         } finally {
-            System.out.println("netty server bind!");
+            System.out.println("netty server bind at port:" + port);
         }
     }
 
