@@ -1,6 +1,5 @@
 package com.wz.prodect;
 
-import com.wz.dubbo.api.DemoService;
 import com.wz.dubbo.api.IDemoService;
 import com.wz.dubbo.api.Person;
 import com.wz.prodect.callback.NotifyImpl;
@@ -43,7 +42,7 @@ public class ConsumerMain {
             public void changed(String msg) {
                 System.out.println("callback1:" + msg);
             }
-        });*/
+        });
         /******************************************** 参数回调 ***************************************************/
 
         /******************************************** 异步回调 ***************************************************/

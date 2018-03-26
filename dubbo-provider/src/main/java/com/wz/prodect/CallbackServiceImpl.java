@@ -25,6 +25,7 @@ public class CallbackServiceImpl implements CallbackService {
                     try {
                         for (Map.Entry<String, CallbackListener> entry : listeners.entrySet()) {
                             try {
+                                System.out.println("server call CallbackListener!");
                                 entry.getValue().changed(getChanged(entry.getKey()));
                             } catch (Throwable e) {
                                 listeners.remove(entry.getKey());
