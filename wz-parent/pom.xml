@@ -418,15 +418,8 @@
                     <encoding>${default.encoding}</encoding>
                     <source>${default.jdk.version}</source>
                     <target>${default.jdk.version}</target>
-                    <compilerArgument>-Xlint:unchecked</compilerArgument>
+                    <!--<compilerArgument>-Xlint:unchecked</compilerArgument>-->
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.codehaus.plexus</groupId>
-                        <artifactId>plexus-compiler-javac</artifactId>
-                        <version>${plugin.plexus.compiler.version}</version>
-                    </dependency>
-                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.owasp</groupId>
@@ -451,7 +444,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-enforcer-plugin</artifactId>
                 <version>1.4.1</version>
@@ -483,7 +476,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-assembly-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

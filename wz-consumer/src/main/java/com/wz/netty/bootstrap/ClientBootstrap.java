@@ -23,7 +23,7 @@ public class ClientBootstrap {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         String configLocation = "smile-consumer.xml";
         ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
-        /*DemoService ds = (DemoService) context.getBean("myService");
+        DemoService ds = (DemoService) context.getBean("myService");
 
         System.out.println("===============================================");
         MsgInfo info = new MsgInfo();
@@ -46,7 +46,7 @@ public class ClientBootstrap {
         System.out.println(infoResult);
         System.out.println(infoResult1);
         System.out.println(infoResultAsync);
-        System.out.println(infoResultAsync2);*/
+        System.out.println(infoResultAsync2);
 
         /******************************************** 异步回调 ***************************************************/
         IDemoService demoService = (IDemoService) context.getBean("demoService1");
