@@ -16,10 +16,10 @@
 	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>
 	<dubbo:service interface="com.wz.dubbo.api.DemoService" ref="demoService" />-->
 	<!-- 和本地bean一样实现服务 -->
-	<!--<bean id="demoService" class="com.wz.rpc.DemoServiceImpl" />-->
+	<bean id="demoService" class="com.wz.rpc.DemoServiceImpl" />
 
-	<!--<wz:service interface="com.wz.dubbo.api.DemoService" ref="demoService" port="2222"/>-->
+	<wz:service interface="com.wz.dubbo.api.DemoService" ref="demoService" port="2222"/>
 
-	<bean id="normalDemoService" class="com.wz.rpc.NormalDemoService"/>
-	<wz:service interface="com.wz.dubbo.api.IDemoService" ref="normalDemoService"/>
+	<!--<bean id="normalDemoService" class="com.wz.rpc.NormalDemoService"/>
+	<wz:service interface="com.wz.dubbo.api.IDemoService" ref="normalDemoService"/>-->
 </beans>

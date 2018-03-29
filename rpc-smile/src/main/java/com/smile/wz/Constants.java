@@ -281,7 +281,11 @@ public class Constants {
 
     public static final String ASYNC_KEY = "async";
 
+    public static final String ASYNC = "Async";
+
     public static final String RETURN_KEY = "return";
+
+    public static final String RETURN_FUTURE = "returnFuture";
 
     public static final String TOKEN_KEY = "token";
 

@@ -20,9 +20,17 @@ public class ClientBootstrap {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         String configLocation = "smile-consumer.xml";
         ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
-        DemoServiceAsync demoService = (DemoServiceAsync) context.getBean("myService");
-
-        /*System.out.println("===============================================");
+        DemoServiceAsync demoService = (DemoServiceAsync) context.getBean("demoService");
+        System.out.println("===============================================");
+        /*************************************************同步调用************************************************/
+        /*MsgInfo info = new MsgInfo();
+        info.setId(3);
+        info.setName("zhangsan");
+        info.setMsgs(new ArrayList<String>());
+        MsgInfo infoResult = demoService.returnMsgInfo(info);
+        System.out.println(infoResult);*/
+        /*************************************************同步调用************************************************/
+        /*
         MsgInfo info = new MsgInfo();
         info.setId(3);
         info.setName("zhangsan");
@@ -46,11 +54,13 @@ public class ClientBootstrap {
         System.out.println(infoResultAsync2);*/
 
         /********************************************** 新型异步调用 **********************************************/
+        long start = System.currentTimeMillis();
         MsgInfo info = new MsgInfo();
         info.setId(3);
         info.setName("zhangsan");
         info.setMsgs(new ArrayList<String>());
         Future<MsgInfo> future = demoService.returnMsgInfoAsync(info);
+        System.out.println("time:" + (System.currentTimeMillis() - start));
         MsgInfo info1 = new MsgInfo();
         info1.setName("lisi");
         info1.setId(2);
@@ -59,10 +69,12 @@ public class ClientBootstrap {
         list.add("test2");
         info1.setMsgs(list);
         Future<MsgInfo> future1 = demoService.returnMsgInfoAsync(info1);
+        System.out.println("time1:" + (System.currentTimeMillis() - start));
         MsgInfo infoResultAsync = future.get();
         MsgInfo infoResultAsync2 = future1.get();
         System.out.println(infoResultAsync);
         System.out.println(infoResultAsync2);
+        System.out.println("time3:" + (System.currentTimeMillis() - start));
         /********************************************** 新型异步调用 **********************************************/
 
         /******************************************** 异步回调 ***************************************************/

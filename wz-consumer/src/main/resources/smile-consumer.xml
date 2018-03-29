@@ -46,7 +46,7 @@
 	<dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>-->
 
 	<!-- 同步调用配置 -->
-	<wz:reference id="myService" interface="com.wz.dubbo.api.DemoService" address="127.0.0.1:2222"/>
+	<!--<wz:reference id="myService" interface="com.wz.dubbo.api.DemoService" address="127.0.0.1:2222"/>-->
 
 	<!-- 异步调用配置 -->
 	<!--<wz:reference id="myService" interface="com.wz.dubbo.api.DemoService" address="127.0.0.1:2222" async="true"/>-->

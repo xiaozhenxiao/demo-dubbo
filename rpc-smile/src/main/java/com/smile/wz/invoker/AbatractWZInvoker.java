@@ -1,6 +1,7 @@
 package com.smile.wz.invoker;
 
 
+import com.alibaba.dubbo.common.utils.ReflectUtils;
 import com.alibaba.dubbo.rpc.RpcException;
 import com.smile.wz.Constants;
 import com.smile.wz.StaticContext;
@@ -36,9 +37,15 @@ public abstract class AbatractWZInvoker<T> implements WZInvoker {
     public Result invoke(WZInvocation inv) throws RpcException {
         WZRpcInvocation invocation = (WZRpcInvocation) inv;
         invocation.setInvoker(this);
-        invocation.setAttachment(Constants.INTERFACE_KEY, this.type.getName());
+        String methodName = invocation.getMethodName();
+        invocation.setAttachment(Constants.INTERFACE_KEY, this.type.getName().endsWith(Constants.ASYNC) ? this.type.getName().substring(0, this.type.getName().length() - 5) : this.type.getName());
         invocation.setAttachment(Constants.ASYNC_KEY, getAsync(invocation.getMethodName()));
         try {
+            if(methodName.endsWith(Constants.ASYNC)){
+                invocation.setMethodName(methodName.substring(0, methodName.length()-5));
+                invocation.setAttachment(Constants.ASYNC_KEY, Boolean.TRUE.toString());
+                invocation.setAttachment(Constants.RETURN_FUTURE, Boolean.TRUE.toString());
+            }
             fireInvokeCallback(this, invocation);
             Result result = doInvoke(invocation);
             if (Boolean.TRUE.toString().equals(inv.getAttachment(Constants.ASYNC_KEY))) {
@@ -126,8 +133,8 @@ public abstract class AbatractWZInvoker<T> implements WZInvoker {
     }
 
     private void fireReturnCallback(final WZInvoker<?> invoker, final WZInvocation invocation, final Object result) {
-        String onReturnMethodKey = StaticContext.getKey(this.attachment,invocation.getMethodName(), Constants.ON_RETURN_METHOD_KEY);
-        String onReturnInstancedKey = StaticContext.getKey(this.attachment,invocation.getMethodName(), Constants.ON_RETURN_INSTANCE_KEY);
+        String onReturnMethodKey = StaticContext.getKey(this.attachment, invocation.getMethodName(), Constants.ON_RETURN_METHOD_KEY);
+        String onReturnInstancedKey = StaticContext.getKey(this.attachment, invocation.getMethodName(), Constants.ON_RETURN_INSTANCE_KEY);
         final Method onReturnMethod = (Method) StaticContext.getSystemContext().get(onReturnMethodKey);
         final Object onReturnInst = StaticContext.getSystemContext().get(onReturnInstancedKey);
 
@@ -174,8 +181,8 @@ public abstract class AbatractWZInvoker<T> implements WZInvoker {
     }
 
     private void fireInvokeCallback(final WZInvoker<?> invoker, final WZInvocation invocation) {
-        String onInvokeMethodKey = StaticContext.getKey(this.attachment,invocation.getMethodName(), Constants.ON_INVOKE_METHOD_KEY);
-        String onInvokeInstancedKey = StaticContext.getKey(this.attachment,invocation.getMethodName(), Constants.ON_INVOKE_INSTANCE_KEY);
+        String onInvokeMethodKey = StaticContext.getKey(this.attachment, invocation.getMethodName(), Constants.ON_INVOKE_METHOD_KEY);
+        String onInvokeInstancedKey = StaticContext.getKey(this.attachment, invocation.getMethodName(), Constants.ON_INVOKE_INSTANCE_KEY);
         final Method onInvokeMethod = (Method) StaticContext.getSystemContext().get(onInvokeMethodKey);
         final Object onInvokeInst = StaticContext.getSystemContext().get(onInvokeInstancedKey);
 
@@ -200,8 +207,8 @@ public abstract class AbatractWZInvoker<T> implements WZInvoker {
     }
 
     private void fireThrowCallback(final WZInvoker<?> invoker, final WZInvocation invocation, final Throwable exception) {
-        String onThrowMethodKey = StaticContext.getKey(this.attachment,invocation.getMethodName(), Constants.ON_THROW_METHOD_KEY);
-        String onThrowInstancedKey = StaticContext.getKey(this.attachment,invocation.getMethodName(), Constants.ON_THROW_INSTANCE_KEY);
+        String onThrowMethodKey = StaticContext.getKey(this.attachment, invocation.getMethodName(), Constants.ON_THROW_METHOD_KEY);
+        String onThrowInstancedKey = StaticContext.getKey(this.attachment, invocation.getMethodName(), Constants.ON_THROW_INSTANCE_KEY);
         final Method onthrowMethod = (Method) StaticContext.getSystemContext().get(onThrowMethodKey);
         final Object onthrowInst = StaticContext.getSystemContext().get(onThrowInstancedKey);
 

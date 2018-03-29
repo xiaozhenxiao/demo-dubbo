@@ -4,16 +4,17 @@ import com.alibaba.dubbo.common.utils.AtomicPositiveInteger;
 import com.alibaba.dubbo.remoting.RemotingException;
 import com.alibaba.dubbo.remoting.TimeoutException;
 import com.alibaba.dubbo.rpc.RpcException;
-import com.smile.wz.result.WZRpcResult;
 import com.smile.wz.Constants;
 import com.smile.wz.netty.client.WZNettyClient;
 import com.smile.wz.result.Result;
+import com.smile.wz.result.WZRpcResult;
 import com.smile.wz.rpc.FutureAdapter;
 import com.smile.wz.rpc.WZResponseFuture;
 import com.smile.wz.rpc.WZRpcContext;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Future;
 
 /**
  * TODO
@@ -54,7 +55,11 @@ public class XiaoWZInvoker<T> extends AbatractWZInvoker<T> {
             if (Boolean.TRUE.toString().equals(invocation.getAttachment(Constants.ASYNC_KEY))) {
                 /** 异步调用 **/
                 WZResponseFuture future = currentClient.request(invocation, 5000);
-                WZRpcContext.getContext().setFuture(new FutureAdapter<Object>(future));
+                Future resultFuture = new FutureAdapter<Object>(future);
+                if (Boolean.TRUE.toString().equals(invocation.getAttachment(Constants.RETURN_FUTURE))) {
+                    return new WZRpcResult(resultFuture);
+                }
+                WZRpcContext.getContext().setFuture(resultFuture);
                 return new WZRpcResult();
             }
             /** 同步调用 **/
