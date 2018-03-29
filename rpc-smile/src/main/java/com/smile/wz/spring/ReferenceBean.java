@@ -67,7 +67,7 @@ public class ReferenceBean<T> implements FactoryBean {
         }
         initialized = true;
         if (interfaceName == null || interfaceName.length() == 0) {
-            throw new IllegalStateException("<dubbo:reference interface=\"\" /> interface not allow null!");
+            throw new IllegalStateException("<wz:reference interface=\"\" /> interface not allow null!");
         }
 
         try {

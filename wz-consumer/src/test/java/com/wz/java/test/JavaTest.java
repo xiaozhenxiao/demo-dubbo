@@ -5,11 +5,13 @@ import io.netty.buffer.Unpooled;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.IntBuffer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by wangzhen on 2016-08-05.
@@ -31,11 +33,11 @@ public class JavaTest {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        long[] array = new long[]{5,9,6,7,8,2,4,3,1,5,7,85,42,63,54,27,45};
+        long[] array = new long[]{5, 9, 6, 7, 8, 2, 4, 3, 1, 5, 7, 85, 42, 63, 54, 27, 45};
         Arrays.sort(array, 0, 10);
         for (int i = 0; i < array.length; i++) {
             long l = array[i];
-            System.out.print(l+ "\t");
+            System.out.print(l + "\t");
         }
         System.out.println();
         List<String> list = new ArrayList<>();
@@ -46,7 +48,7 @@ public class JavaTest {
 //            System.out.println(s);
 //        }
         System.out.println("===========================");
-        List<String> subList = list.subList(0,11);
+        List<String> subList = list.subList(0, 11);
         for (int i = 0; i < subList.size(); i++) {
             System.out.println(subList.get(i));
         }
@@ -63,12 +65,12 @@ public class JavaTest {
         ByteBuffer byteBuffer = ByteBuffer.allocate(4);
         byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
         byteBuffer.asIntBuffer().put(1);
-        System.out.println(byteBuffer.array()[0] + " " + byteBuffer.array()[1] + " " + byteBuffer.array()[2]+ " " + byteBuffer.array()[3]);
+        System.out.println(byteBuffer.array()[0] + " " + byteBuffer.array()[1] + " " + byteBuffer.array()[2] + " " + byteBuffer.array()[3]);
         byteBuffer.order(ByteOrder.BIG_ENDIAN);
         byteBuffer.asIntBuffer().put(1);
-        System.out.println(byteBuffer.array()[0] + " " + byteBuffer.array()[1] + " " + byteBuffer.array()[2]+ " " + byteBuffer.array()[3]);
+        System.out.println(byteBuffer.array()[0] + " " + byteBuffer.array()[1] + " " + byteBuffer.array()[2] + " " + byteBuffer.array()[3]);
 
-        byte[] bytes = {(byte)0xAB,(byte)0x65,(byte)0xAB,(byte)0x65};
+        byte[] bytes = {(byte) 0xAB, (byte) 0x65, (byte) 0xAB, (byte) 0x65};
         ByteBuf byteBuf = Unpooled.copiedBuffer(bytes);
         long r = byteBuf.getUnsignedInt(0);
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!" + r);
@@ -80,7 +82,12 @@ public class JavaTest {
         System.out.println(" co > 0 " + (co > 0));
         System.out.println(" co < 0 " + (co < 0));
 
-
-
+        String interfaceName = "com.wz.dubbo.api.DemoServiceAsync";
+        String asyncInterfaceName = null;
+        if (interfaceName.endsWith("Async")) {
+            asyncInterfaceName = interfaceName;
+            interfaceName = interfaceName.substring(0, interfaceName.length() - 5);
+        }
+        System.out.println(interfaceName + " = " + asyncInterfaceName);
     }
 }

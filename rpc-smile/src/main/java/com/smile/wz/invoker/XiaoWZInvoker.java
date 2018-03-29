@@ -42,7 +42,6 @@ public class XiaoWZInvoker<T> extends AbatractWZInvoker<T> {
 
     @Override
     protected Result doInvoke(WZInvocation invocation) throws Throwable {
-        WZInvocation inv = (WZInvocation) invocation;
         final String methodName = invocation.getMethodName();
 
         WZNettyClient currentClient;
@@ -52,14 +51,14 @@ public class XiaoWZInvoker<T> extends AbatractWZInvoker<T> {
             currentClient = clients[index.getAndIncrement() % clients.length];
         }
         try {
-            if (Boolean.TRUE.toString().equals(inv.getAttachment(Constants.ASYNC_KEY))) {
+            if (Boolean.TRUE.toString().equals(invocation.getAttachment(Constants.ASYNC_KEY))) {
                 /** 异步调用 **/
-                WZResponseFuture future = currentClient.request(inv, 5000);
+                WZResponseFuture future = currentClient.request(invocation, 5000);
                 WZRpcContext.getContext().setFuture(new FutureAdapter<Object>(future));
                 return new WZRpcResult();
             }
             /** 同步调用 **/
-            return (Result) currentClient.request(inv, 5000).get();
+            return (Result) currentClient.request(invocation, 5000).get();
         } catch (TimeoutException e) {
             throw new RpcException(RpcException.TIMEOUT_EXCEPTION, "Invoke remote method timeout. method: " + invocation.getMethodName() + ", cause: " + e.getMessage(), e);
         } catch (RemotingException e) {

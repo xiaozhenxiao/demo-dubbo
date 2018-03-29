@@ -1,9 +1,6 @@
 package com.wz.netty.bootstrap;
 
-import com.wz.dubbo.api.DemoService;
-import com.wz.dubbo.api.IDemoService;
-import com.wz.dubbo.api.MsgInfo;
-import com.wz.dubbo.api.Person;
+import com.wz.dubbo.api.*;
 import com.wz.prodect.callback.NotifyImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -23,9 +20,9 @@ public class ClientBootstrap {
     public static void main(String[] args) throws ExecutionException, InterruptedException {
         String configLocation = "smile-consumer.xml";
         ApplicationContext context = new ClassPathXmlApplicationContext(configLocation);
-        DemoService ds = (DemoService) context.getBean("myService");
+        DemoServiceAsync demoService = (DemoServiceAsync) context.getBean("myService");
 
-        System.out.println("===============================================");
+        /*System.out.println("===============================================");
         MsgInfo info = new MsgInfo();
         info.setId(3);
         info.setName("zhangsan");
@@ -46,13 +43,33 @@ public class ClientBootstrap {
         System.out.println(infoResult);
         System.out.println(infoResult1);
         System.out.println(infoResultAsync);
+        System.out.println(infoResultAsync2);*/
+
+        /********************************************** 新型异步调用 **********************************************/
+        MsgInfo info = new MsgInfo();
+        info.setId(3);
+        info.setName("zhangsan");
+        info.setMsgs(new ArrayList<String>());
+        Future<MsgInfo> future = demoService.returnMsgInfoAsync(info);
+        MsgInfo info1 = new MsgInfo();
+        info1.setName("lisi");
+        info1.setId(2);
+        List list = new ArrayList();
+        list.add("test1");
+        list.add("test2");
+        info1.setMsgs(list);
+        Future<MsgInfo> future1 = demoService.returnMsgInfoAsync(info1);
+        MsgInfo infoResultAsync = future.get();
+        MsgInfo infoResultAsync2 = future1.get();
+        System.out.println(infoResultAsync);
         System.out.println(infoResultAsync2);
+        /********************************************** 新型异步调用 **********************************************/
 
         /******************************************** 异步回调 ***************************************************/
-        IDemoService demoService = (IDemoService) context.getBean("demoService1");
+        /*IDemoService idemoService = (IDemoService) context.getBean("demoService1");
         NotifyImpl notify = (NotifyImpl) context.getBean("demoCallback");
         String requestId = "2";
-        Person ret = demoService.get(requestId);
+        Person ret = idemoService.get(requestId);
         System.out.println(ret);
         //for Test：只是用来说明callback正常被调用，业务具体实现自行决定.
         for (int i = 0; i < 10; i++) {
@@ -62,7 +79,7 @@ public class ClientBootstrap {
                 break;
             }
         }
-        System.out.println(notify.ret.get(requestId));
+        System.out.println(notify.ret.get(requestId));*/
         /******************************************** 异步回调 ***************************************************/
         System.out.println("===============================================");
 

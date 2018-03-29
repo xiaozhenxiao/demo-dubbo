@@ -7,7 +7,7 @@ public interface DemoService {
 
 	String sayHello(String name);
 
-	int returnHello();
+	String returnHello();
 
 	MsgInfo returnMsgInfo(MsgInfo info);
 
