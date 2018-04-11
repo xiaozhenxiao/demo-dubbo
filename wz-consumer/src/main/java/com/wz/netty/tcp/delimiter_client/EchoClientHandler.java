@@ -16,6 +16,7 @@
 package com.wz.netty.tcp.delimiter_client;
 
 import io.netty.buffer.Unpooled;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -41,16 +42,20 @@ public class EchoClientHandler extends ChannelHandlerAdapter {
         // ByteBuf buf = UnpooledByteBufAllocator.DEFAULT.buffer(ECHO_REQ
         // .getBytes().length);
         // buf.writeBytes(ECHO_REQ.getBytes());
-        for (int i = 0; i < 10; i++) {
+        for (int i=0; i<100; i++) {
             ctx.writeAndFlush(Unpooled.copiedBuffer(ECHO_REQ.getBytes()));
+            /*try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }*/
         }
     }
 
     @Override
-    public void channelRead(ChannelHandlerContext ctx, Object msg)
-            throws Exception {
-        System.out.println("This is " + ++counter + " times receive server : ["
-                + msg + "]");
+    public void channelRead(ChannelHandlerContext ctx, Object msg)     throws Exception {
+        Channel channel = ctx.channel();
+        System.out.println(channel.localAddress() + " : " + channel.remoteAddress() + " -This is " + ++counter + " times receive server : [" + msg + "]");
     }
 
     @Override

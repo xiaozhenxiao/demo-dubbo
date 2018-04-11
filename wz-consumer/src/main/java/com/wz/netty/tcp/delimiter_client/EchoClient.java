@@ -72,7 +72,7 @@ public class EchoClient {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        int port = 8080;
+        int port = 80;
         if (args != null && args.length > 0) {
             try {
                 port = Integer.valueOf(args[0]);
@@ -80,6 +80,6 @@ public class EchoClient {
                 // 采用默认值
             }
         }
-        new EchoClient().connect(port, "127.0.0.1");
+        new EchoClient().connect(port, "192.168.187.128");
     }
 }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Created by wangzhen on 2016-08-05.
@@ -89,5 +90,10 @@ public class JavaTest {
             interfaceName = interfaceName.substring(0, interfaceName.length() - 5);
         }
         System.out.println(interfaceName + " = " + asyncInterfaceName);
+
+        AtomicLong atomicLong = new AtomicLong(Long.MAX_VALUE-5);
+        for (int i=0;i<10;i++) {
+            System.out.println(Long.MIN_VALUE + ">>>>>>>>>>>" + atomicLong.getAndIncrement());
+        }
     }
 }
