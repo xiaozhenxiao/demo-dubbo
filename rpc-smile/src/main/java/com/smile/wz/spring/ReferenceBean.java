@@ -2,6 +2,7 @@ package com.smile.wz.spring;
 
 import com.alibaba.dubbo.common.utils.ReflectUtils;
 import com.alibaba.dubbo.common.utils.StringUtils;
+import com.alibaba.dubbo.config.RegistryConfig;
 import com.alibaba.dubbo.config.support.Parameter;
 import com.smile.wz.Constants;
 import com.smile.wz.ProxyFactory;
@@ -36,6 +37,10 @@ public class ReferenceBean<T> implements FactoryBean {
     private Class<?> interfaceClass;
     // method configs
     private List<MethodConfig> methods;
+
+    // registry centers
+    protected List<RegistryConfig> registries;
+
     private static final Protocol refprotocol = new MyselfProtocol();
     private static final ProxyFactory proxyFactory = new JdkProxyFactory();
 
@@ -239,5 +244,13 @@ public class ReferenceBean<T> implements FactoryBean {
 
     public void setMethods(List<MethodConfig> methods) {
         this.methods = methods;
+    }
+
+    public List<RegistryConfig> getRegistries() {
+        return registries;
+    }
+
+    public void setRegistries(List<RegistryConfig> registries) {
+        this.registries = registries;
     }
 }
