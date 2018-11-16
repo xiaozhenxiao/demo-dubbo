@@ -1,6 +1,7 @@
 package com.wz.java.designpatterns.basicreactor;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -46,6 +47,16 @@ class Reactor implements Runnable {
             r.run();
     }
 
+    public static void main(String[] args) {
+        int port = 8088;
+        try {
+            new Thread(new Reactor(port)).start();
+            System.out.println("Reactor 服务启动……");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     class Acceptor implements Runnable { // inner
         public void run() {
             try {
@@ -60,15 +71,15 @@ class Reactor implements Runnable {
 
 final class Handler implements Runnable {
     private static final int MAXIN = 1024;
-    private static final int MAXOUT = 1024;
+    ByteBuffer output;
     final SocketChannel socket;
     final SelectionKey sk;
-    ByteBuffer input = ByteBuffer.allocate(MAXIN);
-    ByteBuffer output = ByteBuffer.allocate(MAXOUT);
+    final Selector selector;
     static final int READING = 0, SENDING = 1;
     int state = READING;
 
     Handler(Selector sel, SocketChannel c) throws IOException {
+        selector = sel;
         socket = c; c.configureBlocking(false);
         // Optionally try first read now
         sk = socket.register(sel, 0);
@@ -78,7 +89,17 @@ final class Handler implements Runnable {
     }
     boolean inputIsComplete() { /* ... */ return true;}
     boolean outputIsComplete() { /* ... */ return true;}
-    void process() { /* ... */ }
+    String process(ByteBuffer input) { /* ... */
+        input.flip();
+        byte[] bytes = new byte[input.remaining()];
+        input.get(bytes);
+        try {
+            return new String(bytes, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "error";
+    }
 
     public void run() {
         try {
@@ -88,17 +109,30 @@ final class Handler implements Runnable {
     }
 
     void read() throws IOException {
+        ByteBuffer input = ByteBuffer.allocate(MAXIN);
         socket.read(input);
         if (inputIsComplete()) {
-            process();
+            String body = process(input);
+            System.out.println("recive message:" + body);
             state = SENDING;
             // Normally also do first write now
             sk.interestOps(SelectionKey.OP_WRITE); //第三步,接收write事件
+
+            String res = "QUERY TIME ORDER"
+                    .equalsIgnoreCase(body) ? new java.util.Date(
+                    System.currentTimeMillis()).toString()
+                    : "BAD ORDER";
+            output = ByteBuffer.allocate(res.length());
+            output.put(res.getBytes());
+            selector.wakeup();
         }
     }
     void send() throws IOException {
+        output.flip();
         socket.write(output);
-        if (outputIsComplete()) sk.cancel(); //write完就结束了, 关闭select key
+        if (outputIsComplete()){
+            sk.cancel(); //write完就结束了, 关闭select key
+        }
     }
 }
 

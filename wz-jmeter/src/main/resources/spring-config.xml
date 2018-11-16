@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans.xsd
-           http://code.alibabatech.com/schema/dubbo
-           http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jsf="http://jsf.jd.com/schema/jsf"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://jsf.jd.com/schema/jsf http://jsf.jd.com/schema/jsf/jsf.xsd">
 
-    <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
-    <dubbo:application name="consumer-of-jmeter-app"/>
-    <!-- zookeeper注册中心 -->
-    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181"/>
-    <!-- 使用multicast广播注册中心暴露的服务地址 -->
-    <!--<dubbo:registry address="multicast://10.57.41.19:1234" /> -->
-    <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
-    <dubbo:reference id="demoService" interface="com.wz.dubbo.api.DemoService" timeout="10000"/>
+    <!-- 注册中心 address="192.168.150.119:40660,192.168.150.121:40660" -->
+    <jsf:registry id="jsfRegistry" index="i.jsf.jd.com" />
 
-    <dubbo:protocol name="dubbo" port="20880" serialization="hessian2"/>
+    <!-- 服务端 端口默认22000-->
+    <jsf:server id="myjsf" protocol="jsf"/>
+
+    <jsf:consumer id="taskDispatcherService" interface="com.jd.crp.service.task.TaskDispatcherService"
+                  alias="Ptest" timeout="5000" retries="0" serialization="hessian"/>
 
 </beans>

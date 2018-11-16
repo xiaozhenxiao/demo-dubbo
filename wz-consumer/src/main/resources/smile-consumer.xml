@@ -55,8 +55,8 @@
 	<wz:reference id="demoService" interface="com.wz.dubbo.api.DemoServiceAsync" address="127.0.0.1:2222"/>
 
 	<!-- 异步回调配置 -->
-	<!--<bean id ="demoCallback" class = "com.wz.prodect.callback.NotifyImpl" />
+	<bean id ="demoCallback" class = "com.wz.prodect.callback.NotifyImpl" />
 	<wz:reference id="demoService1" interface="com.wz.dubbo.api.IDemoService" address="127.0.0.1:2222">
 		<wz:method name="get" async="true" oninvoke="demoCallback.oninvoke" onreturn="demoCallback.onreturn" onthrow="demoCallback.onthrow" />
-	</wz:reference>-->
+	</wz:reference>
 </beans>

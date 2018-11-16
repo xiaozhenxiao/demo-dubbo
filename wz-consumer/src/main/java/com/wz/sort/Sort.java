@@ -12,9 +12,9 @@ public class Sort {
         int [] array1 = {4, 3, 6, 2, 5, 1, 7};
         printArray("排序前：",  array);
 //        radixSort(array, 10, 4);
-//        bubbleSort(array);
+        bubbleSort(array);
 //        kuaipai(array1, 0, array1.length-1);
-        mergeSort(array, 0, array.length-1);
+//        mergeSort(array, 0, array.length-1);
         printArray("排序：", array);
     }
 

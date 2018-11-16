@@ -11,6 +11,7 @@ public class JdkProxy {
         BookFacade bookProxy = (BookFacade) proxy.bind(new BookFacadeImpl());
         System.out.println("********************************BookFacadeImpl*******************************");
         bookProxy.addBook();
+        bookProxy.method2();
         System.out.println("********************************BookFacadeImpl*******************************");
 
 
@@ -19,6 +20,8 @@ public class JdkProxy {
 
 interface BookFacade {
     void addBook();
+
+    void method2();
 }
 
 class BookFacadeImpl implements BookFacade {
@@ -26,6 +29,11 @@ class BookFacadeImpl implements BookFacade {
     @Override
     public void addBook() {
         System.out.println("TODO增加图书方法。。。");
+    }
+
+    @Override
+    public void method2() {
+        System.out.println("测试方法2");
     }
 }
 

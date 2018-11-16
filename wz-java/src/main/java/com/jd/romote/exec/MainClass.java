@@ -11,11 +11,15 @@ import java.io.IOException;
  */
 public class MainClass {
     public static void main(String[] args) throws IOException {
-        String classPath = "E:/myworkspaces/idea-dubbo/wz-java/target/classes/com/jd/romote/exec/bytecode/Person.class";
+        String classPath = "E:/myworkspaces/idea-dubbo/wz-java/target/classes/com/jd/romote/exec/bytecode/MyEnum.class";
         BytecodeAnalysis.bindClass(classPath);
         ClassFile classFile = BytecodeAnalysis.analysis();
 //        String java = BytecodeAnalysis.generateJava(classFile).toString();
 //        System.out.println(java.replaceAll("/", "."));
+
+        System.out.println("*********************************");
+        System.out.println(0 << 8 | 5);
+        System.out.println("*********************************");
     }
 
     public static void printByte(byte[] bytes) {

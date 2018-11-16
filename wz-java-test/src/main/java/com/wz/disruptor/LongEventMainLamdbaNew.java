@@ -5,6 +5,7 @@ import com.lmax.disruptor.RingBuffer;
 import com.lmax.disruptor.WorkHandler;
 import com.lmax.disruptor.dsl.Disruptor;
 import com.lmax.disruptor.dsl.ProducerType;
+import rx.Observable;
 
 import java.nio.ByteBuffer;
 import java.util.concurrent.Executor;
@@ -44,8 +45,8 @@ public class LongEventMainLamdbaNew {
         // Construct the Disruptor
 //        Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent::new, bufferSize, myThreadFactory);
         //调优参数
-        Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent::new, bufferSize, myThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
-//        Disruptor<LongEvent> disruptor = new Disruptor<>(factory, bufferSize, myThreadFactory, ProducerType.MULTI, new BlockingWaitStrategy());
+//        Disruptor<LongEvent> disruptor = new Disruptor<>(LongEvent::new, bufferSize, myThreadFactory, ProducerType.SINGLE, new BlockingWaitStrategy());
+        Disruptor<LongEvent> disruptor = new Disruptor<>(factory, bufferSize, myThreadFactory, ProducerType.MULTI, new BlockingWaitStrategy());
 
         // Connect the handler
         /*************************************************************************************************************************************************************/
@@ -81,7 +82,18 @@ public class LongEventMainLamdbaNew {
         WorkHandler<LongEvent>[] workHandlers = new WorkHandler[3];//3个消费者
 
         for (int i = 0; i < 3; i++) {
-            workHandlers[i] = (event) -> System.out.println(Thread.currentThread().getName() + " # " + " - " + "Event: " + event);
+            workHandlers[i] = (event) ->
+                Observable.create((Observable.OnSubscribe<String>) subscriber -> {
+                    System.out.println(Thread.currentThread().getName() + " #  - " + "Event: " + event);
+                    try {
+                        Thread.sleep(1000);
+                        subscriber.onNext(event.toString());
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }).subscribe(result ->
+                        System.out.println(Thread.currentThread().getName() + "--------->" + result)
+                );
         }
         disruptor.handleEventsWithWorkerPool(workHandlers);
         /**---------------------------------------------------------------------------------------------------------------------------------------------------------**/
@@ -91,19 +103,19 @@ public class LongEventMainLamdbaNew {
         // Get the ring buffer from the Disruptor to be used for publishing.
         RingBuffer<LongEvent> ringBuffer = disruptor.getRingBuffer();
 
-        ByteBuffer bb = ByteBuffer.allocate(8);
+        /*ByteBuffer bb = ByteBuffer.allocate(8);
         for (long l = 0; true; l++) {
             bb.putLong(0, l);
             ringBuffer.publishEvent(LongEventMainLamdbaNew::translate, bb);
             Thread.sleep(1000);
-        }
+        }*/
 
         /**多个生产者**/
-        /*for (int i = 0; i < 5; i++) {
+        for(int i = 0; i < 5; i++) {
             new Thread(new ProducerThread(ringBuffer)).start();
-        }*/
-        /*while (true) {
+        }
+        while (true) {
             Thread.sleep(10000);
-        }*/
+        }
     }
 }

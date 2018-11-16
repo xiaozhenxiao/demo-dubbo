@@ -63,7 +63,7 @@ public class TimeClient {
      * @throws Exception
      */
     public static void main(String[] args) throws Exception {
-        int port = 8080;
+        int port = 80;
         if (args != null && args.length > 0) {
             try {
                 port = Integer.valueOf(args[0]);
@@ -71,6 +71,6 @@ public class TimeClient {
                 // 采用默认值
             }
         }
-        new TimeClient().connect(port, "127.0.0.1");
+        new TimeClient().connect(port, "192.168.187.128");
     }
 }

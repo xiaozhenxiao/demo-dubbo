@@ -1,5 +1,6 @@
 package com.wz.java.test;
 
+import com.google.common.collect.Lists;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -89,5 +90,7 @@ public class JavaTest {
             interfaceName = interfaceName.substring(0, interfaceName.length() - 5);
         }
         System.out.println(interfaceName + " = " + asyncInterfaceName);
+
+
     }
 }

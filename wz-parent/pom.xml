@@ -16,7 +16,7 @@
         <module>../wz-provider</module>
         <module>../wz-java-test</module>
         <module>../wz-spark</module>
-        <module>../wz-jd</module>
+        <module>../wz-jd-web</module>
         <module>../wz-jmeter</module>
         <module>../wz-jd-tbschedule</module>
         <module>../wz-java</module>
@@ -432,7 +432,7 @@
                 <version>${plugin.source.version}</version>
                 <configuration>
                     <includePom>true</includePom>
-                    <excludeResources>true</excludeResources>
+                    <excludeResources>false</excludeResources>
                     <attach>true</attach>
                 </configuration>
                 <executions>
@@ -478,11 +478,11 @@
                 </executions>
             </plugin>-->
             <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-assembly-plugin -->
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.6</version>
-            </plugin>
+            </plugin>-->
 
         </plugins>
     </build>

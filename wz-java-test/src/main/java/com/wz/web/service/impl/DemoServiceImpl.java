@@ -6,6 +6,7 @@ import com.wz.web.domain.User;
 import com.wz.web.exception.ParseException;
 import com.wz.web.service.DemoService;
 import com.wz.web.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -16,9 +17,9 @@ import java.util.List;
  */
 @Service("demoService")
 public class DemoServiceImpl implements DemoService {
-    @Resource
+    @Autowired
     private DemoDao demoDao;
-    @Resource
+    @Autowired
     private UserService userService;
 
 

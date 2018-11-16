@@ -1,1 +1,3 @@
 com.smile.wz.processor.AsyncInterfaceProcessor
+com.smile.wz.processor.GetterProcessor
+com.smile.wz.processor.SafetyProcessor

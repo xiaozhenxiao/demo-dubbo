@@ -23,8 +23,8 @@ public class ThreadPoolDemo1 {
             pool.execute(tc);
             pool.execute(td);
             pool.execute(te);
-
             pool.submit(ta);
+
             // 关闭线程池
             pool.shutdown();
         }

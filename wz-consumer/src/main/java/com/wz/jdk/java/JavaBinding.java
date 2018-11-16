@@ -10,7 +10,7 @@ public class JavaBinding {
         Father father = new Son();
         System.out.println(father.name);
         father.getName();
-        father.getNick();
+        System.out.println(father.getNick());
     }
 }
 

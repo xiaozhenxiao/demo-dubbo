@@ -206,11 +206,5 @@
       <artifactId>jcip-annotations</artifactId>
       <version>1.0</version>
     </dependency>
-
-    <dependency>
-      <groupId>wz.rpc.smile</groupId>
-      <artifactId>rpc-smile</artifactId>
-      <version>1.0-SNAPSHOT</version>
-    </dependency>
   </dependencies>
 </project>

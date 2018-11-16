@@ -44,7 +44,7 @@ public class AsyncInterfaceProcessor extends AbstractProcessor {
                 TypeSpec.Builder typeBuilder = TypeSpec.interfaceBuilder(element.getSimpleName() + "Async").addModifiers(Modifier.PUBLIC);
                 element.getEnclosedElements().forEach(method -> {
                     if (method.getKind() == ElementKind.METHOD && !method.getModifiers().contains(Modifier.STATIC) &&
-                            !method.getModifiers().contains(Modifier.DEFAULT) && !method.getModifiers().contains(Modifier.DEFAULT)) {
+                            !method.getModifiers().contains(Modifier.DEFAULT)) {
                         /*System.out.println("method:" + method);
                         System.out.println("method name:" + method.getSimpleName());
                         System.out.println("method modifier:" + method.getModifiers());*/

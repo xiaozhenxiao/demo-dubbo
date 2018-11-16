@@ -70,10 +70,10 @@ public class ClientBootstrap {
         info1.setMsgs(list);
         Future<MsgInfo> future1 = demoService.returnMsgInfoAsync(info1);
         System.out.println("time1:" + (System.currentTimeMillis() - start));
-        MsgInfo infoResultAsync = future.get();
-        MsgInfo infoResultAsync2 = future1.get();
-        System.out.println(infoResultAsync);
-        System.out.println(infoResultAsync2);
+        /*MsgInfo infoResultAsync = future.get();
+        MsgInfo infoResultAsync2 = future1.get();*/
+        System.out.println(future.get());
+        System.out.println(future1.get());
         System.out.println("time3:" + (System.currentTimeMillis() - start));
         /********************************************** 新型异步调用 **********************************************/
 

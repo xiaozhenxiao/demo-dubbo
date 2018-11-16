@@ -14,7 +14,7 @@ public class CuratorDemo {
     public static void main(String[] args) {
         String leaderSelectorPath = "/leaderSelect";
         CuratorFramework client = CuratorFrameworkFactory.builder()
-                .connectString("127.0.0.1:2181")
+                .connectString("127.0.0.1:2181,127.0.0.1:2182")
                 .sessionTimeoutMs(5000)
                 .retryPolicy(new ExponentialBackoffRetry(1000, 3))
                 .build();

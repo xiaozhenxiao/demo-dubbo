@@ -20,6 +20,7 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.haproxy.HAProxyMessageDecoder;
 
 /**
  * @author lilinfeng
@@ -55,7 +56,7 @@ public class TimeServer {
     private class ChildChannelHandler extends ChannelInitializer<SocketChannel> {
         @Override
         protected void initChannel(SocketChannel arg0) throws Exception {
-            arg0.pipeline().addLast(new TimeServerHandler());
+            arg0.pipeline().addLast(new HAProxyMessageDecoder(),new TimeServerHandler());
         }
 
     }

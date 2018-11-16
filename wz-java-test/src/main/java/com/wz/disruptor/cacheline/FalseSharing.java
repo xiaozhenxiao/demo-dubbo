@@ -20,7 +20,7 @@ public class FalseSharing implements Runnable{
     public final static long ITERATIONS = 500L * 1000L * 100L;
     private int arrayIndex = 0;
 
-    private static ValueNoPadding[] longs;
+    private static ValuePadding[] longs;
     public FalseSharing(final int arrayIndex) {
         this.arrayIndex = arrayIndex;
     }
@@ -37,9 +37,9 @@ public class FalseSharing implements Runnable{
 
     private static void runTest(int NUM_THREADS) throws InterruptedException {
         Thread[] threads = new Thread[NUM_THREADS];
-        longs = new ValueNoPadding[NUM_THREADS];
+        longs = new ValuePadding[NUM_THREADS];
         for (int i = 0; i < longs.length; i++) {
-            longs[i] = new ValueNoPadding();
+            longs[i] = new ValuePadding();
         }
         for (int i = 0; i < threads.length; i++) {
             threads[i] = new Thread(new FalseSharing(i));

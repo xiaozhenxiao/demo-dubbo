@@ -23,6 +23,7 @@ public class RxDemo {
     public static void main(String[] args) {
 //        hello("Ben", "George");
         for (int i = 0; i < 10; i++) {
+            System.out.println("主线程："+ Thread.currentThread().getName());
             create("xiao " + i);
         }
     }
@@ -40,7 +41,7 @@ public class RxDemo {
 
     public static void create(String message) {
         Observable.create((Observable.OnSubscribe<String>) subscriber -> {
-            System.out.println(Thread.currentThread().getName() + " fire " + message);
+            System.out.println("生产线程："+Thread.currentThread().getName() + " fire " + message);
             // 把Drawable对象发送出去
             subscriber.onNext(message);
             subscriber.onCompleted();
@@ -48,21 +49,8 @@ public class RxDemo {
         })
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(Schedulers.newThread())
-                .subscribe(new Subscriber<String>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LOG.info(e.toString());
-                    }
-
-                    @Override
-                    public void onNext(String drawable) {
-                        System.out.println(Thread.currentThread().getName() + " recive:" + drawable);
-                    }
+                .subscribe(msg -> {
+                    System.out.println("消费线程："+ Thread.currentThread().getName());
                 });
     }
 }

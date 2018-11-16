@@ -30,8 +30,12 @@ public class BytecodeAnalysis {
     private static int u4 = 4;
     private static int u8 = 8;
 
+    private static String thisClassName;
     private static String[] addVariables;
+    private static Map<String, Integer> addVarLifeCycle;
     private static boolean localFlag = false;
+    private static boolean isElseIf = false;
+    private static int omit = 0;
     private static ArrayList<Integer> addCode;
 
     static {
@@ -53,6 +57,18 @@ public class BytecodeAnalysis {
             instructions_2.add(Integer.parseInt("b7", 16));
             instructions_2.add(Integer.parseInt("b5", 16));
             instructions_2.add(Integer.parseInt("14", 16));
+            instructions_2.add(Integer.parseInt("a4", 16));
+            instructions_2.add(Integer.parseInt("a2", 16));
+            instructions_2.add(Integer.parseInt("a7", 16));
+            instructions_2.add(Integer.parseInt("a1", 16));
+            instructions_2.add(Integer.parseInt("b6", 16));
+            instructions_2.add(Integer.parseInt("b8", 16));
+            instructions_2.add(Integer.parseInt("bb", 16));
+            instructions_2.add(Integer.parseInt("bd", 16));
+            instructions_2.add(Integer.parseInt("b4", 16));
+            instructions_2.add(Integer.parseInt("b3", 16));
+            instructions_2.add(Integer.parseInt("b2", 16));
+            instructions_2.add(Integer.parseInt("c0", 16));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -112,7 +128,9 @@ public class BytecodeAnalysis {
 
         /* 解析方法表集合 */
         offset = analysisMethodTables(offset, classFile);
-        decompileByteCode();
+        if (addCode != null) {
+            decompileByteCode();
+        }
         System.out.println("offset:" + offset);
         return classFile;
     }
@@ -175,9 +193,9 @@ public class BytecodeAnalysis {
             int nameIndex = ByteUtils.bytes2Int(classByte, offset + u2, u2);
             methodInfo.setNameIndex(nameIndex);
             System.out.println("name_index:#" + nameIndex + "->" + constantMap.get(nameIndex));
-            if(constantMap.get(nameIndex).equals("add")){
+            if (constantMap.get(nameIndex).equals("add")) {
                 localFlag = true;
-            }else{
+            } else {
                 localFlag = false;
             }
             int descriptorIndex = ByteUtils.bytes2Int(classByte, offset + u4, u2);
@@ -307,7 +325,7 @@ public class BytecodeAnalysis {
                     i++;
                     code.add(operand);
                     name += " " + operand;
-                }else if (instructions_2.contains(opcode)) {
+                } else if (instructions_2.contains(opcode)) {
                     int operand1 = ByteUtils.bytes2Int(classByte, index, u1);
                     int operand2 = ByteUtils.bytes2Int(classByte, index + u1, u1);
                     index += u2;
@@ -320,75 +338,171 @@ public class BytecodeAnalysis {
             }
         }
         codeAttribute.setCode(code);
-        if(localFlag){
+        if (localFlag) {
             addCode = code;
         }
         System.out.println("=========指令END==========");
         return offset + u4 + codeLength;
     }
 
-    private static void decompileByteCode(){
+    private static void decompileByteCode() {
         Stack<String> javaCodeStack = new Stack<>();
         for (int i = 0; i < addCode.size(); i++) {
             int opcode = addCode.get(i);
-            if (Objects.nonNull(opcode)) {
-                if (instructions_1.contains(opcode)) {
-                    decompile(opcode, addCode.get(++i), javaCodeStack);
-                }else if (instructions_2.contains(opcode)) {
-                    decompile(opcode, addCode.get(++i), javaCodeStack);
-                    decompile(opcode, addCode.get(++i), javaCodeStack);
-                }else {
-                    decompile(opcode, null, javaCodeStack);
-                }
-            }
+            i = decompileOpcode(javaCodeStack, i, opcode, "");
         }
         System.out.println("==================================反编译========================================");
         for (String s : javaCodeStack) {
-            System.out.println(s + ";");
+            System.out.println(s);
         }
         System.out.println("==================================反编译========================================");
     }
-    private static Stack<String> decompile(Integer opcode, Integer operand, Stack<String> javaCodeStack){
-        if(opcode.equals(Integer.parseInt("1b", 16))){//iload_1
+
+    private static Stack<String> decompileOne(int index, Integer opcode, Integer operand, Stack<String> javaCodeStack, String tab) {
+        if (opcode.equals(Integer.parseInt("1b", 16))) {//iload_1
             javaCodeStack.push(addVariables[1]);
-        }else if(opcode.equals(Integer.parseInt("03", 16))){//iconst_0
+        } else if (opcode.equals(Integer.parseInt("03", 16))) {//iconst_0
             javaCodeStack.push("0");
-        }else if(opcode.equals(Integer.parseInt("04", 16))){//iconst_1
+        } else if (opcode.equals(Integer.parseInt("04", 16))) {//iconst_1
             javaCodeStack.push("1");
-        }else if(opcode.equals(Integer.parseInt("05", 16))){//iconst_2
+        } else if (opcode.equals(Integer.parseInt("05", 16))) {//iconst_2
             javaCodeStack.push("2");
-        }else if(opcode.equals(Integer.parseInt("06", 16))){//iconst_3
+        } else if (opcode.equals(Integer.parseInt("06", 16))) {//iconst_3
             javaCodeStack.push("3");
-        }else if(opcode.equals(Integer.parseInt("07", 16))){//iconst_4
+        } else if (opcode.equals(Integer.parseInt("07", 16))) {//iconst_4
             javaCodeStack.push("4");
-        }else if(opcode.equals(Integer.parseInt("08", 16))){//iconst_5
+        } else if (opcode.equals(Integer.parseInt("08", 16))) {//iconst_5
             javaCodeStack.push("5");
-        }else if(opcode.equals(Integer.parseInt("1c", 16))){//iload_2
+        } else if (opcode.equals(Integer.parseInt("1c", 16))) {//iload_2
             javaCodeStack.push(addVariables[2]);
-        }else if(opcode.equals(Integer.parseInt("1d", 16))){//iload_3
+        } else if (opcode.equals(Integer.parseInt("1d", 16))) {//iload_3
             javaCodeStack.push(addVariables[3]);
-        }else if(opcode.equals(Integer.parseInt("60", 16))){//iadd
+        } else if (opcode.equals(Integer.parseInt("60", 16))) {//iadd
             pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " + ");//iadd
-        }else if(opcode.equals(Integer.parseInt("3e", 16))){//istore_3
-            javaCodeStack.push("int " + addVariables[3] + " = " + javaCodeStack.pop());
-        }else if(opcode.equals(Integer.parseInt("3d", 16))){//istore_2
-            javaCodeStack.push("int " + addVariables[2] + " = " + javaCodeStack.pop());
-        }else if(opcode.equals(Integer.parseInt("3c", 16))){//istore_1
-            javaCodeStack.push("int " + addVariables[1] + " = " + javaCodeStack.pop());
-        }else if(opcode.equals(Integer.parseInt("3b", 16))){//istore_0
-            javaCodeStack.push("int " + addVariables[0] + " = " + javaCodeStack.pop());
-        }else if(opcode.equals(Integer.parseInt("68", 16))){//imul
+        } else if (opcode.equals(Integer.parseInt("64", 16))) {//isub
+            pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " - ");//isub
+        } else if (opcode.equals(Integer.parseInt("3e", 16))) {//istore_3
+            boolean isType = addVarLifeCycle.get(addVariables[3]) >= index;
+            javaCodeStack.push(tab + (isType ? "int " : "") + addVariables[3] + " = " + javaCodeStack.pop() + ";");
+        } else if (opcode.equals(Integer.parseInt("3d", 16))) {//istore_2
+            boolean isType = addVarLifeCycle.get(addVariables[2]) >= index;
+            javaCodeStack.push(tab + (isType ? "int " : "") + addVariables[2] + " = " + javaCodeStack.pop() + ";");
+        } else if (opcode.equals(Integer.parseInt("3c", 16))) {//istore_1
+            boolean isType = addVarLifeCycle.get(addVariables[1]) >= index;
+            javaCodeStack.push(tab + (isType ? "int " : "") + addVariables[1] + " = " + javaCodeStack.pop() + ";");
+        } else if (opcode.equals(Integer.parseInt("3b", 16))) {//istore_0
+            boolean isType = addVarLifeCycle.get(addVariables[0]) >= index;
+            javaCodeStack.push(tab + (isType ? "int " : "") + addVariables[0] + " = " + javaCodeStack.pop() + ";");
+        } else if (opcode.equals(Integer.parseInt("68", 16))) {//imul
             pushCalc(javaCodeStack, javaCodeStack.pop(), javaCodeStack.pop(), " * ");//imul
-        }else if(opcode.equals(Integer.parseInt("36", 16))){//istore
-            javaCodeStack.push("int " + addVariables[operand] + " = " + javaCodeStack.pop());
-        }else if(opcode.equals(Integer.parseInt("15", 16))){//iload
+        } else if (opcode.equals(Integer.parseInt("36", 16))) {//istore
+            boolean isType = addVarLifeCycle.get(addVariables[operand]) >= index;
+            javaCodeStack.push(tab + (isType ? "int " : "") + addVariables[operand] + " = " + javaCodeStack.pop() + ";");
+        } else if (opcode.equals(Integer.parseInt("15", 16))) {//iload
             javaCodeStack.push(addVariables[operand]);
-        }else if(opcode.equals(Integer.parseInt("ac", 16))){//ireturn
-            javaCodeStack.push("return " + javaCodeStack.pop());//ireturn
+        } else if (opcode.equals(Integer.parseInt("ac", 16))) {//ireturn
+            javaCodeStack.push(tab + "return " + javaCodeStack.pop() + ";");//ireturn
+        } else if (opcode.equals(Integer.parseInt("59", 16))) {//dup
+            javaCodeStack.push(javaCodeStack.peek());//dup
+        } else if (opcode.equals(Integer.parseInt("2a", 16))) {//aload_0
+            javaCodeStack.push(addVariables[0]);//aload_0
         }
 
         return javaCodeStack;
     }
+
+    private static int decompileTwo(int index, Integer opcode, Integer operand1, Integer operand2, Stack<String> javaCodeStack, String tab) {
+        int returnIndex = index;
+        if (opcode.equals(Integer.parseInt("a4", 16))) {//if_icmple
+            int offset = (operand1 << 8) | operand2;
+            String two = javaCodeStack.pop();
+            String one = javaCodeStack.pop();
+            javaCodeStack.push(tab + "if(" + one + " > " + two + "){");
+            for (int i = index + 3; i < offset + index; i++) {
+                int op = addCode.get(i);
+                i = decompileOpcode(javaCodeStack, i, op, "\t");
+                returnIndex = i;
+            }
+            if (omit > 0) {
+                omit--;
+            } else {
+                javaCodeStack.push("}");
+            }
+        } else if (opcode.equals(Integer.parseInt("a7", 16))) {//goto
+            int offset = (operand1 << 8) | operand2;
+            for (int i = index + 3; i < offset + index; i++) {
+                Integer op = addCode.get(i);
+                if (!isElseIf && op.equals(Integer.parseInt("a4", 16))) {//if_icmple
+                    omit++;
+                }
+            }
+            isElseIf = true;
+            String elseIf = "\t";
+            if (omit > 0) {
+                elseIf = "}else ";
+            } else {
+                javaCodeStack.push("}else{");
+            }
+            for (int i = index + 3; i < offset + index; i++) {
+                int op = addCode.get(i);
+                i = decompileOpcode(javaCodeStack, i, op, elseIf);
+                returnIndex = i;
+            }
+        } else if (opcode.equals(Integer.parseInt("b6", 16))) {//invokevirtual
+            int offset = (operand1 << 8) | operand2;
+            String method = constantMap.get(offset);
+            String methodName = method.substring(method.lastIndexOf(".") + 1, method.indexOf("("));
+            String thisClass = method.substring(method.indexOf(" ") + 1, method.lastIndexOf("."));
+            System.out.println("method:" + method);
+            System.out.println("methodName:" + methodName);
+
+            int paramNum = method.substring(method.indexOf("(") + 1, method.indexOf(")")).length();
+            String params[] = new String[paramNum + 1];
+            for (int s = 0; s < paramNum + 1; s++) {
+                params[s] = javaCodeStack.pop();
+            }
+            StringBuilder mathedAnaly;
+            if(thisClass.equals(thisClassName)){
+                mathedAnaly = new StringBuilder(params[params.length - 1]);
+            }else {
+                mathedAnaly = new StringBuilder(javaCodeStack.pop()).append(".").append(params[params.length - 1]);
+            }
+            mathedAnaly.append(".").append(methodName).append("(");
+            for (int s = params.length - 2; s >= 0; s--) {
+                mathedAnaly.append(params[s]).append(", ");
+            }
+            if(paramNum > 0) {
+                int lastIndex = mathedAnaly.lastIndexOf(",");
+                mathedAnaly.delete(lastIndex, lastIndex + 2);
+            }
+            mathedAnaly.append(");");
+            javaCodeStack.push(mathedAnaly.toString());
+            returnIndex += 2;
+        }else if (opcode.equals(Integer.parseInt("b4", 16))) {//getfield
+            int offset = (operand1 << 8) | operand2;
+            String fieldFull = constantMap.get(offset);
+            String field = fieldFull.substring(fieldFull.lastIndexOf(".")+1);
+            javaCodeStack.push(field);
+            System.out.println("field:" + field);
+            returnIndex += 2;
+        }
+
+        return returnIndex;
+    }
+
+    private static int decompileOpcode(Stack<String> javaCodeStack, int i, int op, String tab) {
+        if (Objects.nonNull(op)) {
+            if (instructions_1.contains(op)) {
+                decompileOne(i, op, addCode.get(++i), javaCodeStack, tab);
+            } else if (instructions_2.contains(op)) {
+                i = decompileTwo(i, op, addCode.get(++i), addCode.get(++i), javaCodeStack, tab);
+            } else {
+                decompileOne(i, op, null, javaCodeStack, tab);
+            }
+        }
+        return i;
+    }
+
     public static Stack<String> pushCalc(Stack<String> stack, String second, String first, String operateType) {
         stack.push(first + operateType + second);
         return stack;
@@ -449,8 +563,9 @@ public class BytecodeAnalysis {
         System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!LocalVariableTable START!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
         System.out.println("local_variable_table_length:" + localVariableTableLength);
 
-        if(localFlag){
+        if (localFlag) {
             addVariables = new String[localVariableTableLength];
+            addVarLifeCycle = new HashMap<>();
         }
         offset += u2;
         for (int i = 0; i < localVariableTableLength; i++) {
@@ -470,8 +585,9 @@ public class BytecodeAnalysis {
             offset += u2;
             int index = ByteUtils.bytes2Int(classByte, offset, u2);
             localVariableInfo.setIndex(index);
-            if(localFlag) {
+            if (localFlag) {
                 addVariables[index] = constantMap.get(nameIndex);
+                addVarLifeCycle.put(addVariables[index], startPc);
             }
             offset += u2;
             System.out.println("----------Variable" + i + "-----------");
@@ -490,6 +606,7 @@ public class BytecodeAnalysis {
         int superClassIndex = ByteUtils.bytes2Int(classByte, offset + u2, u2);
         classFile.setThisClass(thisClassIndex);
         classFile.setSuperClass(superClassIndex);
+        thisClassName = constantMap.get(thisClassIndex);
         System.out.println("this_class_index:#" + thisClassIndex + "->" + constantMap.get(thisClassIndex));
         System.out.println("super_class_index:#" + superClassIndex + "->" + constantMap.get(superClassIndex));
         offset += u4;
