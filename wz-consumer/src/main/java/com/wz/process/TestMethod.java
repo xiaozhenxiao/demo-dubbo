@@ -9,16 +9,15 @@ import com.smile.wz.processor.Safety;
 @Safety
 public class TestMethod {
 
-    @Safety
-    public String methiod(){
-        return "";
+    public String method(String param0, String param1, String param2) {
+        return param0 + param1 + param2;
     }
 
-    public String methiod1(){
-        return "";
+    public String method1(Person p) {
+        return p.getClass().getName();
     }
 
-    public String methiod2(){
+    public String method2(Integer i1, int i2, float f, Float f1, Double d, double d1) {
         return "";
     }
 }

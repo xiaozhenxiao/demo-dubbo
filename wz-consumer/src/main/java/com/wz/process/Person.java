@@ -10,6 +10,7 @@ import com.smile.wz.processor.Getter;
 public class Person {
     private String id;
     private Integer age;
+    private Son son;
 
     public void setId(String id) {
         this.id = id;
@@ -17,5 +18,9 @@ public class Person {
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public void setSon(Son son) {
+        this.son = son;
     }
 }
