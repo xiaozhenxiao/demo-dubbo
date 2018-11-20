@@ -17,7 +17,6 @@
         <module>../wz-java-test</module>
         <module>../wz-spark</module>
         <module>../wz-jd-web</module>
-        <module>../wz-jmeter</module>
         <module>../wz-jd-tbschedule</module>
         <module>../wz-java</module>
         <module>../dubbo-provider</module>
