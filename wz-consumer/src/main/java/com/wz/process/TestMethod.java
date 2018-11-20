@@ -9,6 +9,7 @@ import com.smile.wz.processor.Safety;
 @Safety
 public class TestMethod {
 
+    @Safety
     public String method(String param0, String param1, String param2) {
         return param0 + param1 + param2;
     }

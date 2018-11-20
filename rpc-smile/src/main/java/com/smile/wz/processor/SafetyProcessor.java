@@ -93,7 +93,6 @@ public class SafetyProcessor extends AbstractProcessor {
                         );//String xiao = "method"
                         jcStatementList = jcStatementList.append(var);
 
-                        // TODO: 2018/11/16
                         JCTree.JCExpressionStatement es = treeMaker.Exec(treeMaker.Apply(
                                 List.of(memberAccess("java.lang.String")),//参数类型
                                 memberAccess("java.lang.System.out.println"),
@@ -103,8 +102,6 @@ public class SafetyProcessor extends AbstractProcessor {
                         );//System.out.println(xiao);
                         jcStatementList = jcStatementList.append(es);
 
-                        messager.printMessage(Diagnostic.Kind.NOTE, "JCExpressionStatement:" + es);
-                        messager.printMessage(Diagnostic.Kind.NOTE, "jcStatementList:" + jcStatementList);
                         if (params.length() > 0) {
                             List<JCTree.JCExpression> args = List.nil();
 //                            String outString = "参数：";

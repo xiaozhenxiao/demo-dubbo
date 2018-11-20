@@ -16,17 +16,18 @@ public class Main {
 //        System.out.println("id:" + p.getId());
 
         TestMethod method = new TestMethod();
+
         Person p = new Person();
         p.setId("1111111111");
         p.setAge(100);
+
         Son son = new Son();
         son.setAge(100);
         son.setName("xiaoxiao");
         p.setSon(son);
+
         method.method("111","222","333");
         method.method1(p);
         method.method2(1,2,3f,4f,5d,6);
-
-        System.out.printf("输出%s,%s", method, "23");
     }
 }
