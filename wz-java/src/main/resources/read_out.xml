@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<workbook>
+    <worksheet name="Sheet1">
+        <section startRow="0" endRow="0">
+        </section>
+        <loop startRow="1" endRow="1" items="orders" var="order" varType="com.jd.util.Order">
+            <section startRow="1" endRow="1">
+                <mapping row="1" col="0">order.skuId</mapping>
+                <mapping row="1" col="1">order.orderId</mapping>
+                <mapping row="1" col="2">order.name</mapping>
+                <mapping row="1" col="3">order.phone</mapping>
+                <mapping row="1" col="4">order.orderStatus</mapping>
+            </section>
+            <loopbreakcondition>
+                <rowcheck offset="0">
+                    <cellcheck offset="0"></cellcheck>
+                </rowcheck>
+            </loopbreakcondition>
+        </loop>
+    </worksheet>
+</workbook>
