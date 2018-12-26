@@ -23,11 +23,11 @@ class Father{
     }
 
     public String getName(){
-        System.out.println("Father's name is " + this.name + this.getClass());
+        System.out.println("Father's name is " + this.name + getClass());
         return name;
     }
     public String getNick(){
-        System.out.println(name + " Father's Nick name is " + getName() + " " + this.getClass());
+        System.out.println(name + " Father's Nick name is " + getName() + " " + getClass());
         return name;
     }
     public void increase(){
@@ -46,12 +46,12 @@ class Son extends Father{
     }
 
     public String getName(){
-        System.out.println("Son's name is " + this.name + " " + this.getClass());
+        System.out.println("Son's name is " + this.name + " " + getClass());
         return name;
     }
 
     public String getName(String name){
-        System.out.println("Son's Overload name is " + name + this.getClass());
+        System.out.println("Son's Overload name is " + name + getClass());
         return name;
     }
     public void increase(){

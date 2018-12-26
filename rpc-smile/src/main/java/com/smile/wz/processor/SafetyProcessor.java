@@ -18,7 +18,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -46,6 +45,8 @@ public class SafetyProcessor extends AbstractProcessor {
      */
     private Names names;
 
+    private List<String> processMethods = List.nil();
+
     private String formatString = "参数:";
 
     @Override
@@ -64,7 +65,6 @@ public class SafetyProcessor extends AbstractProcessor {
         System.out.println("safety set:" + set);
         set.forEach(element -> {
             if (element.getKind() == ElementKind.CLASS) {
-                System.out.println("process all");
                 processClass(element);
             } else {
                 processMethod(element);
@@ -75,68 +75,180 @@ public class SafetyProcessor extends AbstractProcessor {
     }
 
     private void processClass(Element element) {
+        JCTree jcClassTree = trees.getTree(element);
         element.getEnclosedElements().forEach(method -> {
             if (method.getKind() == ElementKind.METHOD && !method.getModifiers().contains(Modifier.STATIC) &&
                     !method.getModifiers().contains(Modifier.DEFAULT)) {
-                JCTree jcTree = trees.getTree(method);
-                jcTree.accept(new TreeTranslator() {
-                    @Override
-                    public void visitMethodDef(JCTree.JCMethodDecl jcMethodDecl) {
-                        List<JCTree.JCVariableDecl> params = jcMethodDecl.params;
-                        List<JCTree.JCStatement> jcStatementList = List.nil();
-
-                        JCTree.JCVariableDecl var = treeMaker.VarDef(
-                                treeMaker.Modifiers(0),
-                                getNameFromString("xiao"), //名字
-                                memberAccess("java.lang.String"), //类型
-                                treeMaker.Literal(jcMethodDecl.name.toString())//初始化语句
-                        );//String xiao = "method"
-                        jcStatementList = jcStatementList.append(var);
-
-                        JCTree.JCExpressionStatement es = treeMaker.Exec(treeMaker.Apply(
-                                List.of(memberAccess("java.lang.String")),//参数类型
-                                memberAccess("java.lang.System.out.println"),
-//                                List.of(treeMaker.Literal("xiao test zhen"))//参数集合
-                                List.of(treeMaker.Ident(getNameFromString("xiao")))
-                                )
-                        );//System.out.println(xiao);
-                        jcStatementList = jcStatementList.append(es);
-
-                        if (params.length() > 0) {
-                            List<JCTree.JCExpression> args = List.nil();
-//                            String outString = "参数：";
-                            for (int i = 0; i < params.length(); i++) {
-                                Type p = params.get(i).getType().type;
-
-                                args = processNestingParameter(p, args, params.get(i).name.toString());
-                                if (i == params.length() - 1) {
-                                    formatString += "\n\r";
-                                }
-                            }
-                            args = args.prepend(treeMaker.Literal(formatString));
-                            JCTree.JCExpressionStatement paramES = treeMaker.Exec(treeMaker.Apply(
-                                    List.nil(),//参数类型
-                                    memberAccess("java.lang.System.out.printf"),
-//                                List.of(treeMaker.Literal("xiao test zhen"))//参数集合
-                                    args
-                                    )
-                            );
-                            jcStatementList = jcStatementList.append(paramES);
-                        }
-
-                        List<JCTree.JCStatement> methodBlock = jcMethodDecl.body.stats.prependList(jcStatementList);
-                        jcMethodDecl.body = treeMaker.Block(0, methodBlock);
-                        super.visitMethodDef(jcMethodDecl);
-                        formatString = "参数:";
-                    }
-
-                });
+                processMethod(jcClassTree, method);
             }
         });
     }
 
-    private List<JCTree.JCExpression> processNestingParameter(Type p, List<JCTree.JCExpression> args, String name) {
-        System.out.println("====" + p);
+    private void processMethod(JCTree jcClassTree, Element method) {
+        Symbol.MethodSymbol methodSymbol = (Symbol.MethodSymbol) method;
+        if (processMethods.contains(methodSymbol.owner + "." + methodSymbol.name + methodSymbol.type)) {
+            return;
+        }
+        processMethods = processMethods.append(methodSymbol.owner + "." + methodSymbol.name + methodSymbol.type);
+        JCTree jcMethodTree = trees.getTree(method);
+
+        jcMethodTree.accept(new TreeTranslator() {
+            @Override
+            public void visitMethodDef(JCTree.JCMethodDecl jcMethodDecl) {
+                formatString = "参数:";
+                JCTree.JCMethodDecl generateMethod = treeMaker.MethodDef(
+//                                treeMaker.Modifiers(jcMethodDecl.sym.flags(), treeMaker.Annotations(jcMethodDecl.sym.getRawAttributes())),
+                        jcMethodDecl.mods,
+                        getNameFromString("__" + jcMethodDecl.name),
+//                                treeMaker.Type(jcMethodDecl.sym.getReturnType()),
+                        jcMethodDecl.restype,
+//                                treeMaker.TypeParams(jcMethodDecl.sym.type.getTypeArguments()),
+                        jcMethodDecl.typarams,
+//                                treeMaker.Params(jcMethodDecl.sym.type.getParameterTypes(), jcMethodDecl.sym),
+                        jcMethodDecl.params,
+//                                treeMaker.Types(jcMethodDecl.sym.type.getThrownTypes()),
+                        jcMethodDecl.thrown,
+                        treeMaker.Block(0, getJcStatements(jcMethodDecl)),
+                        jcMethodDecl.defaultValue
+                );
+                jcClassTree.accept(new TreeTranslator() {
+                    @Override
+                    public void visitClassDef(JCTree.JCClassDecl jcClassDecl) {
+                        jcClassDecl.defs = jcClassDecl.defs.append(generateMethod);
+                        super.visitClassDef(jcClassDecl);
+                    }
+                });
+                List<JCTree.JCVariableDecl> paramList = jcMethodDecl.params;
+                List<JCTree.JCExpression> params = List.nil();
+                if (paramList.length() > 0) {
+                    for (int i = 0; i < paramList.length(); i++) {
+                        params = params.append(treeMaker.Ident(paramList.get(i).name));
+                    }
+                }
+
+                List<JCTree.JCStatement> jcStatementList = List.nil();
+
+                if (!jcMethodDecl.restype.toString().equals("void")) {
+                    JCTree.JCVariableDecl returnVar = makeVarDef(treeMaker.Modifiers(0), "__result", jcMethodDecl.restype,
+                            treeMaker.Apply(List.nil(),
+                                    treeMaker.Select(treeMaker.Ident(names.fromString("this")), getNameFromString("__" + jcMethodDecl.name)),
+                                    params
+                            ));
+                    jcStatementList = jcStatementList.append(returnVar);
+                    List<JCTree.JCExpression> args = List.nil();
+                    formatString = "结果:";
+                    args = processNestingType(returnVar.vartype.type, args, "__result");
+                    formatString += "\n\r";
+                    jcStatementList = constructPrintStatements(jcStatementList, args);
+                } else {
+                    jcStatementList = jcStatementList.append(treeMaker.Exec(treeMaker.Apply(
+                            List.nil(),//参数类型
+                            treeMaker.Select(treeMaker.Ident(names.fromString("this")), getNameFromString("__" + jcMethodDecl.name)),
+                            params
+                    )));
+                }
+                jcMethodDecl.body = treeMaker.Block(0, jcMethodDecl.body.stats.prependList(jcStatementList));
+                super.visitMethodDef(jcMethodDecl);
+
+            }
+
+        });
+    }
+
+    private List<JCTree.JCStatement> constructPrintStatements(List<JCTree.JCStatement> jcStatementList, List<JCTree.JCExpression> args) {
+        args = args.prepend(treeMaker.Literal(formatString));
+        JCTree.JCExpressionStatement printStatement = treeMaker.Exec(treeMaker.Apply(
+                List.nil(),//参数类型
+                memberAccess("java.lang.System.out.printf"),
+                args
+                )
+        );
+        return jcStatementList.append(printStatement);
+    }
+
+    private List<JCTree.JCStatement> getJcStatements(JCTree.JCMethodDecl jcMethodDecl) {
+        List<JCTree.JCVariableDecl> params = jcMethodDecl.params;
+        List<JCTree.JCStatement> jcStatementList = List.nil();
+
+        //String xiao = "methodName";  初始化变量并赋初始值
+        JCTree.JCVariableDecl var = makeVarDef(treeMaker.Modifiers(0), "xiao", memberAccess("java.lang.String"), treeMaker.Literal(jcMethodDecl.name.toString()));
+        jcStatementList = jcStatementList.append(var);
+
+        //xiao = "assignment test";  给变量赋值
+        JCTree.JCExpressionStatement assignment = makeAssignment(treeMaker.Ident(getNameFromString("xiao")), treeMaker.Literal(jcMethodDecl.name.toString() + " assignment test"));
+        jcStatementList = jcStatementList.append(assignment);
+
+        //xiao = "-Binary operator one" + "-Binary operator two";  两个字符串字面量相加并赋值
+        JCTree.JCExpressionStatement binaryStatement = treeMaker.Exec(
+                treeMaker.Assign(treeMaker.Ident(getNameFromString("xiao")),
+                        treeMaker.Binary(
+                                JCTree.Tag.PLUS,
+                                treeMaker.Literal("-Binary operator one"),
+                                treeMaker.Literal("-Binary operator two")
+                        ))
+        );
+        jcStatementList = jcStatementList.append(binaryStatement);
+
+        //xiao += "Assignop test";
+        JCTree.JCExpressionStatement assignmentSelf = treeMaker.Exec(
+                treeMaker.Assignop(
+                        JCTree.Tag.PLUS_ASG,
+                        treeMaker.Ident(getNameFromString("xiao")),
+                        treeMaker.Literal("-Assignop test")
+                )
+        );
+        jcStatementList = jcStatementList.append(assignmentSelf);
+
+        //Integer zhen = 1;
+        JCTree.JCVariableDecl intVar = makeVarDef(treeMaker.Modifiers(0), "zhen", memberAccess("java.lang.Integer"), treeMaker.Literal(1));
+        jcStatementList = jcStatementList.append(intVar);
+        //zhen++;
+        JCTree.JCExpressionStatement unaryStatement = treeMaker.Exec(
+                treeMaker.Unary(
+                        JCTree.Tag.PREINC,
+                        treeMaker.Ident(getNameFromString("zhen"))
+                )
+        );
+        jcStatementList = jcStatementList.append(unaryStatement);
+
+        //zhen = zhen + 10;
+        JCTree.JCExpressionStatement binaryIntStatement = treeMaker.Exec(
+                treeMaker.Assign(
+                        treeMaker.Ident(getNameFromString("zhen")),
+                        treeMaker.Binary(
+                                JCTree.Tag.PLUS,
+                                treeMaker.Ident(getNameFromString("zhen")),
+                                treeMaker.Literal(10)
+                        ))
+        );
+        jcStatementList = jcStatementList.append(binaryIntStatement);
+
+        /*JCTree.JCExpressionStatement es = treeMaker.Exec(treeMaker.Apply(
+                List.of(memberAccess("java.lang.String")),//参数类型
+                memberAccess("java.lang.System.out.println"),
+//                                List.of(treeMaker.Literal("xiao test zhen"))//参数集合
+                List.of(treeMaker.Ident(getNameFromString("xiao")))
+                )
+        );//System.out.println(xiao);
+        jcStatementList = jcStatementList.append(es);*/
+
+        if (params.length() > 0) {
+            List<JCTree.JCExpression> args = List.nil();
+            for (int i = 0; i < params.length(); i++) {
+                Type p = params.get(i).getType().type;
+
+                args = processNestingType(p, args, params.get(i).name.toString());
+                if (i == params.length() - 1) {
+                    formatString += "\n\r";
+                }
+            }
+            jcStatementList = constructPrintStatements(jcStatementList, args);
+        }
+        jcStatementList = jcMethodDecl.body.stats.prependList(jcStatementList);
+        return jcStatementList;
+    }
+
+    private List<JCTree.JCExpression> processNestingType(Type p, List<JCTree.JCExpression> args, String name) {
         if (isPrimitive(p)) {
             args = args.append(memberAccess(name));
             formatString += name + ":%s,";
@@ -173,7 +285,7 @@ public class SafetyProcessor extends AbstractProcessor {
                         args = args.append(fn);
                         formatString += name + "." + member.flatName() + ":%s,";
                     } else {
-                        args = processNestingParameter(member.asType(), args, name + "." + member.flatName());// TODO: 2018/11/20
+                        args = processNestingType(member.asType(), args, name + "." + member.flatName());// TODO: 2018/11/20
                     }
                 }
             }
@@ -196,7 +308,9 @@ public class SafetyProcessor extends AbstractProcessor {
     private void processMethod(Element element) {
         if (element.getKind() == ElementKind.METHOD && !element.getModifiers().contains(Modifier.STATIC) &&
                 !element.getModifiers().contains(Modifier.DEFAULT)) {
-
+            Symbol clazz = ((Symbol.MethodSymbol) element).owner;
+            JCTree jcClassTree = trees.getTree(clazz);
+            processMethod(jcClassTree, element);
         }
     }
 
@@ -204,24 +318,38 @@ public class SafetyProcessor extends AbstractProcessor {
         return names.fromString(s);
     }
 
-    private JCTree.JCExpressionStatement assignment(Name name) {
+    /**
+     * 创建赋值语句
+     *
+     * @param lhs
+     * @param rhs
+     * @return
+     */
+    private JCTree.JCExpressionStatement makeAssignment(JCTree.JCExpression lhs, JCTree.JCExpression rhs) {
         return treeMaker.Exec(
                 treeMaker.Assign(
-                        treeMaker.Select(
-                                treeMaker.Ident(names.fromString("this")),
-                                name
-                        ),
-                        treeMaker.Ident(name)
+                        lhs,
+                        rhs
                 )
         );
     }
 
-    private JCTree.JCVariableDecl makeVarDef(JCTree.JCVariableDecl prototypeJCVariable) {
+    /**
+     * 创建变量语句
+     * modifiers vartype name = init;  例 (private) String xiao = "test";
+     *
+     * @param modifiers treeMaker.Modifiers(0)/treeMaker.Modifiers(Flags.PUBLIC)
+     * @param name
+     * @param vartype
+     * @param init
+     * @return
+     */
+    private JCTree.JCVariableDecl makeVarDef(JCTree.JCModifiers modifiers, String name, JCTree.JCExpression vartype, JCTree.JCExpression init) {
         return treeMaker.VarDef(
-                prototypeJCVariable.mods,
-                prototypeJCVariable.name, //名字
-                prototypeJCVariable.vartype, //类型
-                null //初始化语句
+                modifiers,
+                getNameFromString(name), //名字
+                vartype, //类型
+                init //初始化语句
         );
     }
 

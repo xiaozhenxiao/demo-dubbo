@@ -1,6 +1,6 @@
 package com.wz.process;
 
-import com.smile.wz.processor.Getter;
+import lombok.Getter;
 
 /**
  * wangzhen23
