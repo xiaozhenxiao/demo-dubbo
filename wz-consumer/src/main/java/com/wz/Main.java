@@ -20,15 +20,16 @@ public class Main {
         Person p = new Person();
         p.setId("1111111111");
         p.setAge(100);
-
-        p.getId();
+        p.setTelephone("138xxxxxxxx");
 
         Son son = new Son();
         son.setAge(100);
         son.setName("xiaoxiao");
+        son.setMobilePhone("183yyyyyyyy");
+        son.setMailbox("xiao@163.com");
         p.setSon(son);
 
-        method.method("111", "222", "333");
+        method.method("a_zhen@126.com", "183xxxxxxxx", "333");
         method.method1(p);
         method.method2(1, 2, 3f, 4f, 5d, 6);
         System.out.println("一天的秒数：" + method.method3());

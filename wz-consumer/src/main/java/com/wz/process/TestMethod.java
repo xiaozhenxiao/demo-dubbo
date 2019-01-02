@@ -9,8 +9,9 @@ import com.smile.wz.processor.Safety;
 //@Safety
 public class TestMethod {
 
-    public String method(String param0, String param1, String param2) {
-        return param0 + param1 + param2;
+    @Safety(exclude = {"phoneC2ard", "test"})
+    public String method(String email, String phone, String phoneCard) {
+        return email + phone + phoneCard;
     }
     @Safety
     public Son method1(Person p) {

@@ -12,4 +12,8 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.SOURCE)
 public @interface Safety {
+
+    String[] value() default {};
+
+    String[] exclude() default {};
 }

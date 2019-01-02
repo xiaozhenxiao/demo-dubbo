@@ -7,10 +7,7 @@ import com.sun.tools.javac.processing.JavacProcessingEnvironment;
 import com.sun.tools.javac.tree.JCTree;
 import com.sun.tools.javac.tree.TreeMaker;
 import com.sun.tools.javac.tree.TreeTranslator;
-import com.sun.tools.javac.util.Context;
-import com.sun.tools.javac.util.List;
-import com.sun.tools.javac.util.Name;
-import com.sun.tools.javac.util.Names;
+import com.sun.tools.javac.util.*;
 
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -19,6 +16,7 @@ import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -62,7 +60,6 @@ public class SafetyProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         Set<? extends Element> set = roundEnv.getElementsAnnotatedWith(Safety.class);
-        System.out.println("safety set:" + set);
         set.forEach(element -> {
             if (element.getKind() == ElementKind.CLASS) {
                 processClass(element);
@@ -95,6 +92,20 @@ public class SafetyProcessor extends AbstractProcessor {
         jcMethodTree.accept(new TreeTranslator() {
             @Override
             public void visitMethodDef(JCTree.JCMethodDecl jcMethodDecl) {
+                ListBuffer<String> excludes = new ListBuffer();
+                List<JCTree.JCAnnotation> annotations = jcMethodDecl.mods.annotations;
+                if (!Objects.isNull(annotations)) {
+                    annotations.forEach(annotation -> {
+                        if ("com.smile.wz.processor.Safety".equals(annotation.type.toString())) {
+                            List<JCTree.JCExpression> annArgs = annotation.args;
+                            annArgs.forEach(arg -> {
+                                if ("exclude".equals(((JCTree.JCAssign) arg).lhs.toString())) {
+                                    ((JCTree.JCNewArray) ((JCTree.JCAssign) arg).rhs).elems.forEach(exclude -> excludes.add(exclude.toString().replaceAll("\"","")));
+                                }
+                            });
+                        }
+                    });
+                }
                 formatString = "参数:";
                 JCTree.JCMethodDecl generateMethod = treeMaker.MethodDef(
 //                                treeMaker.Modifiers(jcMethodDecl.sym.flags(), treeMaker.Annotations(jcMethodDecl.sym.getRawAttributes())),
@@ -108,7 +119,7 @@ public class SafetyProcessor extends AbstractProcessor {
                         jcMethodDecl.params,
 //                                treeMaker.Types(jcMethodDecl.sym.type.getThrownTypes()),
                         jcMethodDecl.thrown,
-                        treeMaker.Block(0, getJcStatements(jcMethodDecl)),
+                        treeMaker.Block(0, getJcStatements(jcMethodDecl, excludes)),
                         jcMethodDecl.defaultValue
                 );
                 jcClassTree.accept(new TreeTranslator() {
@@ -137,7 +148,7 @@ public class SafetyProcessor extends AbstractProcessor {
                     jcStatementList = jcStatementList.append(returnVar);
                     List<JCTree.JCExpression> args = List.nil();
                     formatString = "结果:";
-                    args = processNestingType(returnVar.vartype.type, args, "__result");
+                    args = processNestingType(returnVar.vartype.type, args, "__result", excludes);
                     formatString += "\n\r";
                     jcStatementList = constructPrintStatements(jcStatementList, args);
                 } else {
@@ -166,8 +177,9 @@ public class SafetyProcessor extends AbstractProcessor {
         return jcStatementList.append(printStatement);
     }
 
-    private List<JCTree.JCStatement> getJcStatements(JCTree.JCMethodDecl jcMethodDecl) {
+    private List<JCTree.JCStatement> getJcStatements(JCTree.JCMethodDecl jcMethodDecl, ListBuffer<String> excludes) {
         List<JCTree.JCVariableDecl> params = jcMethodDecl.params;
+
         List<JCTree.JCStatement> jcStatementList = List.nil();
 
         //String xiao = "methodName";  初始化变量并赋初始值
@@ -223,21 +235,64 @@ public class SafetyProcessor extends AbstractProcessor {
         );
         jcStatementList = jcStatementList.append(binaryIntStatement);
 
-        /*JCTree.JCExpressionStatement es = treeMaker.Exec(treeMaker.Apply(
+        /*JCTree.JCExpressionStatement printVar = treeMaker.Exec(treeMaker.Apply(
                 List.of(memberAccess("java.lang.String")),//参数类型
                 memberAccess("java.lang.System.out.println"),
-//                                List.of(treeMaker.Literal("xiao test zhen"))//参数集合
                 List.of(treeMaker.Ident(getNameFromString("xiao")))
                 )
-        );//System.out.println(xiao);
-        jcStatementList = jcStatementList.append(es);*/
+        );*///System.out.println(xiao);
+
+        /*JCTree.JCExpressionStatement printLiteral = treeMaker.Exec(treeMaker.Apply(
+                List.of(memberAccess("java.lang.String")),//参数类型
+                memberAccess("java.lang.System.out.println"),
+                List.of(treeMaker.Literal("xiao test zhen"))//参数集合
+                )
+        );*///System.out.println("xiao test zhen");
+
+        //创建if语句
+        /**
+         * if (zhen < 10) {
+         *     System.out.println(xiao);
+         * } else {
+         *     System.out.println("xiao test zhen");
+         * }
+         * **/
+        /*JCTree.JCIf jcIf = treeMaker.If(
+                treeMaker.Binary(
+                        JCTree.Tag.LT,
+                        treeMaker.Ident(getNameFromString("zhen")),
+                        treeMaker.Literal(10)
+                ),
+                printVar,
+                printLiteral
+        );
+        jcStatementList = jcStatementList.append(jcIf);
+*/
+        /**
+         * if(xiao != null){
+         *      System.out.println(xiao);
+         * } else {
+         *      System.out.println("xiao test zhen");
+         * }
+         */
+        /*JCTree.JCIf jcIfNull = treeMaker.If(
+                treeMaker.Parens(
+                        treeMaker.Binary(
+                                JCTree.Tag.NE,
+                                treeMaker.Ident(getNameFromString("xiao")),
+                                treeMaker.Literal(TypeTag.BOT, null))
+                ),
+                printVar,
+                printLiteral
+        );
+        jcStatementList = jcStatementList.append(jcIfNull);*/
 
         if (params.length() > 0) {
             List<JCTree.JCExpression> args = List.nil();
             for (int i = 0; i < params.length(); i++) {
                 Type p = params.get(i).getType().type;
 
-                args = processNestingType(p, args, params.get(i).name.toString());
+                args = processNestingType(p, args, params.get(i).name.toString(), excludes);
                 if (i == params.length() - 1) {
                     formatString += "\n\r";
                 }
@@ -248,10 +303,17 @@ public class SafetyProcessor extends AbstractProcessor {
         return jcStatementList;
     }
 
-    private List<JCTree.JCExpression> processNestingType(Type p, List<JCTree.JCExpression> args, String name) {
+    private List<JCTree.JCExpression> processNestingType(Type p, List<JCTree.JCExpression> args, String name, ListBuffer<String> excludes) {
         if (isPrimitive(p)) {
-            args = args.append(memberAccess(name));
-            formatString += name + ":%s,";
+            String[] names = name.split("\\.");
+            if (excludes.contains(names[names.length - 1])) {
+                return args;
+            }
+            String logName = NameAnalysis.analysis(names[names.length - 1]);
+            if (!Objects.isNull(logName)) {
+                args = args.append(memberAccess(name));
+                formatString += logName + ":%s,";
+            }
         } else {
             Iterator<Symbol> pmember = ((Symbol.ClassSymbol) p.tsym).members_field.getElements().iterator();
             String[] names = name.split("\\.");
@@ -269,23 +331,27 @@ public class SafetyProcessor extends AbstractProcessor {
             while (pmember.hasNext()) {
                 Symbol member = pmember.next();
                 if (member instanceof Symbol.VarSymbol) {
-                    System.out.println("p.field:" + member.flatName());
-                    System.out.println("p.field.type:" + member.asType());
                     if (isPrimitive(member.asType())) {
-                        JCTree.JCExpression fn;
-                        if (nesting) {
-                            fn = functionAccess(prefix + ".get" + getUpperCaseFirst(member.flatName().toString()));
-                        } else {
-                            fn = treeMaker.Apply(
-                                    List.nil(),//参数类型
-                                    memberAccess(prefix + ".get" + getUpperCaseFirst(member.flatName().toString())),
-                                    List.nil()
-                            );
+                        if (excludes.contains(member.name.toString())) {
+                            return args;
                         }
-                        args = args.append(fn);
-                        formatString += name + "." + member.flatName() + ":%s,";
+                        String logName = NameAnalysis.analysis(member.name.toString());
+                        if (!Objects.isNull(logName)) {
+                            JCTree.JCExpression fn;
+                            if (nesting) {
+                                fn = functionAccess(prefix + ".get" + getUpperCaseFirst(member.flatName().toString()));
+                            } else {
+                                fn = treeMaker.Apply(
+                                        List.nil(),//参数类型
+                                        memberAccess(prefix + ".get" + getUpperCaseFirst(member.flatName().toString())),
+                                        List.nil()
+                                );
+                            }
+                            args = args.append(fn);
+                            formatString += logName + ":%s,";
+                        }
                     } else {
-                        args = processNestingType(member.asType(), args, name + "." + member.flatName());// TODO: 2018/11/20
+                        args = processNestingType(member.asType(), args, name + "." + member.flatName(), excludes);// TODO: 2018/11/20
                     }
                 }
             }

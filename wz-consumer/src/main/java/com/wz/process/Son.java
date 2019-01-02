@@ -7,6 +7,8 @@ package com.wz.process;
 public class Son {
     private String name;
     private int age;
+    private String mobilePhone;
+    private String mailbox;
 
     public String getName() {
         return name;
@@ -22,5 +24,21 @@ public class Son {
 
     public void setAge(int age) {
         this.age = age;
+    }
+
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
+    }
+
+    public String getMobilePhone() {
+        return mobilePhone;
+    }
+
+    public String getMailbox() {
+        return mailbox;
+    }
+
+    public void setMailbox(String mailbox) {
+        this.mailbox = mailbox;
     }
 }
