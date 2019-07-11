@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Archiver-Version: Plexus Archiver
+Created-By: Apache Maven
+Built-By: wangzhen23
+Build-Jdk: 1.8.0_65
+Main-Class: com.wz.instrument.TestMainInJar
+Premain-Class: com.wz.instrument.Premain
+
+>java -javaagent:elastic-search-1.0-SNAPSHOT.jar -cp elastic-search-1.0-SNAPSHOT.jar com.wz.instrument.TestMainInJar
