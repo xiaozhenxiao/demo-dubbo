@@ -1,7 +1,5 @@
 package com.wz.elastic;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
 import org.apache.http.auth.AuthScope;
@@ -15,6 +13,8 @@ import org.elasticsearch.client.Response;
 import org.elasticsearch.client.ResponseListener;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.sniff.Sniffer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
  * 2019/7/4.
  */
 public class Rest {
-    private static final Log log = LogFactory.getLog(Rest.class);
+    private static final Logger log = LoggerFactory.getLogger(Rest.class);
 
     public static void main(String[] args) throws IOException, InterruptedException {
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
