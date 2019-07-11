@@ -1,6 +1,7 @@
 package com.smile.wz.processor;
 
 import com.sun.tools.javac.api.JavacTrees;
+import com.sun.tools.javac.code.Attribute;
 import com.sun.tools.javac.code.Symbol;
 import com.sun.tools.javac.code.Type;
 import com.sun.tools.javac.processing.JavacProcessingEnvironment;
@@ -451,5 +452,9 @@ public class SafetyProcessor extends AbstractProcessor {
                     List.nil());
         }
         return expr;
+    }
+
+    public void main(String[] args) {
+//        Attribute.Compound compound = new Attribute.Compound(treeMaker.Type(Type.ClassType.));
     }
 }

@@ -34,7 +34,8 @@ public class TwoThreadNoLock {
 
         @Override
         public void run() {
-            while (noLock.start <= 100) {
+            while (noLock.start < 100) {
+                /** while (noLock.start <= 100) 时  在此处会超出100 **/
                 if (!noLock.flag) {
                     System.out.println(Thread.currentThread().getName() + "+-+" + noLock.start);
                     noLock.start++;

@@ -17,10 +17,13 @@ package com.wz.netty.tcp.client;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.concurrent.ExecutionException;
 
 /**
  * @author lilinfeng
@@ -47,9 +50,21 @@ public class TimeClientHandler extends ChannelHandlerAdapter {
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) {
-        ByteBuf message = Unpooled.buffer(req.getBytes().length);
-        message.writeBytes(req.getBytes());
-        ctx.writeAndFlush(message);
+        for (int i = 0; i < 10; i++) {
+            req += 1;
+            ByteBuf message = Unpooled.buffer(req.getBytes().length);
+            message.writeBytes(req.getBytes());
+            ChannelFuture future = ctx.writeAndFlush(message);
+            try {
+                Void result = future.get();
+                System.out.println("===========result:" + result);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     @Override

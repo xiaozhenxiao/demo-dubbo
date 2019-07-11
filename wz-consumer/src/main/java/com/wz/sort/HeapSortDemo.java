@@ -25,8 +25,7 @@ public class HeapSortDemo {
         printHeap(-1, queue);
         System.out.println("\r\n======================================================");
 
-        getLevel(array.length);
-        System.out.println("\r\n======================================================");
+        System.out.println("\r\n======================================================length:" + getLevel(array.length));
         for (int i = 9; i >= 0; i--) {
             siftDownHeap(i);
         }
@@ -63,8 +62,8 @@ public class HeapSortDemo {
             int child = (k << 1) + 1;
             int c = queue[child];
             int right = child + 1;
-            if (right < size && c > queue[right])
-                c = queue[child = right];
+            if (right < size && c > queue[right])  //左孩子大于右孩子时
+                c = queue[child = right];  //把右孩子赋值个c，即c保存值小的孩子节点值
             if (key < c)
                 break;
             queue[k] = c;
@@ -93,16 +92,17 @@ public class HeapSortDemo {
         }
     }
 
-    private static Integer getLevel(Integer length) {
-        Integer level = 0;
+    private static Integer getLevel(int length) {
+        Double higth = Math.ceil(Math.log(length+1) / Math.log(2));
+        /*Integer level = 0;
         while (true) {
-            Double power = Math.pow(length, level);
-            if (power < length) {
+            Double power = Math.pow(2, level);
+            if (power <= length) {
                 level++;
             }else {
                 break;
             }
-        }
-        return level;
+        }*/
+        return higth.intValue();
     }
 }

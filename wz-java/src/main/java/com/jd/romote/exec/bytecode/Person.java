@@ -19,10 +19,18 @@ public class Person implements Serializable{
     private FieldInfo fieldInfo;
 
     public int add(int a, int b){
-        int i = a + b;
+        /*int i = a + b;
         int j = a * b;
         int k = i + j;
-        return k + 1 + 2;
+        return k + 1 + 2;*/
+        int i = 10;
+        try {
+            return i = a + 20;
+        } catch (Exception e) {
+        } finally {
+            i = i + 10;
+        }
+        return i;
     }
 
     public int add1(int a, int b){

@@ -38,27 +38,30 @@ public class HttpClientTest {
     private SchemeRegistry schemeRegistry;
     private int maxPerRoute = 10;//每个路由(目标机器)的最大连接数
     private int maxTotal = 10;//最大连接数
-    private static int connectionTimeout = 10; //连接超时时间
-    private static int soTimeOut = 5000;//响应超时时间
-    private int connTTL = 10;//max lifetime
+    private static int connectionTimeout = 1000; //连接超时时间
+    private static int soTimeOut = 50000;//响应超时时间
+    private int connTTL = 100;//max lifetime
     private int retryCount;//重试次数
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        HttpClientTest httpClient = new HttpClientTest();
+    public static void main(String[] args) throws Exception {
+        HttpsClient httpClient = new HttpsClient();
 //        DefaultHttpClient hclient = httpClient.getHttpClient();
 //        HttpParams params = hclient.getParams();
 //        HttpConnectionParams.setConnectionTimeout(params, connectionTimeout);
 
         int num = 0;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             num++;
-            HttpUriRequest method = new HttpPost("http://blog.csdn.net/fly_time2012/article/details/50771296");
+            HttpUriRequest method0 = new HttpPost("https://blog.csdn.net/A_zhenzhen/article/details/78830812");
+            HttpUriRequest method1 = new HttpPost("https://blog.csdn.net/A_zhenzhen/article/details/86065063");
+
+            HttpUriRequest method = i % 2 == 0 ? method0 : method1;
             method.getParams().setParameter(HttpMethodParams.SO_TIMEOUT, soTimeOut);
-            Thread thread = new Thread(new HttpTask(httpClient.getHttpClient(), method, System.currentTimeMillis()));
+            Thread thread = new Thread(new HttpTask(httpClient, method, System.currentTimeMillis()));
             thread.start();
-//            Thread.sleep(100L);
+            Thread.sleep(100L);
         }
-        System.out.println("============================END==========================="+num);
+        System.out.println("============================END===========================" + num);
     }
 
     protected static class HttpTask implements Runnable {
@@ -75,22 +78,26 @@ public class HttpClientTest {
 
         @Override
         public void run() {
-            try {
-                HttpParams params = client.getParams();
-                HttpConnectionParams.setConnectionTimeout(params, connectionTimeout);
-                HttpResponse response = client.execute(method);
-                int statusCode = response.getStatusLine().getStatusCode();
 
-                if (statusCode != HttpStatus.SC_OK) {
-                    log.info((num++ + "------------------Method failed: " + response.getStatusLine()));
-                    return;
+            HttpParams params = client.getParams();
+            HttpConnectionParams.setConnectionTimeout(params, connectionTimeout);
+            for (int i = 0; i < 10; i++) {
+                try {
+                    HttpResponse response = client.execute(method);
+                    int statusCode = response.getStatusLine().getStatusCode();
+
+                    if (statusCode != HttpStatus.SC_OK) {
+                        log.info((num++ + "------------------Method failed: " + response.getStatusLine()));
+                        return;
+                    }
+                    String message = EntityUtils.toString(response.getEntity(), "GBK");
+                    System.out.println(num++ + "=============================" + message.length() + "**************" + (System.currentTimeMillis() - systemTime));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    log.error("occur error! ", e);
                 }
-                String message = EntityUtils.toString(response.getEntity(), "GBK");
-                System.out.println(num++ + "=============================" + message.length() + "**************" + (System.currentTimeMillis()-systemTime));
-            } catch (IOException e) {
-                e.printStackTrace();
-                log.error("occur error! ", e);
             }
+
         }
     }
 

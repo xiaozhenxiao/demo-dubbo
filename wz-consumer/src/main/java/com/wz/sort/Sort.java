@@ -8,46 +8,52 @@ import java.util.Arrays;
  */
 public class Sort {
     public static void main(String[] args) {
-        int [] array = {11, 5, 8, 2, 7, 4, 3, 6, 9, 15, 10, 1, 13};
-        int [] array1 = {4, 3, 6, 2, 5, 1, 7};
-        printArray("排序前：",  array);
+        int[] array = {11, 5, 8, 2, 7, 4, 3, 6, 9, 15, 10, 1, 13};
+        int[] array1 = {4, 3, 6, 2, 5, 1, 7};
+        printArray("排序前：", array);
 //        radixSort(array, 10, 4);
-        bubbleSort(array);
+//        bubbleSort(array);
+        insertSort(array);
 //        kuaipai(array1, 0, array1.length-1);
 //        mergeSort(array, 0, array.length-1);
         printArray("排序：", array);
     }
 
-    public static void kuaipai(int[] a, int start, int end){
-        if(start<end){
+    public static void kuaipai(int[] a, int start, int end) {
+        if (start < end) {
             int i = start, j = end;
             int base = a[start];
-            while(i<=j){
-                while(i < end && a[i] < base)
+            while (i <= j) {
+                while (i < end && a[i] < base) {
                     i++;
-                while(j > start && a[j] > base)
+                }
+                while (j > start && a[j] > base) {
                     j--;
-                if (i<=j){
+                }
+                if (i <= j) {
                     swap(a, i, j);
                     i++;
                     j--;
                 }
             }
-            if(i < end)
+            if (i < end) {
                 kuaipai(a, i, end);
-            if(j > start)
+            }
+            if (j > start) {
                 kuaipai(a, start, j);
+            }
         }
     }
 
-    public static void printArray(String print, int[] numbers){
+    public static void printArray(String print, int[] numbers) {
         System.out.println(print);
         for (int i : numbers) {
             System.out.print(i + " - ");
         }
         System.out.println();
     }
-    public static void swap(int a[], int i, int j){
+
+    public static void swap(int a[], int i, int j) {
         int temp = a[i];
         a[i] = a[j];
         a[j] = temp;
@@ -69,7 +75,7 @@ public class Sort {
         int size = numbers.length; // 数组大小
         for (int i = 0; i < size - 1; i++) {
             for (int j = i + 1; j < size; j++) {
-                if (numbers[i] < numbers[j]) { // 交换两数的位置
+                if (numbers[i] > numbers[j]) { // 交换两数的位置
                     swap(numbers, i, j);
                 }
             }
@@ -94,20 +100,24 @@ public class Sort {
             int base = numbers[start]; // 选定的基准值（第一个数值作为基准值）
             int i = start, j = end;
             do {
-                while ((numbers[i] < base) && (i < end))
+                while ((numbers[i] < base) && (i < end)) {
                     i++;
-                while ((numbers[j] > base) && (j > start))
+                }
+                while ((numbers[j] > base) && (j > start)) {
                     j--;
+                }
                 if (i <= j) {
                     swap(numbers, i, j);
                     i++;
                     j--;
                 }
             } while (i <= j);
-            if (start < j)
+            if (start < j) {
                 quickSort(numbers, start, j);
-            if (end > i)
+            }
+            if (end > i) {
                 quickSort(numbers, i, end);
+            }
         }
     }
 
@@ -123,8 +133,10 @@ public class Sort {
         int size = numbers.length;
         for (int i = 0; i < size; i++) {
             int k = i;
-            for (int j = size - 1; j >i; j--)  {
-                if (numbers[j] < numbers[k])  k = j;
+            for (int j = size - 1; j > i; j--) {
+                if (numbers[j] < numbers[k]) {
+                    k = j;
+                }
             }
             swap(numbers, i, k);
         }
@@ -145,15 +157,17 @@ public class Sort {
      */
     public static void insertSort(int[] numbers) {
         int size = numbers.length, temp, j;
-        for(int i=1; i<size; i++) {
+        for (int i = 1; i < size; i++) {
             temp = numbers[i];
-            for(j = i; j > 0 && temp < numbers[j-1]; j--)
-                numbers[j] = numbers[j-1];
+            for (j = i; j > 0 && temp < numbers[j - 1]; j--) {
+                numbers[j] = numbers[j - 1];
+            }
             numbers[j] = temp;
         }
     }
 
-    /** 归并排序<br/>
+    /**
+     * 归并排序<br/>
      * <ul>
      * <li>申请空间，使其大小为两个已经排序序列之和，该空间用来存放合并后的序列</li>
      * <li>设定两个指针，最初位置分别为两个已经排序序列的起始位置</li>
@@ -175,10 +189,12 @@ public class Sort {
                 merge(numbers, i, i + (s - 1), i + (t - 1));
                 i += t;
             }
-            if (i + (s - 1) < right)
+            if (i + (s - 1) < right) {
                 merge(numbers, i, i + (s - 1), right);
+            }
         }
     }
+
     /**
      * 归并算法实现
      *
@@ -202,12 +218,14 @@ public class Sort {
             }
             k++;
         }
-        if (s == q + 1)
+        if (s == q + 1) {
             B[k++] = data[t++];
-        else
+        } else {
             B[k++] = data[s++];
-        for (int i = p; i <= r; i++)
+        }
+        for (int i = p; i <= r; i++) {
             data[i] = B[i];
+        }
     }
 
     /**
@@ -218,6 +236,7 @@ public class Sort {
      * 最低位优先法（LSD）(Least Significant Digit first)
      * 例如，对如下数据序列进行排序。192,221,12,23
      * 可以观察到它的每个数据至多只有3位，因此可以将每个数据拆分成3个关键字：百位（高位）、十位、个位（低位）。
+     *
      * @param data
      * @param radix
      * @param d

@@ -15,6 +15,8 @@ public class SwapTwoVar {
         System.out.println("b=" + b);
 
         int n = 3846;
+
+        System.out.println("任何数和自己做异或结果是0:" + (n ^ n));
         System.out.println("任何数和0做异或结果是自身:" + (n ^ 0));
         System.out.println("任何数和-1做与结果是自身:" + (n & -1));
         System.out.println("任何数和0做或结果是自身:" + (n | 0));

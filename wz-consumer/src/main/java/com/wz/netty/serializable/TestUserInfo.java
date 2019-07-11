@@ -15,9 +15,10 @@
  */
 package com.wz.netty.serializable;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+
+import java.io.*;
 
 /**
  * @author Administrator
@@ -33,17 +34,31 @@ public class TestUserInfo {
     public static void main(String[] args) throws IOException {
         UserInfo info = new UserInfo();
         info.buildUserID(100).buildUserName("Welcome to Netty");
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream os = new ObjectOutputStream(bos);
-        os.writeObject(info);
+        OutputStream os = new FileOutputStream("tempFile");
+        ObjectOutputStream oos = new ObjectOutputStream(os);
+        oos.writeObject(info);
         os.flush();
         os.close();
-        byte[] b = bos.toByteArray();
-        System.out.println("The jdk serializable length is : " + b.length);
-        bos.close();
-        System.out.println("-------------------------------------");
-        System.out.println("The byte array serializable length is : "
-                + info.codeC().length);
+
+        //Read Obj from File
+        File file = new File("tempFile");
+        ObjectInputStream ois = null;
+        try {
+            ois = new ObjectInputStream(new FileInputStream(file));
+            UserInfo newUser = (UserInfo) ois.readObject();
+            System.out.println(newUser);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(ois);
+            try {
+                FileUtils.forceDelete(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

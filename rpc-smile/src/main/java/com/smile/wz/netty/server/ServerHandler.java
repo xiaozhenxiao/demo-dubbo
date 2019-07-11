@@ -38,9 +38,9 @@ public class ServerHandler extends ChannelHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 //        System.out.println("The server receive message request: " + JSON.toJSONString(msg));
 
-        ExecutorService cexecutor = getExecutorService();
+        ExecutorService executor = getExecutorService();
         try {
-            cexecutor.execute(new ChannelEventRunnable(ctx.channel(), handler, ChannelState.RECEIVED, msg));
+            executor.execute(new ChannelEventRunnable(ctx.channel(), handler, ChannelState.RECEIVED, msg));
         }catch (Exception e){
             System.out.println("rpc server Thread execute error");
             e.printStackTrace();

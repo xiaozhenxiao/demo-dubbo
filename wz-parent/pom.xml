@@ -21,6 +21,7 @@
         <module>../wz-java</module>
         <module>../dubbo-provider</module>
         <module>../dubbo-consumer</module>
+        <module>../elastic-search</module>
     </modules>
 
     <properties>
@@ -58,9 +59,9 @@
         <http.client.version>4.4.1</http.client.version>
         <druid.version>1.0.20</druid.version>
         <mysql.version>5.1.36</mysql.version>
-        <slf4j.api.version>1.7.21</slf4j.api.version>
-        <logback.version>1.1.7</logback.version>
-        <fastjson.version>1.2.28</fastjson.version>
+        <slf4j.api.version>1.7.26</slf4j.api.version>
+        <logback.version>1.2.3</logback.version>
+        <fastjson.version>1.2.58</fastjson.version>
         <jackson.version>2.7.4</jackson.version>
         <javassist.version>3.18.2-GA</javassist.version>
         <freemarker.version>2.3.23</freemarker.version>

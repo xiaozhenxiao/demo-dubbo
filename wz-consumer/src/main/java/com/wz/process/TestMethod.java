@@ -6,15 +6,15 @@ import com.smile.wz.processor.Safety;
  * wangzhen23
  * 2018/11/16.
  */
-//@Safety
+@Safety
 public class TestMethod {
+    private String name;
 
-    @Safety(exclude = {"phoneC2ard", "test"})
     public String method(String email, String phone, String phoneCard) {
         return email + phone + phoneCard;
     }
     @Safety
-    public Son method1(Person p) {
+    public Son method1(@Param Person p) {
         return p.getSon();
     }
 
