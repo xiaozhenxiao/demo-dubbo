@@ -3,6 +3,8 @@ package com.wz.main;
 import com.alibaba.fastjson.JSON;
 import com.wz.dubbo.api.DemoService;
 import com.wz.dubbo.api.MsgInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -13,7 +15,10 @@ import java.util.ArrayList;
  * Created by wangzhen on 2016-07-15.
  */
 public class Main {
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
+
     public static void main(String[] args) {
+        logger.info("s{}", "");
         /*String configLocation= "smile-consumer.xml";
         ApplicationContext context =new ClassPathXmlApplicationContext(configLocation);
 //        DependService ds = context.getBean("dependService", DependService.class);

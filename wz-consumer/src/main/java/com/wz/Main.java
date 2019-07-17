@@ -32,7 +32,7 @@ public class Main {
         method.method("a_zhen@126.com", "183xxxxxxxx", "333");
         method.method1(p);
         method.method2(1, 2, 3f, 4f, 5d, 6);
-        System.out.println("一天的秒数：" + method.method3());
+        System.out.println("一天的秒数：" + method.method3(Main.class));
 
     }
 }

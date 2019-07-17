@@ -1,6 +1,8 @@
 package com.wz.process;
 
 import com.smile.wz.processor.Safety;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * wangzhen23
@@ -22,7 +24,7 @@ public class TestMethod {
         return;
     }
 
-    public Integer method3() {
+    public Integer method3(Class clazz) {
         return 60 * 60 * 24;
     }
 }
