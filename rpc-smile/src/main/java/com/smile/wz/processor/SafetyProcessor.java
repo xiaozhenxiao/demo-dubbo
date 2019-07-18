@@ -56,6 +56,7 @@ public class SafetyProcessor extends AbstractProcessor {
     private List<String> processMethods = List.nil();
 
     private String formatString = "参数:";
+    private String logString = "参数:";
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
@@ -141,6 +142,7 @@ public class SafetyProcessor extends AbstractProcessor {
                     });
                 }
                 formatString = "参数:";
+                logString = "参数:";
                 JCTree.JCMethodDecl generateMethod = treeMaker.MethodDef(
 //                                treeMaker.Modifiers(jcMethodDecl.sym.flags(), treeMaker.Annotations(jcMethodDecl.sym.getRawAttributes())),
                         jcMethodDecl.mods,
@@ -182,8 +184,10 @@ public class SafetyProcessor extends AbstractProcessor {
                     jcStatementList = jcStatementList.append(returnVar);
                     List<JCTree.JCExpression> args = List.nil();
                     formatString = "结果:";
+                    logString = "结果:";
                     args = processNestingType(returnVar.vartype.type, args, "__result", excludes);
                     formatString += "\n\r";
+                    logString += "\n\r";
                     jcStatementList = constructPrintStatements(jcStatementList, args);
                 } else {
                     jcStatementList = jcStatementList.append(treeMaker.Exec(treeMaker.Apply(
@@ -201,12 +205,15 @@ public class SafetyProcessor extends AbstractProcessor {
     }
 
     private List<JCTree.JCStatement> constructPrintStatements(List<JCTree.JCStatement> jcStatementList, List<JCTree.JCExpression> args) {
+
+        List<JCTree.JCExpression> logArgs = args.prepend(treeMaker.Literal(logString));
+
         args = args.prepend(treeMaker.Literal(formatString));
 
         JCTree.JCExpressionStatement logPrint = treeMaker.Exec(treeMaker.Apply(
                 List.nil(),//参数类型
                 memberAccess("logger.info"),
-                args
+                logArgs
                 )
         );
         jcStatementList = jcStatementList.append(logPrint);
@@ -338,6 +345,7 @@ public class SafetyProcessor extends AbstractProcessor {
                 args = processNestingType(p, args, params.get(i).name.toString(), excludes);
                 if (i == params.length() - 1) {
                     formatString += "\n\r";
+                    logString += "\n\r";
                 }
             }
             jcStatementList = constructPrintStatements(jcStatementList, args);
@@ -356,6 +364,7 @@ public class SafetyProcessor extends AbstractProcessor {
             if (Objects.nonNull(logName)) {
                 args = args.append(memberAccess(name));
                 formatString += logName + ":%s,";
+                logString += logName + ":{},";
             }
         } else {
             Iterator<Symbol> pmember = ((Symbol.ClassSymbol) p.tsym).members_field.getElements().iterator();
@@ -392,6 +401,7 @@ public class SafetyProcessor extends AbstractProcessor {
                             }
                             args = args.append(fn);
                             formatString += logName + ":%s,";
+                            logString += logName + ":{},";
                         }
                     } else {
                         args = processNestingType(member.asType(), args, name + "." + member.flatName(), excludes);// TODO: 2018/11/20
