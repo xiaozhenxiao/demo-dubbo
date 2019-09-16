@@ -83,15 +83,15 @@ public class HighLevelRest {
                 )
         );
 
-        index(client);
+//        index(client);
 
-        get(client);
+//        get(client);
 
-        update(client);
+//        update(client);
 
         search(client);
 
-        search2(client);
+//        search2(client);
 
         TimeUnit.SECONDS.sleep(30);
         client.close();
