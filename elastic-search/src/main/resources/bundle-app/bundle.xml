@@ -1,0 +1,42 @@
+<bundle-app name='rbt-bundle-wangzhen' xmlns='uri:oozie:bundle:0.2'>
+    <parameters>
+        <property>
+            <name>appPath2</name>
+            <value>${nameNode}/${application_workflow_path}/rebate/schedule/wangzhen/cron-schedule2</value>
+        </property>
+    </parameters>
+    <coordinator name='coordJobFromBundle1'>
+        <app-path>${appPath}</app-path>
+        <configuration>
+            <property>
+                <name>workflowAppUri</name>
+                <value>${appPath}</value>
+            </property>
+            <property>
+                <name>start</name>
+                <value>2019-08-22T19:26Z</value>
+            </property>
+            <property>
+                <name>end</name>
+                <value>2019-08-22T20:30Z</value>
+            </property>
+        </configuration>
+    </coordinator>
+    <coordinator name='coordJobFromBundle2'>
+        <app-path>${appPath2}</app-path>
+        <configuration>
+            <property>
+                <name>workflowAppUri</name>
+                <value>${appPath2}</value>
+            </property>
+            <property>
+                <name>start</name>
+                <value>2019-08-22T19:20Z</value>
+            </property>
+            <property>
+                <name>end</name>
+                <value>2019-08-22T20:30Z</value>
+            </property>
+        </configuration>
+    </coordinator>
+</bundle-app>

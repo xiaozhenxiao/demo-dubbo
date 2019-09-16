@@ -1,0 +1,39 @@
+<coordinator-app name="rbt-cron-coord-wangzhen" frequency="0 0/10 * * * ?" start="${start}" end="${end}"
+                 timezone="GMT+0800"
+                 xmlns="uri:oozie:coordinator:0.5">
+    <datasets>
+        <dataset name="logs" frequency="${coord:months(10)}"
+                 initial-instance="2019-09-12T18:00Z" timezone="Asia/Shanghai">
+            <uri-template>${nameNode}${application_workflow_path}/rebate/schedule/${YEAR}${MONTH}/${DAY}/${HOUR}/${MINUTE}/data</uri-template>
+        </dataset>
+        <dataset name="siteAccessStats" frequency="${coord:months(10)}"
+                 initial-instance="2019-09-12T18:00Z" timezone="Asia/Shanghai">
+            <uri-template>${nameNode}${application_workflow_path}/rebate/schedule/${YEAR}/${MONTH}/${DAY}/${HOUR}/${MINUTE}/data</uri-template>
+        </dataset>
+    </datasets>
+    <input-events>
+        <data-in name="input" dataset="logs">
+            <instance>${coord:current(0)}</instance>
+        </data-in>
+    </input-events>
+    <output-events>
+        <data-out name="output" dataset="siteAccessStats">
+            <instance>${coord:current(0)}</instance>
+        </data-out>
+    </output-events>
+    <action>
+        <workflow>
+            <app-path>${workflowAppUri}</app-path>
+            <configuration>
+                <property>
+                    <name>wfInput</name>
+                    <value>${coord:dataIn('input')}</value>
+                </property>
+                <property>
+                    <name>wfOutput</name>
+                    <value>${coord:dataOut('output')}</value>
+                </property>
+            </configuration>
+        </workflow>
+    </action>
+</coordinator-app>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<!DOCTYPE workflow PUBLIC
+        "-//OpenSymphony Group//DTD OSWorkflow 2.8//EN"
+        "D:\repository\opensymphony\osworkflow\2.8.0\osworkflow-2.8.0.jar!\META-INF\workflow_2_8.dtd">-->
+<!DOCTYPE workflow PUBLIC
+        "-//OpenSymphony Group//DTD OSWorkflow 2.8//EN"
+        "http://www.opensymphony.com/osworkflow/workflow_2_8.dtd">
+<workflow>
+    <registers>
+        <register type="class" variable-name="log">
+            <arg name="class.name">
+                com.opensymphony.workflow.util.LogRegister
+            </arg>
+            <arg name="addInstanceId">true</arg>
+            <arg name="Category">workflow</arg>
+        </register>
+    </registers>
+    <initial-actions>
+        <action id="0" name="Start Workflow">
+            <results>
+                <!--old-status属性是用来指明当前步骤完成以后的状态是什么-->
+                <unconditional-result old-status="Finished" status="Queued" step="1"/>
+            </results>
+        </action>
+    </initial-actions>
+    <steps>
+        <step id="1" name="First Draft">
+            <actions>
+                <action id="1" name="Start First Draft">
+                    <restrict-to>
+                        <conditions>
+                            <condition type="class">
+                                <arg name="class.name">com.opensymphony.workflow.util.StatusCondition</arg>
+                                <arg name="status">Queued</arg>
+                            </condition>
+                        </conditions>
+                    </restrict-to>
+                    <pre-functions>
+                        <function type="class">
+                            <arg name="class.name">com.opensymphony.workflow.util.Caller</arg>
+                        </function>
+                        <function type="beanshell">
+                            <arg name="script">propertySet.setString("foo", "bar")</arg>
+                        </function>
+                    </pre-functions>
+                    <results>
+                        <unconditional-result old-status="Finished" status="Underway" step="1" owner="${caller}"/>
+                    </results>
+                </action>
+                <action id="2" name="Finish First Draft">
+                    <restrict-to>
+                        <conditions type="AND">
+                            <condition type="class">
+                                <arg name="class.name">
+                                    com.opensymphony.workflow.util.StatusCondition
+                                </arg>
+                                <arg name="status">Underway</arg>
+                            </condition>
+                            <condition type="class">
+                                <arg name="class.name">
+                                    com.opensymphony.workflow.util.AllowOwnerOnlyCondition
+                                </arg>
+                            </condition>
+                        </conditions>
+                    </restrict-to>
+                    <validators>
+                        <validator type="class">
+                            <arg name="class.name">
+                                com.wz.workflow.validators.TitleValidator
+                            </arg>
+                        </validator>
+                    </validators>
+                    <pre-functions>
+                        <function type="beanshell">
+                            <arg name="script">transientVars.get("log").info("executing action 2 " + propertySet.getString("foo"))</arg>
+                        </function>
+                    </pre-functions>
+                    <results>
+                        <unconditional-result old-status="Finished" status="Queued" step="2"/>
+                    </results>
+                </action>
+            </actions>
+        </step>
+        <step id="2" name="finished"/>
+    </steps>
+</workflow>
