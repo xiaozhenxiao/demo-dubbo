@@ -18,6 +18,8 @@
 
 package org.apache.oozie.example;
 
+import java.util.Random;
+
 public class DemoJavaMain {
     public static void main(String[] args) {
         System.out.println("Demo Java Main");
@@ -28,6 +30,10 @@ public class DemoJavaMain {
         }
         String jobId = System.getenv("BEE_BUSINESSID");
         System.out.println("oozie workflow id is " + jobId);
-        System.exit(0);
+        if(new Random(10).nextInt()/2==0) {
+            System.exit(0);
+        }else {
+            System.exit(-1);
+        }
     }
 }

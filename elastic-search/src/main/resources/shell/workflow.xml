@@ -1,0 +1,41 @@
+<workflow-app xmlns="uri:oozie:workflow:0.5" name="rbt-shell-wangzhen-wf">
+<start to="shell-node"/>
+<action name="shell-node">
+    <shell xmlns="uri:oozie:shell-action:0.2">
+        <job-tracker>${jobTracker}</job-tracker>
+        <name-node>${nameNode}</name-node>
+        <prepare>
+            <delete path="[PATH]"/>
+            <mkdir path="[PATH]"/>
+        </prepare>
+        <configuration>
+            <property>
+                <name>mapred.job.queue.name</name>
+                <value>${queueName}</value>
+            </property>
+        </configuration>
+        <exec>${EXEC}</exec>
+        <argument>my_output=Hello Oozie</argument>
+        <argument>the second paramter</argument>
+        <file>${EXEC}#${EXEC}</file>
+        <capture-output/>
+    </shell>
+    <ok to="check-output"/>
+    <error to="fail"/>
+</action>
+<decision name="check-output">
+    <switch>
+        <case to="end">
+            ${wf:actionData('shell-node')['my_output'] eq 'Hello Oozie'}
+        </case>
+        <default to="fail-output"/>
+    </switch>
+</decision>
+<kill name="fail">
+    <message>Shell action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
+</kill>
+<kill name="fail-output">
+    <message>Incorrect output, expected [Hello Oozie] but was [${wf:actionData('shell-node')['my_output']}]</message>
+</kill>
+<end name="end"/>
+</workflow-app>
