@@ -1,0 +1,51 @@
+1、hadoop fs -rm -r /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/other/ebsData/S_LOCK
+  > hadoop.fs.TrashPolicyDefault.moveToTrash(TrashPolicyDefault.java 191) [main] : Moved: 'hdfs://ns1007/user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/other/ebsData/S_LOCK' to trash at: hdfs://ns1007/user/mart_sch/mart_rbt/.Trash/Current/user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/other/ebsData/S_LOCK
+
+2、buffalo job -kill -bundle 1723
+------------------------------------------------------------------------------------------------------------------------------------
+任务实例ID  任务ID      计划执行时间         进入队列时间  开始运行时间  运行结束时间         最近运行状态  冻结状态
+------------------------------------------------------------------------------------------------------------------------------------
+39980390    91318       2019-08-22 20:10:00  -             -             2019-08-22 20:07:21  KILLED        非冻结
+39980391    91319       2019-08-22 20:10:00  -             -             2019-08-22 20:07:21  KILLED        非冻结
+------------------------------------------------------------------------------------------------------------------------------------
+kill任务实例成功，共终止2个任务实例，调度系统正尝试终止实例后台进程，请耐心等待！
+
+hadoop distcp hdfs://xxxx/user/mart_ebs/input_data/cbj/2019/07 hdfs://yyyy/user/mart_sch/mart_rbt/test/input_data/cbj/2019/07
+
+BEE_SOURCE=buffalo4 #固定值
+BEE_BUSINESSID #任务实例id
+BEE_SN #环节实例的日志id
+BEE_USER #负责人
+BUFFALO_ENV_NTIME #计划运行时间
+BEE_NOMINALTIME #计划运行时间
+BUFFALO_ENV_ACTION_DEF_ID #环节定义id
+BUFFALO_ENV_ACTION_INSTANCE_ID#环节实例id
+BUFFALO_ENV_RUN_LOG_ID #环节实例日志id
+BUFFALO_ENV_TASK_DEF_ID #任务定义id
+BUFFALO_ENV_TASK_INSTANCE_ID #任务实例id
+BUFFALO_ENV_CYCLE_TYPE #周期类型
+BEE_SCRIPT_ID #脚本id（数据计算类型任务）
+BEE_SCRIPT_V #脚本版本（数据计算类型任务）
+
+
+find . -name job.properties | grep "./.*/" -o | xargs -I {} -n 1 echo '{}lib/' | xargs -I {} -n 1 echo 'hadoop fs -put -f {}*'
+find . -name job.properties | grep "./.*/" -o | xargs -I {} -n 1 echo '{}lib/' | xargs -I {} -n 1 echo > upload.sh 'hadoop fs -put -f {}* /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/batchCalc/{}'
+
+find . -name job.properties | grep "./.*/" -o | xargs -I {} -n 1 echo '{}lib/' | xargs -I {} -n 1 cp -p ~/upload/wangzhen/jdrebate-calc-dependencies.jar '{}
+find . -name job.properties | xargs -I {} buffalo job -submit -config '{}'
+
+
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/baitiao/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/baojiePayable/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/capitalPoolPromoRelation/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/cbj/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/couponInfo/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/deptCouponInfo/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/erpSpareNum/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/erpStoreDaySum/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/erpStoreNum/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/erpStoreNumHbase/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/jdbSaleBack/lib/
+hadoop fs -put -f jdrebate-etl-dependencies.jar /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/jdbsaleOutstoreOrder/lib/
+
+hadoop fs -rm -r /user/mart_sch/mart_rbt/test/oozie/workflow/rebate/etl/bi/jdbsaleOutstoreOrder/lib/*
