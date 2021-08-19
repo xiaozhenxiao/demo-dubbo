@@ -63,7 +63,7 @@
         <slf4j.api.version>1.7.21</slf4j.api.version>
         <logback.version>1.1.7</logback.version>
         <fastjson.version>1.2.28</fastjson.version>
-        <jackson.version>2.7.4</jackson.version>
+        <jackson.version>2.9.10.7</jackson.version>
         <javassist.version>3.18.2-GA</javassist.version>
         <freemarker.version>2.3.23</freemarker.version>
         <velocity.version>1.7</velocity.version>
