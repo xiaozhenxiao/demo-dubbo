@@ -25,7 +25,7 @@
     </modules>
 
     <properties>
-        <spring.version>4.3.0.RELEASE</spring.version>
+        <spring.version>5.2.20.RELEASE</spring.version>
         <default.encoding>UTF-8</default.encoding>
         <default.jdk.version>1.8</default.jdk.version>
 
